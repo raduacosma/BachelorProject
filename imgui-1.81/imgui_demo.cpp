@@ -264,7 +264,7 @@ void ImGui::ShowDemoWindow(bool* p_open)
     static bool show_app_simple_overlay = false;
     static bool show_app_fullscreen = false;
     static bool show_app_window_titles = false;
-    static bool show_app_custom_rendering = false;
+    static bool show_app_custom_rendering = true;
 
     if (show_app_main_menu_bar)       ShowExampleAppMainMenuBar();
     if (show_app_documents)           ShowExampleAppDocuments(&show_app_documents);

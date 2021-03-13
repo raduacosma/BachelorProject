@@ -4,7 +4,7 @@ INCLUDE(FindPkgConfig)
 pkg_search_module(GLFW REQUIRED glfw3)
 include_directories(${GLFW_INCLUDE_DIRS})
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 20)
 
 include_directories(imgui-1.81)
 include_directories(imgui-1.81/backends)
@@ -35,6 +35,10 @@ add_executable(BachelorProject
         libs/glfw/include/GLFW/glfw3.h
         libs/glfw/include/GLFW/glfw3native.h
 
-        project/main.cpp)
+        project/main.cpp
+        project/uiFunctions/uiFunctions.h
+        project/uiFunctions/uiFunctions.cpp
+        project/simState/simState.cpp
+        project/simState/simState.h project/simBuilder/simBuilder.cpp project/simBuilder/simBuilder.h project/utilities/utilities.h)
 
 target_link_libraries(BachelorProject GL ${GLFW_STATIC_LIBRARIES})
