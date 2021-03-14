@@ -11,6 +11,7 @@
 #include <iostream>
 #include "uiFunctions/uiFunctions.h"
 #include "simState/simState.h"
+#include "uiStateTracker/uiStateTracker.h"
 
 // About Desktop OpenGL function loaders:
 //  Modern desktop OpenGL doesn't have a standard portable header file to load OpenGL function pointers.
@@ -118,8 +119,8 @@ int main(int, char**)
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
     // Setup Dear ImGui style
-//    ImGui::StyleColorsDark();
-    ImGui::StyleColorsClassic();
+    ImGui::StyleColorsDark();
+//    ImGui::StyleColorsClassic();
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -143,11 +144,10 @@ int main(int, char**)
     bool show_demo_window = true;
     bool show_another_window = false;
     bool show_app_custom_rendering = true;
+
+    UiStateTracker uiStateTracker;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-    size_t const nrHorizontalSquares = 10;
-    SimState simState{static_cast<size_t>(nrHorizontalSquares *
-                                           static_cast<float>(windowWidth)/windowHeight),
-                       nrHorizontalSquares};
+
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -167,8 +167,18 @@ int main(int, char**)
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 //        if (show_demo_window)
 //            ImGui::ShowDemoWindow(&show_demo_window);
-        drawMenuBar(simState);
-        drawGameState(simState);
+        if (uiStateTracker.showSizeSelectionMenu)
+        {
+            drawSizeSelectionMenu(uiStateTracker);
+        }
+        if(not uiStateTracker.showSizeSelectionMenu)
+        {
+            static SimBuilder sim{ uiStateTracker.nextSimCellWidth,
+                                      uiStateTracker.nextSimCellHeight };
+            drawMenuBar(sim);
+            drawGameState(sim);
+            updateSimBuilder(sim);
+        }
         // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
 //        {
 //            static float f = 0.0f;

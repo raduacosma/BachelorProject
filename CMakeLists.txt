@@ -28,7 +28,8 @@ add_executable(BachelorProject
         imgui-1.81/imgui_internal.h
         imgui-1.81/imgui_tables.cpp
         imgui-1.81/imgui_widgets.cpp
-
+        imgui-1.81/misc/cpp/imgui_stdlib.h
+        imgui-1.81/misc/cpp/imgui_stdlib.cpp
         libs/gl3w/GL/gl3w.c
         libs/gl3w/GL/gl3w.h
         libs/gl3w/GL/glcorearb.h
@@ -39,6 +40,6 @@ add_executable(BachelorProject
         project/uiFunctions/uiFunctions.h
         project/uiFunctions/uiFunctions.cpp
         project/simState/simState.cpp
-        project/simState/simState.h project/simBuilder/simBuilder.cpp project/simBuilder/simBuilder.h project/utilities/utilities.h)
+        project/simState/simState.h project/simBuilder/simBuilder.cpp project/simBuilder/simBuilder.h project/utilities/utilities.h project/uiStateTracker/uiStateTracker.h)
 
 target_link_libraries(BachelorProject GL ${GLFW_STATIC_LIBRARIES})

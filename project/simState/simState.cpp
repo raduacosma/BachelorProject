@@ -3,13 +3,8 @@ using namespace std;
 
 std::vector <std::vector<TileStates>> SimState::getFullMazeRepr() const
 {
-    for(size_t i = 0; i!=simSize.y; ++i)
-        for(size_t j = 0; j!=simSize.x; ++j)
-        {
-
-        }
-    vector<TileStates> row{simSize.x, TileStates::EMPTY};
-    return vector<vector<TileStates>>{simSize.y,row};
+    vector<TileStates> row{simSize.y, TileStates::EMPTY};
+    return vector<vector<TileStates>>{simSize.x,row};
 
 }
 
@@ -17,4 +12,17 @@ SimState::SimState(size_t width, size_t height)
 :
     simSize({width,height})
 {
+}
+
+void SimState::updateCanvasBegPos(ImVec2 pos)
+{
+    canvasBegPos = pos;
+}
+void SimState::updateCanvasEndPos(ImVec2 pos)
+{
+    canvasEndPos = pos;
+}
+void SimState::updateCanvasStepSize(ImVec2 stepSize)
+{
+    canvasStepSize = stepSize;
 }

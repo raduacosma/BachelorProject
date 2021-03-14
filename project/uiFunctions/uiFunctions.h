@@ -3,9 +3,13 @@
 
 #include "../simState/simState.h"
 #include "../simBuilder/simBuilder.h"
+#include "../uiStateTracker/uiStateTracker.h"
+
+
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "../imgui-1.81/misc/cpp/imgui_stdlib.h"
 
 #undef IMGUI_DEFINE_PLACEMENT_NEW
 #define IMGUI_DEFINE_PLACEMENT_NEW
@@ -25,20 +29,18 @@ concept StateRepresentation = requires(Repr repr)
     repr.getFullMazeRepr();
 };
 
-
+void drawSizeSelectionMenu(UiStateTracker &uiStateTracker);
 void drawMenuBar(SimBuilder &simBuilder);
 void drawMenuBar(SimState const &simState);
 
+void updateSimBuilder(SimBuilder &simBuilder);
+
 template <typename StateRepr>
-void drawGameState(StateRepr const &simState)
+void drawGameState(StateRepr &simState)
 {
     ImGuiViewportP *viewport =
         (ImGuiViewportP *)(void *)ImGui::GetMainViewport();
-    ImVec2 menu_bar_pos = viewport->Pos + viewport->CurrWorkOffsetMin;
-    ImVec2 menu_bar_size =
-        ImVec2(viewport->Size.x - viewport->CurrWorkOffsetMin.x +
-               viewport->CurrWorkOffsetMax.x,
-               1.0f);
+
     ImGui::SetNextWindowPos(viewport->WorkPos);
     ImGui::SetNextWindowSize(viewport->WorkSize);
     ImGui::Begin(
@@ -70,18 +72,23 @@ void drawGameState(StateRepr const &simState)
 
 
 template <StateRepresentation StateRepr>
-void renderSimState(StateRepr const &simState, ImVec2 const &canvas_p0,
+void renderSimState(StateRepr &simState, ImVec2 const &canvas_p0,
                     ImVec2 const &canvas_p1, ImDrawList *draw_list)
 {
     float xStepSize = (canvas_p1.x - canvas_p0.x) / simState.getWidth();
     float yStepSize = (canvas_p1.y - canvas_p0.y) / simState.getHeight();
+    simState.updateCanvasStepSize({xStepSize,yStepSize});
+    simState.updateCanvasBegPos({ canvas_p0.x, canvas_p0.y });
+    simState.updateCanvasEndPos({canvas_p1.x,canvas_p1.y});
+
     float xCurr = canvas_p0.x;
     float xInitial = xCurr;
     float yCurr = canvas_p0.y;
+    float yInitial = yCurr;
     auto stateRepr = simState.getFullMazeRepr();
-    for (size_t i = 0; i < simState.getHeight(); ++i)
+    for (size_t i = 0; i < simState.getWidth(); ++i)
     {
-        for (size_t j = 0; j < simState.getWidth(); ++j)
+        for (size_t j = 0; j < simState.getHeight(); ++j)
         {
             TileStates currTile = stateRepr[i][j];
             auto drawRect = [&](size_t r, size_t g, size_t b, size_t a){
@@ -114,10 +121,10 @@ void renderSimState(StateRepr const &simState, ImVec2 const &canvas_p0,
                     break;
             }
 
-            xCurr += xStepSize;
+            yCurr += yStepSize;
         }
-        xCurr = xInitial;
-        yCurr += yStepSize;
+        yCurr = yInitial;
+        xCurr += xStepSize;
     }
 }
 

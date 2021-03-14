@@ -3,32 +3,31 @@
 
 #include <vector>
 #include "../utilities/utilities.h"
+#include "imgui.h"
 
-enum class TileStates
-{
-    AGENT,
-    OPPONENT,
-    AGENT_TRACE,
-    OPPONENT_TRACE,
-    WALL,
-    GOAL,
-    EMPTY
-};
 
 class SimState
 {
     public:
     SimState(size_t width, size_t height);
     std::vector<std::vector<TileStates>> getFullMazeRepr() const;
+    void updateCanvasStepSize(ImVec2 stepSize);
+    void updateCanvasBegPos(ImVec2 pos);
+    void updateCanvasEndPos(ImVec2 pos);
     size_t getWidth() const;
     size_t getHeight() const;
     private:
-    pos simSize;
 
-    pos agentPos;
-    pos goalPos;
-    std::vector<pos> currOppPosHist;
-    std::vector<pos> walls;
+    ImVec2 canvasStepSize;
+    ImVec2 canvasBegPos;
+    ImVec2 canvasEndPos;
+
+    Position simSize;
+
+    Position agentPos;
+    Position goalPos;
+    std::vector<Position> currOppPosHist;
+    std::vector<Position> walls;
 
 
 
