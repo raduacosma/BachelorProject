@@ -5,28 +5,15 @@
 using namespace std;
 bool Agent::performOneStep()
 {
-    auto [reward, newState, continueStatus] =
+    auto [reward, newState, canContinue] =
     d_maze->computeNextStateAndReward(action(d_oldstate));
     giveFeedback(reward, newState);
 //    totalReward += reward;
-    switch (continueStatus)
+    if (not canContinue)
     {
-
-        case SimResult::CONTINUE:
-            break;
-        case SimResult::REACHED_GOAL:
-//            d_simContainer->nextLevel();
-//            d_maze = &d_simContainer->getCurrent();
-//            d_maze->resetForNextEpisode();
-            break;
-        case SimResult::KILLED_BY_OPPONENT:
-//            d_simContainer->goToBeginning();
-//            d_maze = &d_simContainer->getCurrent();
-//            d_maze->resetForNextEpisode();
-            return false;
-            break;
+        return false;
     }
-
+    // check if d_oldstate should be updated even if we can't continue
     d_oldstate = newState;
     return true;
 }

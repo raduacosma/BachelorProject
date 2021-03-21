@@ -150,7 +150,7 @@ int main(int, char**)
     UiStateTracker uiStateTracker;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
     SimBuilder sim;
-    SimContainer simContainer;
+    SimContainer *simContainer = nullptr;
     size_t simSpeed = 10;
     size_t speedCounter = 0;
     Agent * agent = new QLearning(100,0.1,0.1,0.1);
@@ -179,10 +179,12 @@ int main(int, char**)
             {
                 sim = SimBuilder{};
             }
-            if (simContainer.isCorrectState())
+            if (simContainer != nullptr)
             {
-                simContainer = SimContainer{};
-                delete agent;   // questionable these copy assignment things need to be checked
+                delete simContainer;
+                simContainer = nullptr;
+                std::cout<<"here for some reason"<<std::endl;
+                delete agent;   // questionable, these copy assignment things need to be checked
                 agent = new QLearning(100,0.1,0.1,0.1);
             }
             drawStartMenu(uiStateTracker);
@@ -202,10 +204,11 @@ int main(int, char**)
         {
             speedCounter+=simSpeed;
 
-            if (not simContainer.isCorrectState())
+            if (simContainer == nullptr)
             {
-                simContainer =
+                simContainer = new
                     SimContainer{ uiStateTracker.nextFilename, agent };
+                std::cout<<"this should be the last"<<std::endl;
             }
             if(speedCounter >= 60)
             {
@@ -218,8 +221,8 @@ int main(int, char**)
                 agent->performOneStep();
                 uiStateTracker.playOneStep = false;
             }
-            drawMenuBar(simContainer.getCurrent(), uiStateTracker);
-            drawGameState(simContainer.getCurrent());
+            drawMenuBar(simContainer->getCurrent(), uiStateTracker);
+            drawGameState(simContainer->getCurrent());
 
 
         }
@@ -279,6 +282,7 @@ int main(int, char**)
     glfwTerminate();
 
     delete agent;
+    delete simContainer;
 
     return 0;
 }

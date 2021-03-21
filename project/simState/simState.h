@@ -42,6 +42,7 @@ class SimState
     Position goalPos;
     size_t currOpPosIdx;
     size_t traceSize = 5;
+    size_t visionGridSize = 2;
 
     std::vector<Position> opponentTrace;
     std::vector<Position> walls;

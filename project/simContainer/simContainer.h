@@ -23,7 +23,7 @@ class SimContainer
     SimContainer(std::string const &filename, Agent *agentParam);
     SimState &getCurrent();
     size_t mazeStateHash() const;
-    std::tuple<double, size_t, SimResult> computeNextStateAndReward(Actions action);
+    std::tuple<double, size_t, bool> computeNextStateAndReward(Actions action);
     void sendNrStatesToAgent();
     bool nextLevel();
     void goToBeginning();

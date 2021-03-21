@@ -37,22 +37,10 @@ tuple<double, size_t, SimResult> SimState::computeNextStateAndReward(Actions act
     // make sure this should be updated before opponent
     size_t hash = mazeStateHash();
     bool returnContinue;
-    switch (canContinue)
+    if(canContinue == SimResult::CONTINUE)
     {
-
-        case SimResult::CONTINUE:
-            returnContinue = true;
-            updateOpponentPos();
-            break;
-        case SimResult::REACHED_GOAL:
-//            returnContinue = true;
-            break;
-        case SimResult::KILLED_BY_OPPONENT:
-//            returnContinue = false;
-//            resetForNextEpisode();
-            break;
+        updateOpponentPos();
     }
-
 
     return make_tuple(reward, hash, canContinue);
 }

@@ -56,9 +56,35 @@ size_t SimContainer::mazeStateHash() const
 {
     return simStates[currSimState].mazeStateHash();
 }
-std::tuple<double, size_t, SimResult>
+std::tuple<double, size_t, bool>
 SimContainer::computeNextStateAndReward(Actions action)
 {
-    cout<<simStates.size()<<endl;
-    return make_tuple(1,2,SimResult::CONTINUE);
+    auto [reward,newState,continueStatus] = simStates[currSimState].computeNextStateAndReward(action);
+    bool canContinue = true;
+    switch (continueStatus)
+    {
+
+        case SimResult::CONTINUE:
+            canContinue = true;
+            break;
+        case SimResult::REACHED_GOAL:
+            if(nextLevel())
+            {
+                canContinue = true;
+            }
+            else
+            {
+                canContinue = false;
+            }
+            simStates[currSimState].resetForNextEpisode();
+            agent->maze(this);
+            break;
+        case SimResult::KILLED_BY_OPPONENT:
+            canContinue = false;
+            goToBeginning();
+            simStates[currSimState].resetForNextEpisode();
+            agent->maze(this);
+            break;
+    }
+    return make_tuple(reward,newState,canContinue);
 }
