@@ -16,7 +16,7 @@ class SimState
     SimState() = default;
     SimState(std::string const &filename);
     void generateStateRepresentation();
-    std::vector<std::vector<SimObject>> const & getFullMazeRepr();
+    std::vector<std::vector<ImVec4>> const & getFullMazeRepr();
     void updateCanvasStepSize(ImVec2 stepSize);
     void updateCanvasBegPos(ImVec2 pos);
     void updateCanvasEndPos(ImVec2 pos);
@@ -27,7 +27,7 @@ class SimState
     private:
     bool correctState = false;
 
-    std::vector<std::vector<SimObject>> stateRepresentation;
+    std::vector<std::vector<ImVec4>> stateRepresentation;
     ImVec2 canvasStepSize;
     ImVec2 canvasBegPos;
     ImVec2 canvasEndPos;

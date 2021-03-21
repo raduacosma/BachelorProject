@@ -12,10 +12,39 @@ SimBuilder::SimBuilder(size_t width, size_t height)
     correctState = true;
     generateStateRepresentation();
 }
-std::vector<std::vector<SimObject>> const &SimBuilder::getFullMazeRepr() const
+std::vector<std::vector<ImVec4>> const &SimBuilder::getFullMazeRepr()
 {
+    vector<ImVec4> row{simSize.y, {255,255,255,255}};
+    vector<vector<ImVec4>> repr{simSize.x,row};
 
-    return stateRepresentation;
+    for (size_t i = 0; i <simSize.x; ++i)
+        for(size_t j =0; j<simSize.y; ++j)
+        {
+            switch(stateRepresentation[i][j])
+            {
+
+                case SimObject::NONE:
+                    repr[i][j] = {211,211,211,255};
+                    break;
+                case SimObject::AGENT:
+                    repr[i][j] = {0,0,255,255};
+                    break;
+                case SimObject::GOAL:
+                    repr[i][j] = {0,128,0,255};
+                    break;
+                case SimObject::WALL:
+                    repr[i][j] = {128,128,128,255};
+                    break;
+                case SimObject::OPPONENT:
+                    repr[i][j] = {255,0,0,255};
+                    break;
+                case SimObject::OPPONENT_TRACE:
+                    repr[i][j] = {243,122,122,255};
+                    break;
+            }
+        }
+    colorRepresentation = move(repr);
+    return colorRepresentation;
 }
 void SimBuilder::drawAtPos(Position pos)
 {

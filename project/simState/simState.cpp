@@ -130,7 +130,7 @@ pair<double, SimResult> SimState::updateAgentPos()
     return make_pair(d_normalReward, SimResult::CONTINUE);
 }
 
-std::vector <std::vector<SimObject>> const & SimState::getFullMazeRepr()
+std::vector <std::vector<ImVec4>> const & SimState::getFullMazeRepr()
 {
     generateStateRepresentation();
     return stateRepresentation;
@@ -185,44 +185,69 @@ SimState::SimState(std::string const &filename)
 
 void SimState::generateStateRepresentation()
 {
-    vector<SimObject> row{simSize.y, SimObject::NONE};
-    vector<vector<SimObject>> repr{simSize.x,row};
+    vector<ImVec4> row{simSize.y, { 211,211,211,255 } };
+    vector<vector<ImVec4>> repr{simSize.x,row};
 
     // Since default pos's are initialized to 0, the (0,0) tile gets colored
     // even though it should not. Therefore, initialize in the constructor
     // all the empty pos's to {height,width} and then check here if they
     // are indeed out of bounds. Since this is just for the GUI, performance
     // does not really matter so it's fine
-    auto assignWithBoundCheck = [&](Position pos, SimObject tileState)
+    auto assignWithBoundCheck = [&](Position pos, ImVec4 color)
     {
       if (pos.x >= getWidth() || pos.y >= getHeight() || pos.x < 0 || pos.y < 0)
           return;
       else
-          repr[pos.x][pos.y] = tileState;
+          repr[pos.x][pos.y] = color;
     };
-
-    assignWithBoundCheck(agentPos,SimObject::AGENT);
-    assignWithBoundCheck(goalPos,SimObject::GOAL);
+    ImVec4 agentColor = {0,0,255,255};
+    ImVec4 goalColor = {0,128,0,255};
+    ImVec4 wallColor = {128,128,128,255};
+    ImVec4 opponentColor = {255,0,0,255};
+    ImVec4 opponentTraceColor = {243,122,122,255};
+    ImVec4 agentViewColor = {50,205,50,255};
+    ImVec4 opponentViewColor = {202,119,119,255};
+    assignWithBoundCheck(agentPos,agentColor);
+    assignWithBoundCheck(goalPos,goalColor);
     for (auto const & wall: walls)
     {
-        assignWithBoundCheck(wall,SimObject::WALL);
+        assignWithBoundCheck(wall,wallColor);
     }
 //    assignWithBoundCheck(opponentPos,SimObject::OPPONENT);
-    assignWithBoundCheck(opponentTrace[currOpPosIdx],SimObject::OPPONENT);
+    assignWithBoundCheck(opponentTrace[currOpPosIdx],opponentColor);
     size_t opLength = traceSize;  // replace with trace size
     // be careful, we can't do the >-1 check due to size_t and this should
     // stop after 0 but if something is wrong good to check this
 
     for (size_t idx = currOpPosIdx; idx-- > 0 and opLength;)
     {
-        assignWithBoundCheck(opponentTrace[idx], SimObject::OPPONENT_TRACE);
+        assignWithBoundCheck(opponentTrace[idx], opponentTraceColor);
         --opLength;
     }
     for (size_t idx = opponentTrace.size(); idx-- > 0 and opLength;)
     {
-        assignWithBoundCheck(opponentTrace[idx], SimObject::OPPONENT_TRACE);
+        assignWithBoundCheck(opponentTrace[idx], opponentTraceColor);
         --opLength;
     }
+    auto applyViewColor = [&](Position pos, ImVec4 color)
+    {
+        for (size_t i = 0; i < simSize.x; ++i)
+            for (size_t j = 0; j < simSize.y; ++j)
+            {
+                if (abs(static_cast<int>(i - pos.x)) <=
+                        visionGridSize and
+                    abs(static_cast<int>(j - pos.y)) <= visionGridSize)
+                {
+                    repr[i][j] = { (repr[i][j].x + color.x) / 2,
+                                   (repr[i][j].y + color.y) / 2,
+                                   (repr[i][j].z + color.z) / 2,
+                                   255 };
+                }
+            }
+    };
+    applyViewColor(agentPos, agentViewColor);
+    applyViewColor(opponentTrace[currOpPosIdx], opponentViewColor);
+
     stateRepresentation = move(repr);
 }
 

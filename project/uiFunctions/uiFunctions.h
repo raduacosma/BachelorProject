@@ -90,34 +90,14 @@ void renderSimState(StateRepr &simState, ImVec2 const &canvas_p0,
     {
         for (size_t j = 0; j < simState.getHeight(); ++j)
         {
-            SimObject currTile = stateRepr[i][j];
-            auto drawRect = [&](size_t r, size_t g, size_t b, size_t a){
+            ImVec4 currTile = stateRepr[i][j];
+            auto drawRect = [&](ImVec4 color){
               draw_list->AddRectFilled({ xCurr+2, yCurr+2 },
                                        { xCurr + xStepSize - 2, yCurr + yStepSize - 2},
-                                       IM_COL32(r,g,b,a));
+                                       IM_COL32(color.x,color.y,color.z,color.w));
             };
-            switch (currTile)
-            {
-                case SimObject::NONE:
-                    drawRect(30,30,30,255);
-                    break;
-                case SimObject::AGENT:
-//                    std::cout<<i<< " " << j <<std::endl;
-                    drawRect(60,60,60,255);
-                    break;
-                case SimObject::OPPONENT:
-                    drawRect(100,100,100,255);
-                    break;
-                case SimObject::OPPONENT_TRACE:
-                    drawRect(120,120,120,255);
-                    break;
-                case SimObject::WALL:
-                    drawRect(140,140,140,255);
-                    break;
-                case SimObject::GOAL:
-                    drawRect(160,160,160,255);
-                    break;
-            }
+            drawRect(currTile);
+
 
             yCurr += yStepSize;
         }
