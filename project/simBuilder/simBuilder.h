@@ -6,31 +6,33 @@
 #include <iostream>
 #include "imgui.h"
 
-enum class SimObject
-{
-    NONE,
-    AGENT,
-    GOAL,
-    WALL,
-    OPPONENT,
-    OPPONENT_TRACE,
-};
+
 struct SimBuilder
 {
-    SimObject objToDraw = SimObject::NONE;
+
     SimBuilder(size_t width, size_t height);
-    std::vector<std::vector<TileStates>> getFullMazeRepr() const;
+    SimBuilder() = default;
+    SimBuilder &operator=(SimBuilder &&tmp);
+//    void swap(SimBuilder &other);
+    std::vector<std::vector<SimObject>> const &getFullMazeRepr() const;
     void updateCanvasStepSize(ImVec2 stepSize);
     void updateCanvasBegPos(ImVec2 pos);
     void updateCanvasEndPos(ImVec2 pos);
     void generateStateRepresentation();
     size_t getWidth() const;
     size_t getHeight() const;
+    void drawAtPos(Position pos);
+    void removeAtPos(Position pos);
+
+    bool correctState = false;
+    SimObject objToDraw = SimObject::NONE;
 
     std::vector<std::vector<SimObject>> stateRepresentation;
+
     ImVec2 canvasStepSize;
     ImVec2 canvasBegPos;
     ImVec2 canvasEndPos;
+
     Position simSize;
 
     Position agentPos;
@@ -38,8 +40,8 @@ struct SimBuilder
     Position opponentPos;
     std::vector<Position> opponentTrace;
     std::vector<Position> walls;
-    void drawAtPos(Position pos);
-    void removeAtPos(Position pos);
+
+    void writeToFile(std::string const &fileName);
 };
 
 

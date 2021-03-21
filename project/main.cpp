@@ -10,8 +10,10 @@
 
 #include <iostream>
 #include "uiFunctions/uiFunctions.h"
-#include "simState/simState.h"
+#include "simContainer/simContainer.h"
 #include "uiStateTracker/uiStateTracker.h"
+#include "agent/agent.h"
+#include "agent/qlearning/qlearning.h"
 
 // About Desktop OpenGL function loaders:
 //  Modern desktop OpenGL doesn't have a standard portable header file to load OpenGL function pointers.
@@ -147,7 +149,11 @@ int main(int, char**)
 
     UiStateTracker uiStateTracker;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
+    SimBuilder sim;
+    SimContainer simContainer;
+    size_t simSpeed = 10;
+    size_t speedCounter = 0;
+    Agent * agent = new QLearning(100,0.1,0.1,0.1);
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -167,17 +173,55 @@ int main(int, char**)
         // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 //        if (show_demo_window)
 //            ImGui::ShowDemoWindow(&show_demo_window);
-        if (uiStateTracker.showSizeSelectionMenu)
+        if (uiStateTracker.showStartMenu)
         {
-            drawSizeSelectionMenu(uiStateTracker);
+            if (sim.correctState)
+            {
+                sim = SimBuilder{};
+            }
+            if (simContainer.isCorrectState())
+            {
+                simContainer = SimContainer{};
+                delete agent;   // questionable but this is never reached
+                agent = new QLearning(100,0.1,0.1,0.1);
+            }
+            drawStartMenu(uiStateTracker);
         }
-        if(not uiStateTracker.showSizeSelectionMenu)
+        if(uiStateTracker.showSimBuilder)
         {
-            static SimBuilder sim{ uiStateTracker.nextSimCellWidth,
-                                      uiStateTracker.nextSimCellHeight };
-            drawMenuBar(sim);
+            if (not sim.correctState)
+            {
+                sim = SimBuilder{ uiStateTracker.nextSimCellWidth,
+                                  uiStateTracker.nextSimCellHeight };
+            }
+            drawMenuBar(sim, uiStateTracker);
             drawGameState(sim);
             updateSimBuilder(sim);
+        }
+        if(uiStateTracker.showSimState)
+        {
+            speedCounter+=simSpeed;
+
+            if (not simContainer.isCorrectState())
+            {
+                simContainer =
+                    SimContainer{ uiStateTracker.nextFilename, agent };
+            }
+            if(speedCounter >= 60)
+            {
+                if (not uiStateTracker.gamePaused)
+                    agent->performOneStep();
+                speedCounter = 0;
+            }
+            if (uiStateTracker.playOneStep)
+            {
+                agent->performOneStep();
+                uiStateTracker.playOneStep = false;
+            }
+            drawMenuBar(simContainer.getCurrent(), uiStateTracker);
+            drawGameState(simContainer.getCurrent());
+
+
         }
         // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
 //        {
@@ -233,6 +277,8 @@ int main(int, char**)
 
     glfwDestroyWindow(window);
     glfwTerminate();
+
+    delete agent;
 
     return 0;
 }

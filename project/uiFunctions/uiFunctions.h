@@ -29,9 +29,9 @@ concept StateRepresentation = requires(Repr repr)
     repr.getFullMazeRepr();
 };
 
-void drawSizeSelectionMenu(UiStateTracker &uiStateTracker);
-void drawMenuBar(SimBuilder &simBuilder);
-void drawMenuBar(SimState const &simState);
+void drawStartMenu(UiStateTracker &uiStateTracker);
+void drawMenuBar(SimBuilder &simBuilder, UiStateTracker &uiStateTracker);
+void drawMenuBar(SimState const &simState, UiStateTracker &uiStateTracker);
 
 void updateSimBuilder(SimBuilder &simBuilder);
 
@@ -90,7 +90,7 @@ void renderSimState(StateRepr &simState, ImVec2 const &canvas_p0,
     {
         for (size_t j = 0; j < simState.getHeight(); ++j)
         {
-            TileStates currTile = stateRepr[i][j];
+            SimObject currTile = stateRepr[i][j];
             auto drawRect = [&](size_t r, size_t g, size_t b, size_t a){
               draw_list->AddRectFilled({ xCurr+2, yCurr+2 },
                                        { xCurr + xStepSize - 2, yCurr + yStepSize - 2},
@@ -98,25 +98,23 @@ void renderSimState(StateRepr &simState, ImVec2 const &canvas_p0,
             };
             switch (currTile)
             {
-                case TileStates::EMPTY:
+                case SimObject::NONE:
                     drawRect(30,30,30,255);
                     break;
-                case TileStates::AGENT:
+                case SimObject::AGENT:
+//                    std::cout<<i<< " " << j <<std::endl;
                     drawRect(60,60,60,255);
                     break;
-                case TileStates::AGENT_TRACE:
-                    drawRect(80,80,80,255);
-                    break;
-                case TileStates::OPPONENT:
+                case SimObject::OPPONENT:
                     drawRect(100,100,100,255);
                     break;
-                case TileStates::OPPONENT_TRACE:
+                case SimObject::OPPONENT_TRACE:
                     drawRect(120,120,120,255);
                     break;
-                case TileStates::WALL:
+                case SimObject::WALL:
                     drawRect(140,140,140,255);
                     break;
-                case TileStates::GOAL:
+                case SimObject::GOAL:
                     drawRect(160,160,160,255);
                     break;
             }

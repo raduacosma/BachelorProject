@@ -5,6 +5,7 @@ pkg_search_module(GLFW REQUIRED glfw3)
 include_directories(${GLFW_INCLUDE_DIRS})
 
 set(CMAKE_CXX_STANDARD 20)
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BachelorProject_SOURCE_DIR})
 
 include_directories(imgui-1.81)
 include_directories(imgui-1.81/backends)
@@ -40,6 +41,19 @@ add_executable(BachelorProject
         project/uiFunctions/uiFunctions.h
         project/uiFunctions/uiFunctions.cpp
         project/simState/simState.cpp
-        project/simState/simState.h project/simBuilder/simBuilder.cpp project/simBuilder/simBuilder.h project/utilities/utilities.h project/uiStateTracker/uiStateTracker.h)
-
+        project/simState/simState.h project/simBuilder/simBuilder.cpp project/simBuilder/simBuilder.h project/utilities/utilities.h project/uiStateTracker/uiStateTracker.h project/agent/agent.cpp project/agent/agent.h
+        project/simState/actions.h
+        project/agent/qlearning/action.cc
+        project/agent/qlearning/frame
+        project/agent/qlearning/giveFeedback.cc
+        project/agent/qlearning/qlearning.h
+        project/agent/qlearning/qlearning.ih
+        project/agent/qlearning/qlearning1.cc
+        project/agent/qlearning/statespacesize.cc
+        project/random/data.cc
+        project/random/frame
+        project/random/random.h
+        project/random/random.ih
+        project/random/uniformInt.cc
+        project/simContainer/simContainer.cpp project/simContainer/simContainer.h)
 target_link_libraries(BachelorProject GL ${GLFW_STATIC_LIBRARIES})

@@ -1,7 +1,7 @@
 #include "uiFunctions.h"
 
 using namespace std;
-void drawMenuBar(SimBuilder &simBuilder)
+void drawMenuBar(SimBuilder &simBuilder, UiStateTracker &uiStateTracker)
 {
     if (ImGui::BeginMainMenuBar())
     {
@@ -25,30 +25,77 @@ void drawMenuBar(SimBuilder &simBuilder)
         {
             simBuilder.objToDraw = SimObject::GOAL;
         }
+        if (ImGui::Button("Save model"))
+        {
+
+            ImGui::OpenPopup("Save Dialog");
+        }
+        if (ImGui::Button("Go back to start"))
+        {
+            uiStateTracker.showSimBuilder = false;
+            uiStateTracker.showStartMenu = true;
+        }
+        ImGuiContext& g = *GImGui;
+        ImGui::SetNextWindowPos(g.IO.DisplaySize * 0.5f, ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+        ImGui::SetNextWindowSize({0,0});
+        if(ImGui::BeginPopupModal("Save Dialog",NULL))
+        {
+            simBuilder.objToDraw = SimObject::NONE;
+            ImGui::Text("Please select the file name of the simulation state");
+            static string simName{"simulation_state.txt"};
+            ImGui::InputText("Simulation state file name", &simName);
+            if(ImGui::Button("Save"))
+            {
+                simBuilder.writeToFile(simName);
+                ImGui::CloseCurrentPopup();
+            }
+            ImGui::SameLine();
+            if(ImGui::Button("Cancel"))
+            {
+                ImGui::CloseCurrentPopup();
+            }
+
+            ImGui::EndPopup();
+        }
+
 
         ImGui::EndMainMenuBar();
     }
 }
-void drawMenuBar(SimState const &simState)
+void drawMenuBar(SimState const &simState, UiStateTracker &uiStateTracker)
 {
     if (ImGui::BeginMainMenuBar())
     {
-        if (ImGui::Button("Pause simulation"))
+        if (ImGui::Button("Play / Pause"))
         {
-            std::cout << "yues" << std::endl;
+            uiStateTracker.gamePaused = !uiStateTracker.gamePaused;
+        }
+        if (ImGui::Button("Step through"))
+        {
+            if (uiStateTracker.gamePaused)
+                uiStateTracker.playOneStep = true;
         }
 
         ImGui::EndMainMenuBar();
     }
 }
-void drawSizeSelectionMenu(UiStateTracker &uiStateTracker)
+void drawStartMenu(UiStateTracker &uiStateTracker)
 {
     ImGuiContext& g = *GImGui;
     ImGui::SetNextWindowPos(g.IO.DisplaySize * 0.5f, ImGuiCond_Always, ImVec2(0.5f, 0.5f));
     ImGui::SetNextWindowSize({0,0});
-    ImGui::Begin("Size Selector");
+    ImGui::Begin("Start Menu");
+    static string fileName;
+    ImGui::Text("Load simulation state from file:");
+    ImGui::InputText("File name",&fileName);
+    if (ImGui::Button("Load"))
+    {
+        uiStateTracker.nextFilename = fileName;
+        uiStateTracker.showStartMenu = false;
+        uiStateTracker.showSimState = true;
+    }
 
-    ImGui::Text("Please select the cell width and height of the next simulation");
+    ImGui::Text("Or prototype on a simulation state; please select the cell width and height of the next simulation");
     static string width{"17"};
     ImGui::InputText("World Width", &width);
     static string height{"10"};
@@ -57,7 +104,8 @@ void drawSizeSelectionMenu(UiStateTracker &uiStateTracker)
     {
         uiStateTracker.nextSimCellWidth = stoul(width);
         uiStateTracker.nextSimCellHeight = stoul(height);
-        uiStateTracker.showSizeSelectionMenu = false;
+        uiStateTracker.showStartMenu = false;
+        uiStateTracker.showSimBuilder = true;
     }
     ImGui::End();
 

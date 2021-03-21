@@ -2,17 +2,25 @@
 #define _INCLUDED_UTILITIES
 
 #include <cstddef>
+#include <ostream>
+
 // TODO: when removing enum, make sure that agent and opponent view are there
 // and remove agent_trace
-enum class TileStates
+enum class SimObject
 {
+    NONE,
     AGENT,
-    OPPONENT,
-    AGENT_TRACE,
-    OPPONENT_TRACE,
-    WALL,
     GOAL,
-    EMPTY
+    WALL,
+    OPPONENT,
+    OPPONENT_TRACE,
+};
+
+enum class SimResult
+{
+    CONTINUE,
+    REACHED_GOAL,
+    KILLED_BY_OPPONENT
 };
 
 struct Position
@@ -30,6 +38,12 @@ struct CanvasPos
 inline bool operator==(Position lhs, Position rhs)
 {
     return lhs.x==rhs.x and lhs.y==rhs.y;
+}
+
+inline std::ostream &operator<<(std::ostream &out, Position pos)
+{
+    out << pos.x << " " << pos.y << std::endl;
+    return out;
 }
 
 #endif
