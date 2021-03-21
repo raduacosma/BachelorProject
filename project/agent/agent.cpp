@@ -5,16 +5,28 @@
 using namespace std;
 bool Agent::performOneStep()
 {
-    auto [reward, newState, canContinue] =
+    auto [reward, newState, continueStatus] =
     d_maze->computeNextStateAndReward(action(d_oldstate));
     giveFeedback(reward, newState);
 //    totalReward += reward;
-    if(not canContinue)
+    switch (continueStatus)
     {
-//        if(reward == d_maze->killedByOpponentReward())
-//            d_hasDied[nrEpisode] = 1;
-        return false;
+
+        case SimResult::CONTINUE:
+            break;
+        case SimResult::REACHED_GOAL:
+//            d_simContainer->nextLevel();
+//            d_maze = &d_simContainer->getCurrent();
+//            d_maze->resetForNextEpisode();
+            break;
+        case SimResult::KILLED_BY_OPPONENT:
+//            d_simContainer->goToBeginning();
+//            d_maze = &d_simContainer->getCurrent();
+//            d_maze->resetForNextEpisode();
+            return false;
+            break;
     }
+
     d_oldstate = newState;
     return true;
 }
@@ -52,7 +64,7 @@ Agent::Agent(size_t nrEpisodes, double epsilon)
 
 void Agent::maze(SimContainer *maze)
 {
-    d_maze = &maze->getCurrent();
+    d_maze = maze;
 }
 void Agent::newEpisode(size_t stateIdx)
 {

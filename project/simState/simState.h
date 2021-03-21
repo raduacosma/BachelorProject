@@ -57,7 +57,7 @@ class SimState
     public:
     void resetForNextEpisode();
     // this also moves the agent
-    std::tuple<double, size_t, bool> computeNextStateAndReward(Actions action);
+    std::tuple<double, size_t, SimResult> computeNextStateAndReward(Actions action);
     size_t mazeStateHash() const;
     double killedByOpponentReward();
 

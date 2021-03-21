@@ -29,7 +29,7 @@ Position SimState::computeNewAgentPos()
     return { agentPos.x, agentPos.y };
 }
 
-tuple<double, size_t, bool> SimState::computeNextStateAndReward(Actions action)
+tuple<double, size_t, SimResult> SimState::computeNextStateAndReward(Actions action)
 {
     currAction = action;
 
@@ -45,16 +45,16 @@ tuple<double, size_t, bool> SimState::computeNextStateAndReward(Actions action)
             updateOpponentPos();
             break;
         case SimResult::REACHED_GOAL:
-            returnContinue = true;
+//            returnContinue = true;
             break;
         case SimResult::KILLED_BY_OPPONENT:
-            returnContinue = false;
-            resetForNextEpisode();
+//            returnContinue = false;
+//            resetForNextEpisode();
             break;
     }
 
 
-    return make_tuple(reward, hash, returnContinue);
+    return make_tuple(reward, hash, canContinue);
 }
 void SimState::updateOpponentPos()
 {

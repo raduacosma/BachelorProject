@@ -182,7 +182,7 @@ int main(int, char**)
             if (simContainer.isCorrectState())
             {
                 simContainer = SimContainer{};
-                delete agent;   // questionable but this is never reached
+                delete agent;   // questionable these copy assignment things need to be checked
                 agent = new QLearning(100,0.1,0.1,0.1);
             }
             drawStartMenu(uiStateTracker);

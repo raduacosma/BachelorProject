@@ -26,7 +26,7 @@ class Agent
     double d_runReward;
 
     size_t d_time = 0;
-    SimState *d_maze;         // The maze the agent is navigating
+    SimContainer *d_maze;         // The maze the agent is navigating
     size_t d_stateSpace = 0;
 
     size_t d_oldstate;

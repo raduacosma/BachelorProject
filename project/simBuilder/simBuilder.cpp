@@ -19,9 +19,9 @@ std::vector<std::vector<SimObject>> const &SimBuilder::getFullMazeRepr() const
 }
 void SimBuilder::drawAtPos(Position pos)
 {
-    if(stateRepresentation[pos.x][pos.y] != SimObject::NONE)
-        return;
     if(pos.x < 0 or pos.x >= getWidth() or pos.y < 0 or pos.y >= getHeight())
+        return;
+    if(stateRepresentation[pos.x][pos.y] != SimObject::NONE)
         return;
     switch (objToDraw)
     {

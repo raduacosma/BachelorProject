@@ -11,14 +11,17 @@ SimContainer::SimContainer(std::string const &filename, Agent *agentParam)
     istringstream in(filename);
     while (getline(in,file,','))
     {
+        cout<<"here for some reason"<<endl;
         cout<<file<<endl;
         simStates.emplace_back(file);
     }
     currSimState = 0;
+    cout<<simStates.size()<<endl;
     agent->maze(this);
     sendNrStatesToAgent();
     correctState = true;
 }
+
 void SimContainer::sendNrStatesToAgent()
 {
     Position simSize = simStates[currSimState].getSimSize();
@@ -32,12 +35,30 @@ SimState &SimContainer::getCurrent()
 {
     return simStates[currSimState];
 }
-//size_t SimContainer::mazeStateHash() const
-//{
-//    return (&simStates[currSimState])->mazeStateHash();
-//}
-//std::tuple<double, size_t, bool>
-//SimContainer::computeNextStateAndReward(Actions action)
-//{
-//    return (&simStates[currSimState])->computeNextStateAndReward(action);
-//}
+bool SimContainer::nextLevel()
+{
+    ++currSimState;
+    if (currSimState == simStates.size())
+    {
+        currSimState = 0;
+//        simStates[currSimState].resetForNextEpisode();
+        return false; // no more levels
+    }
+//    simStates[currSimState].resetForNextEpisode();
+    return true;
+}
+void SimContainer::goToBeginning()
+{
+    currSimState = 0;
+//    simStates[currSimState].resetForNextEpisode();
+}
+size_t SimContainer::mazeStateHash() const
+{
+    return simStates[currSimState].mazeStateHash();
+}
+std::tuple<double, size_t, SimResult>
+SimContainer::computeNextStateAndReward(Actions action)
+{
+    cout<<simStates.size()<<endl;
+    return make_tuple(1,2,SimResult::CONTINUE);
+}
