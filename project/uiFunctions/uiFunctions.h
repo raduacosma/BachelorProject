@@ -16,8 +16,8 @@
 #undef IMGUI_DEFINE_MATH_OPERATORS
 #define IMGUI_DEFINE_MATH_OPERATORS
 
+#include "../simContainer/simContainer.h"
 #include "imgui_internal.h"
-
 
 #include <iostream>
 
@@ -31,7 +31,7 @@ concept StateRepresentation = requires(Repr repr)
 
 void drawStartMenu(UiStateTracker &uiStateTracker);
 void drawMenuBar(SimBuilder &simBuilder, UiStateTracker &uiStateTracker);
-void drawMenuBar(SimState const &simState, UiStateTracker &uiStateTracker);
+void drawMenuBar(SimContainer const &simState, UiStateTracker &uiStateTracker);
 
 void updateSimBuilder(SimBuilder &simBuilder);
 

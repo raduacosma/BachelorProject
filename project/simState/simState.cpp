@@ -51,7 +51,6 @@ void SimState::updateOpponentPos()
     {
         currOpPosIdx = 0;
     }
-    cout<<currOpPosIdx<<endl;
 }
 
 
@@ -138,8 +137,8 @@ std::vector <std::vector<ImVec4>> const & SimState::getFullMazeRepr()
 
 SimState::SimState(std::string const &filename)
 :
- d_outOfBoundsReward(-1), d_reachedGoalReward(1),
-      d_killedByOpponentReward(-100), d_normalReward(-1)
+ d_outOfBoundsReward(-0.01), d_reachedGoalReward(1),
+      d_killedByOpponentReward(-10), d_normalReward(-0.01)
 {
     ifstream in{filename};
     if(not in)
@@ -205,7 +204,7 @@ void SimState::generateStateRepresentation()
     ImVec4 wallColor = {128,128,128,255};
     ImVec4 opponentColor = {255,0,0,255};
     ImVec4 opponentTraceColor = {243,122,122,255};
-    ImVec4 agentViewColor = {50,205,50,255};
+    ImVec4 agentViewColor = {135,206,235,255};
     ImVec4 opponentViewColor = {202,119,119,255};
     assignWithBoundCheck(agentPos,agentColor);
     assignWithBoundCheck(goalPos,goalColor);

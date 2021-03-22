@@ -14,6 +14,8 @@
 #include "uiStateTracker/uiStateTracker.h"
 #include "agent/agent.h"
 #include "agent/qlearning/qlearning.h"
+#include <string>
+#include "runHeadless.h"
 
 // About Desktop OpenGL function loaders:
 //  Modern desktop OpenGL doesn't have a standard portable header file to load OpenGL function pointers.
@@ -56,8 +58,13 @@ static void glfw_error_callback(int error, const char* description)
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
-int main(int, char**)
+int main(int argc, char** argv)
 {
+    if(argc == 3)
+    {
+        runHeadless(std::string{argv[1]}, std::stoul(argv[2]));
+        return 0;
+    }
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
@@ -183,7 +190,6 @@ int main(int, char**)
             {
                 delete simContainer;
                 simContainer = nullptr;
-                std::cout<<"here for some reason"<<std::endl;
                 delete agent;   // questionable, these copy assignment things need to be checked
                 agent = new QLearning(100,0.1,0.1,0.1);
             }
@@ -208,7 +214,6 @@ int main(int, char**)
             {
                 simContainer = new
                     SimContainer{ uiStateTracker.nextFilename, agent };
-                std::cout<<"this should be the last"<<std::endl;
             }
             if(speedCounter >= 60)
             {
@@ -221,7 +226,7 @@ int main(int, char**)
                 agent->performOneStep();
                 uiStateTracker.playOneStep = false;
             }
-            drawMenuBar(simContainer->getCurrent(), uiStateTracker);
+            drawMenuBar(*simContainer, uiStateTracker);
             drawGameState(simContainer->getCurrent());
 
 

@@ -62,7 +62,7 @@ void drawMenuBar(SimBuilder &simBuilder, UiStateTracker &uiStateTracker)
         ImGui::EndMainMenuBar();
     }
 }
-void drawMenuBar(SimState const &simState, UiStateTracker &uiStateTracker)
+void drawMenuBar(SimContainer const &simContainer, UiStateTracker &uiStateTracker)
 {
     if (ImGui::BeginMainMenuBar())
     {
@@ -75,7 +75,12 @@ void drawMenuBar(SimState const &simState, UiStateTracker &uiStateTracker)
             if (uiStateTracker.gamePaused)
                 uiStateTracker.playOneStep = true;
         }
-
+        string levelText = "Level: " + to_string(simContainer.getCurrSimState());
+        ImGui::Text("%s", levelText.c_str());
+        string episodeText = "Episode: " + to_string(simContainer.getEpisodeCount());
+        ImGui::Text("%s", episodeText.c_str());
+        string rewardText = "Last Reward: " + to_string(simContainer.getLastReward());
+        ImGui::Text("%s", rewardText.c_str());
         ImGui::EndMainMenuBar();
     }
 }

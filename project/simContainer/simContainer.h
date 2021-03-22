@@ -14,6 +14,15 @@ class SimContainer
     Agent *agent;
     bool correctState = false;
     size_t currSimState;
+    size_t episodeCount;
+    double lastReward;
+
+    public:
+    double getLastReward() const;
+
+    public:
+    size_t getCurrSimState() const;
+    size_t getEpisodeCount() const;
 
     public:
     bool isCorrectState() const;
@@ -27,5 +36,6 @@ class SimContainer
     void sendNrStatesToAgent();
     bool nextLevel();
     void goToBeginning();
+
 };
 #endif

@@ -55,5 +55,5 @@ add_executable(BachelorProject
         project/random/random.h
         project/random/random.ih
         project/random/uniformInt.cc
-        project/simContainer/simContainer.cpp project/simContainer/simContainer.h)
+        project/simContainer/simContainer.cpp project/simContainer/simContainer.h project/runHeadless.cpp project/runHeadless.h)
 target_link_libraries(BachelorProject GL ${GLFW_STATIC_LIBRARIES})

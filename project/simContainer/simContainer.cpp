@@ -5,18 +5,15 @@
 #include "../agent/agent.h"
 using namespace std;
 SimContainer::SimContainer(std::string const &filename, Agent *agentParam)
-:    agent(agentParam)
+:    agent(agentParam), episodeCount(0)
 {
     string file;
     istringstream in(filename);
     while (getline(in,file,','))
     {
-        cout<<"here for some reason"<<endl;
-        cout<<file<<endl;
         simStates.emplace_back(file);
     }
     currSimState = 0;
-    cout<<simStates.size()<<endl;
     agent->maze(this);
     sendNrStatesToAgent();
     correctState = true;
@@ -75,16 +72,33 @@ SimContainer::computeNextStateAndReward(Actions action)
             else
             {
                 canContinue = false;
+                ++episodeCount;
             }
             simStates[currSimState].resetForNextEpisode();
+            cout << "reached goal"<<endl;
             agent->maze(this);
             break;
         case SimResult::KILLED_BY_OPPONENT:
+            cout<<"hit opponent"<<endl;
             canContinue = false;
             goToBeginning();
             simStates[currSimState].resetForNextEpisode();
             agent->maze(this);
+            ++episodeCount;
             break;
     }
+    lastReward = reward;
     return make_tuple(reward,newState,canContinue);
+}
+size_t SimContainer::getCurrSimState() const
+{
+    return currSimState;
+}
+size_t SimContainer::getEpisodeCount() const
+{
+    return episodeCount;
+}
+double SimContainer::getLastReward() const
+{
+    return lastReward;
 }
