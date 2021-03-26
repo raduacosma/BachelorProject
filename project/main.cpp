@@ -16,6 +16,7 @@
 #include "agent/qlearning/qlearning.h"
 #include <string>
 #include "runHeadless.h"
+#include <memory>
 
 // About Desktop OpenGL function loaders:
 //  Modern desktop OpenGL doesn't have a standard portable header file to load OpenGL function pointers.
@@ -157,10 +158,10 @@ int main(int argc, char** argv)
     UiStateTracker uiStateTracker;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
     SimBuilder sim;
-    SimContainer *simContainer = nullptr;
+    std::unique_ptr<SimContainer> simContainer = nullptr;
     size_t simSpeed = 10;
     size_t speedCounter = 0;
-    Agent * agent = new QLearning(100,0.1,0.1,0.1);
+    std::unique_ptr<Agent> agent = std::make_unique<QLearning>(100,0.1,0.1,0.1);
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -186,12 +187,10 @@ int main(int argc, char** argv)
             {
                 sim = SimBuilder{};
             }
-            if (simContainer != nullptr)
+            if (simContainer)
             {
-                delete simContainer;
                 simContainer = nullptr;
-                delete agent;   // questionable, these copy assignment things need to be checked
-                agent = new QLearning(100,0.1,0.1,0.1);
+                agent = std::make_unique<QLearning>(100,0.1,0.1,0.1);
             }
             drawStartMenu(uiStateTracker);
         }
@@ -210,10 +209,9 @@ int main(int argc, char** argv)
         {
             speedCounter+=simSpeed;
 
-            if (simContainer == nullptr)
+            if (not simContainer)
             {
-                simContainer = new
-                    SimContainer{ uiStateTracker.nextFilename, agent };
+                simContainer = std::make_unique<SimContainer>(uiStateTracker.nextFilename, agent.get());
             }
             if(speedCounter >= 60)
             {
@@ -286,8 +284,6 @@ int main(int argc, char** argv)
     glfwDestroyWindow(window);
     glfwTerminate();
 
-    delete agent;
-    delete simContainer;
 
     return 0;
 }
