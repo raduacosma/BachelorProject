@@ -5,7 +5,7 @@
 #include "../agent/agent.h"
 using namespace std;
 SimContainer::SimContainer(std::string const &filename, Agent *agentParam)
-:    agent(agentParam), episodeCount(0),currSimState(0),lastReward(0)
+:    agent(agentParam), currSimState(0), episodeCount(0), lastReward(0)
 {
     string file;
     istringstream in(filename);

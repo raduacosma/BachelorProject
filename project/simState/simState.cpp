@@ -36,7 +36,6 @@ tuple<double, size_t, SimResult> SimState::computeNextStateAndReward(Actions act
     auto [reward, canContinue] = updateAgentPos();
     // make sure this should be updated before opponent
     size_t hash = mazeStateHash();
-    bool returnContinue;
     if(canContinue == SimResult::CONTINUE)
     {
         updateOpponentPos();

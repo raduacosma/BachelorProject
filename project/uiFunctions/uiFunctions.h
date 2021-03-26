@@ -82,7 +82,6 @@ void renderSimState(StateRepr &simState, ImVec2 const &canvas_p0,
     simState.updateCanvasEndPos({canvas_p1.x,canvas_p1.y});
 
     float xCurr = canvas_p0.x;
-    float xInitial = xCurr;
     float yCurr = canvas_p0.y;
     float yInitial = yCurr;
     auto stateRepr = simState.getFullMazeRepr();
