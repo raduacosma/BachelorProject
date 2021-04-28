@@ -15,6 +15,7 @@ SimBuilder::SimBuilder(size_t width, size_t height)
 std::vector<std::vector<ImVec4>> const &SimBuilder::getFullMazeRepr()
 {   // maybe have generateStateRepr here and remove the move constr along
     // with refactoring main to use uniquePtr for SimBuilder?
+    generateStateRepresentation();
     vector<ImVec4> row{simSize.y, {255,255,255,255}};
     vector<vector<ImVec4>> repr{simSize.x,row};
 
@@ -179,26 +180,4 @@ void SimBuilder::writeToFile(string const &fileName)
         out << wall.x << " " << wall.y << '\n';
     }
 }
-SimBuilder &SimBuilder::operator=(SimBuilder &&tmp)
-{   // TODO: check what's up with this
-    correctState = tmp.correctState;
-    objToDraw = tmp.objToDraw;
-    simSize = tmp.simSize;
-    agentPos = tmp.agentPos;
-    goalPos = tmp.goalPos;
-    opponentPos = tmp.opponentPos;
-    opponentTrace = move(tmp.opponentTrace);
-    walls = move(tmp.walls);
-    generateStateRepresentation();
-    return *this;
-}
-//void SimBuilder::swap(SimBuilder &other)
-//{
-//    simSize = other.simSize;
-//
-//    std::swap(*this,other);
-////    char buffer[sizeof(SimBuilder)];             // aux buffer
-////    memcpy(buffer, this,   sizeof(SimBuilder));  // swap the memory
-////    memcpy(static_cast<void *>(this),   &other, sizeof(SimBuilder));
-////    memcpy(static_cast<void *>(&other), buffer, sizeof(SimBuilder));
-//}
+

@@ -154,7 +154,7 @@ int main(int argc, char** argv)
 
     UiStateTracker uiStateTracker;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-    SimBuilder sim;
+    std::unique_ptr<SimBuilder> simBuilder = nullptr;
     std::unique_ptr<SimContainer> simContainer = nullptr;
     size_t simSpeed = 10;
     size_t speedCounter = 0;
@@ -180,9 +180,9 @@ int main(int argc, char** argv)
 //            ImGui::ShowDemoWindow(&show_demo_window);
         if (uiStateTracker.showStartMenu)
         {
-            if (sim.correctState)
+            if (simBuilder)
             {
-                sim = SimBuilder{};
+                simBuilder = nullptr;
             }
             if (simContainer)
             {
@@ -193,14 +193,14 @@ int main(int argc, char** argv)
         }
         if(uiStateTracker.showSimBuilder)
         {
-            if (not sim.correctState)
+            if (simBuilder == nullptr)
             {
-                sim = SimBuilder{ uiStateTracker.nextSimCellWidth,
-                                  uiStateTracker.nextSimCellHeight };
+                simBuilder = std::make_unique<SimBuilder>(uiStateTracker.nextSimCellWidth,
+                                  uiStateTracker.nextSimCellHeight);
             }
-            drawMenuBar(sim, uiStateTracker);
-            drawGameState(sim);
-            updateSimBuilder(sim);
+            drawMenuBar(*simBuilder, uiStateTracker);
+            drawGameState(*simBuilder);
+            updateSimBuilder(*simBuilder);
         }
         if(uiStateTracker.showSimState)
         {
