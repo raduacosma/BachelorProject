@@ -13,7 +13,8 @@ SimBuilder::SimBuilder(size_t width, size_t height)
     generateStateRepresentation();
 }
 std::vector<std::vector<ImVec4>> const &SimBuilder::getFullMazeRepr()
-{
+{   // maybe have generateStateRepr here and remove the move constr along
+    // with refactoring main to use uniquePtr for SimBuilder?
     vector<ImVec4> row{simSize.y, {255,255,255,255}};
     vector<vector<ImVec4>> repr{simSize.x,row};
 
@@ -121,7 +122,7 @@ void SimBuilder::updateCanvasEndPos(ImVec2 pos)
     canvasEndPos = pos;
 }
 void SimBuilder::generateStateRepresentation()
-{
+{ // TODO: make this more like SimState
     vector<SimObject> row{simSize.y, SimObject::NONE};
     vector<vector<SimObject>> repr{simSize.x,row};
 
@@ -179,7 +180,7 @@ void SimBuilder::writeToFile(string const &fileName)
     }
 }
 SimBuilder &SimBuilder::operator=(SimBuilder &&tmp)
-{
+{   // TODO: check what's up with this
     correctState = tmp.correctState;
     objToDraw = tmp.objToDraw;
     simSize = tmp.simSize;
