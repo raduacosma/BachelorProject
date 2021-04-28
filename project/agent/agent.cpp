@@ -1,14 +1,12 @@
 #include "agent.h"
+#include "../simContainer/simContainer.h"
 #include "tuple"
 #include <iostream>
-#include "../simContainer/simContainer.h"
 using namespace std;
 bool Agent::performOneStep()
 {
-    auto [reward, newState, canContinue] =
-    d_maze->computeNextStateAndReward(action(d_oldstate));
+    auto [reward, newState, canContinue] = d_maze->computeNextStateAndReward(action(d_oldstate));
     giveFeedback(reward, newState);
-//    totalReward += reward;
     if (not canContinue)
     {
         return false;
@@ -27,13 +25,14 @@ void Agent::run()
     d_runReward = 0;
     for (size_t nrEpisode = 0; nrEpisode != d_nrEpisodes; ++nrEpisode)
     {
-        newEpisode(d_maze->mazeStateHash()); // d_oldstate was modified from Maze
-        // so it's fine
-        // anything else?
+        // d_oldstate was modified from Maze so it's fine, anything else?
+        newEpisode(d_maze->mazeStateHash());
         float totalReward = 0;
         while (true)
         {
-            if (not performOneStep())
+            bool canContinue = performOneStep();
+            totalReward += d_maze->getLastReward();
+            if (not canContinue)
                 break;
         }
         d_runReward += totalReward;
@@ -43,11 +42,10 @@ void Agent::run()
 }
 
 Agent::Agent(size_t nrEpisodes, float epsilon)
-    : d_nrEpisodes(nrEpisodes), d_rewards(vector<float>(nrEpisodes)),
-      d_hasDied(vector<size_t>(nrEpisodes)), EPSILON(epsilon)
+    : d_nrEpisodes(nrEpisodes), d_rewards(vector<float>(nrEpisodes)), d_hasDied(vector<size_t>(nrEpisodes)),
+      EPSILON(epsilon)
 {
 }
-
 
 void Agent::maze(SimContainer *maze)
 {
@@ -69,7 +67,7 @@ void Agent::initialState(size_t state)
     d_oldstate = state;
 }
 
-vector<size_t> & Agent::hasDied()
+vector<size_t> &Agent::hasDied()
 {
     return d_hasDied;
 }
@@ -78,4 +76,3 @@ float Agent::runReward()
 {
     return d_runReward;
 }
-
