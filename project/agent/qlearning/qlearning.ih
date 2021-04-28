@@ -1,5 +1,5 @@
 #include "qlearning.h"
-#include "../../random/random.h"
+#include "../../createRngObj/createRngObj.h"
 
 using namespace std;
 

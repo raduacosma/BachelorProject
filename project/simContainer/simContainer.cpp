@@ -15,17 +15,12 @@ SimContainer::SimContainer(std::string const &filename, Agent *agentParam)
     }
     agent->maze(this);
     sendNrStatesToAgent();
-    correctState = true;
 }
 
 void SimContainer::sendNrStatesToAgent()
 {
     Position simSize = simStates[currSimState].getSimSize();
     agent->stateSpaceSize(simSize.x * simSize.y);
-}
-bool SimContainer::isCorrectState() const
-{
-    return correctState;
 }
 SimState &SimContainer::getCurrent()
 {
@@ -52,7 +47,7 @@ size_t SimContainer::mazeStateHash() const
 {
     return simStates[currSimState].mazeStateHash();
 }
-std::tuple<double, size_t, bool>
+std::tuple<float, size_t, bool>
 SimContainer::computeNextStateAndReward(Actions action)
 {
     auto [reward,newState,continueStatus] = simStates[currSimState].computeNextStateAndReward(action);
@@ -97,7 +92,7 @@ size_t SimContainer::getEpisodeCount() const
 {
     return episodeCount;
 }
-double SimContainer::getLastReward() const
+float SimContainer::getLastReward() const
 {
     return lastReward;
 }

@@ -16,6 +16,6 @@ Actions QLearning::action(size_t stateIdx)
 //        d_lastAction = action;
 //      }
 //  }
-    d_lastAction = Random::uniform() * NR_ACTIONS;
+    d_lastAction = globalRng.getUniReal01() * NR_ACTIONS;
   return static_cast<Actions>(d_lastAction);
 }

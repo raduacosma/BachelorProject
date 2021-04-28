@@ -24,7 +24,6 @@ struct SimBuilder
     void drawAtPos(Position pos);
     void removeAtPos(Position pos);
 
-    bool correctState = false;
     SimObject objToDraw = SimObject::NONE;
 
     std::vector<std::vector<SimObject>> stateRepresentation;

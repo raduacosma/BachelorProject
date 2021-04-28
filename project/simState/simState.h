@@ -22,10 +22,9 @@ class SimState
     void updateCanvasEndPos(ImVec2 pos);
     size_t getWidth() const;
     size_t getHeight() const;
-    bool isCorrectState() const;
+
 
     private:
-    bool correctState = false;
 
     std::vector<std::vector<ImVec4>> stateRepresentation;
     ImVec2 canvasStepSize;
@@ -50,20 +49,20 @@ class SimState
     Actions currAction;
 
     // REWARDS TODO: decide on these
-    double d_outOfBoundsReward;
-    double d_reachedGoalReward;
-    double d_killedByOpponentReward;
-    double d_normalReward;
+    float d_outOfBoundsReward;
+    float d_reachedGoalReward;
+    float d_killedByOpponentReward;
+    float d_normalReward;
 
     public:
     void resetForNextEpisode();
     // this also moves the agent
-    std::tuple<double, size_t, SimResult> computeNextStateAndReward(Actions action);
+    std::tuple<float, size_t, SimResult> computeNextStateAndReward(Actions action);
     size_t mazeStateHash() const;
-    double killedByOpponentReward();
+    float killedByOpponentReward();
 
     private:
-    std::pair<double, SimResult> updateAgentPos();
+    std::pair<float, SimResult> updateAgentPos();
     Position computeNewAgentPos();
     void resetAgentPos();
     void sendNrStatesToAgent();
@@ -80,10 +79,7 @@ inline size_t SimState::getHeight() const
 {
     return simSize.y;
 }
-inline bool SimState::isCorrectState() const
-{
-    return correctState;
-}
+
 
 
 #endif

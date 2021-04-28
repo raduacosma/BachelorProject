@@ -51,10 +51,9 @@ add_executable(BachelorProject
         project/agent/qlearning/qlearning.ih
         project/agent/qlearning/qlearning1.cc
         project/agent/qlearning/statespacesize.cc
-        project/random/data.cc
-        project/random/frame
-        project/random/random.h
-        project/random/random.ih
-        project/random/uniformInt.cc
+        project/createRngObj/createRngObj.h
+        project/createRngObj/createRngObj.cpp
+        project/randObj/randobj.h
+        project/randObj/randobj.cpp
         project/simContainer/simContainer.cpp project/simContainer/simContainer.h project/runHeadless.cpp project/runHeadless.h)
 target_link_libraries(BachelorProject GL ${GLFW_STATIC_LIBRARIES})

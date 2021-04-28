@@ -4,9 +4,9 @@
 #include <iostream>
 #include <algorithm>
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include <tuple>
-#include "../random/random.h"
+
 using namespace std;
 
 
@@ -29,7 +29,7 @@ Position SimState::computeNewAgentPos()
     return { agentPos.x, agentPos.y };
 }
 
-tuple<double, size_t, SimResult> SimState::computeNextStateAndReward(Actions action)
+tuple<float, size_t, SimResult> SimState::computeNextStateAndReward(Actions action)
 {
     currAction = action;
 
@@ -53,7 +53,7 @@ void SimState::updateOpponentPos()
 }
 
 
-double SimState::killedByOpponentReward()
+float SimState::killedByOpponentReward()
 {
     return d_killedByOpponentReward;
 }
@@ -82,7 +82,7 @@ void SimState::sendNrStatesToAgent()
 //    agent->stateSpaceSize(simSize.y * simSize.x);
 }
 
-pair<double, SimResult> SimState::updateAgentPos()
+pair<float, SimResult> SimState::updateAgentPos()
 {
 
     auto futurePos = computeNewAgentPos();
@@ -175,7 +175,6 @@ SimState::SimState(std::string const &filename)
     {
         walls.push_back({wallsx,wallsy});
     }
-    correctState = true;
 
 //    sendNrStatesToAgent();
     resetForNextEpisode();

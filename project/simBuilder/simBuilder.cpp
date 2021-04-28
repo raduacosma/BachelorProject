@@ -9,7 +9,6 @@ SimBuilder::SimBuilder(size_t width, size_t height)
       goalPos({width,height}),opponentPos({width,height}),opponentTrace(1,{width,height}),
       walls(1,{width,height})
 {
-    correctState = true;
     generateStateRepresentation();
 }
 std::vector<std::vector<ImVec4>> const &SimBuilder::getFullMazeRepr()

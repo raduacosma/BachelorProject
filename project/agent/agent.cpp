@@ -30,7 +30,7 @@ void Agent::run()
         newEpisode(d_maze->mazeStateHash()); // d_oldstate was modified from Maze
         // so it's fine
         // anything else?
-        double totalReward = 0;
+        float totalReward = 0;
         while (true)
         {
             if (not performOneStep())
@@ -42,8 +42,8 @@ void Agent::run()
     // any cleanup?
 }
 
-Agent::Agent(size_t nrEpisodes, double epsilon)
-    : d_nrEpisodes(nrEpisodes), d_rewards(vector<double>(nrEpisodes)),
+Agent::Agent(size_t nrEpisodes, float epsilon)
+    : d_nrEpisodes(nrEpisodes), d_rewards(vector<float>(nrEpisodes)),
       d_hasDied(vector<size_t>(nrEpisodes)), EPSILON(epsilon)
 {
 }
@@ -59,7 +59,7 @@ void Agent::newEpisode(size_t stateIdx)
     // Some algorithms require this. Empty for the others.
 }
 
-vector<double> &Agent::rewards()
+vector<float> &Agent::rewards()
 {
     return d_rewards;
 }
@@ -74,7 +74,7 @@ vector<size_t> & Agent::hasDied()
     return d_hasDied;
 }
 
-double Agent::runReward()
+float Agent::runReward()
 {
     return d_runReward;
 }
