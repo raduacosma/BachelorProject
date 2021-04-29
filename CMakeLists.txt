@@ -16,6 +16,7 @@ include_directories(libs/gl3w/GL)
 include_directories(libs/glfw)
 include_directories(libs/glfw/include)
 include_directories(libs/glfw/include/GLFW)
+include_directories(${project/Eigen})
 
 add_executable(BachelorProject
         imgui-1.81/backends/imgui_impl_glfw.cpp
@@ -37,7 +38,8 @@ add_executable(BachelorProject
         libs/gl3w/GL/glcorearb.h
         libs/glfw/include/GLFW/glfw3.h
         libs/glfw/include/GLFW/glfw3native.h
-
+        project/mlp/mlp.h
+        project/mlp/mlp.cpp
         project/main.cpp
         project/uiFunctions/uiFunctions.h
         project/uiFunctions/uiFunctions.cpp
@@ -45,15 +47,13 @@ add_executable(BachelorProject
         project/simState/simState.h project/simBuilder/simBuilder.cpp project/simBuilder/simBuilder.h project/utilities/utilities.h project/uiStateTracker/uiStateTracker.h project/agent/agent.cpp project/agent/agent.h
         project/simState/actions.h
         project/agent/qlearning/action.cc
-        project/agent/qlearning/frame
         project/agent/qlearning/giveFeedback.cc
         project/agent/qlearning/qlearning.h
         project/agent/qlearning/qlearning.ih
         project/agent/qlearning/qlearning1.cc
-        project/agent/qlearning/statespacesize.cc
         project/createRngObj/createRngObj.h
         project/createRngObj/createRngObj.cpp
         project/randObj/randobj.h
         project/randObj/randobj.cpp
-        project/simContainer/simContainer.cpp project/simContainer/simContainer.h project/runHeadless.cpp project/runHeadless.h)
+        project/simContainer/simContainer.cpp project/simContainer/simContainer.h project/runHeadless.cpp project/runHeadless.h project/agent/sarsa/sarsa.cpp project/agent/sarsa/sarsa.h)
 target_link_libraries(BachelorProject GL ${GLFW_STATIC_LIBRARIES})

@@ -7,6 +7,7 @@
 #include <cmath>
 #include <tuple>
 
+
 using namespace std;
 
 
@@ -29,19 +30,18 @@ Position SimState::computeNewAgentPos()
     return { agentPos.x, agentPos.y };
 }
 
-tuple<float, size_t, SimResult> SimState::computeNextStateAndReward(Actions action)
+tuple<float, SimResult> SimState::computeNextStateAndReward(Actions action)
 {
     currAction = action;
 
     auto [reward, canContinue] = updateAgentPos();
-    // make sure this should be updated before opponent
-    size_t hash = mazeStateHash();
+    // make sure this and hash should be updated before opponent
     if(canContinue == SimResult::CONTINUE)
     {
         updateOpponentPos();
     }
 
-    return make_tuple(reward, hash, canContinue);
+    return make_tuple(reward, canContinue);
 }
 void SimState::updateOpponentPos()
 {
@@ -57,11 +57,40 @@ float SimState::killedByOpponentReward()
 {
     return d_killedByOpponentReward;
 }
-size_t SimState::mazeStateHash() const
-{
+Eigen::VectorXf SimState::getStateForAgent() const
+{   // should the goal really be a vision grid?
+    // also, everywhere the agent center is included for avoiding the performance cost
+    // of the if and supposedly being better for 2D representations but debatable
+    Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize*3);
+    auto applyToArray = [&](Position const &pos, size_t offset)
+    {
+        long const rowIdx = pos.y-agentPos.y+visionGridSize;
+        long const colIdx = pos.x-agentPos.x+visionGridSize;
+        if(rowIdx >= 0 and colIdx >= 0 and rowIdx < static_cast<long>(visionGridSideSize) and colIdx < static_cast<long>(visionGridSideSize))
+            agentGrid[rowIdx*visionGridSideSize+colIdx+offset] = 1.0f;
+    };
+    for (auto const &wall:walls)
+    {
+        applyToArray(wall,0);
+    }
+    applyToArray(opponentTrace[currOpPosIdx],agentStateSize);
+    size_t opLength = traceSize;  // replace with trace size
+    // be careful, we can't do the >-1 check due to size_t and this should
+    // stop after 0 but if something is wrong good to check this
 
-    size_t stateHash = agentPos.x * simSize.y + agentPos.y;
-    return stateHash;
+    for (size_t idx = currOpPosIdx; idx-- > 0 and opLength;)
+    {
+        applyToArray(opponentTrace[idx], agentStateSize);
+        --opLength;
+    }
+    for (size_t idx = opponentTrace.size(); idx-- > 0 and opLength;)
+    {
+        applyToArray(opponentTrace[idx], agentStateSize);
+        --opLength;
+    }
+    applyToArray(goalPos,agentStateSize*2);
+    std::cout<<agentGrid.transpose()<<std::endl;
+    return agentGrid;
 }
 
 void SimState::resetAgentPos()
@@ -76,11 +105,6 @@ void SimState::resetForNextEpisode()
     resetAgentPos();
 }
 
-void SimState::sendNrStatesToAgent()
-{
-    // will need to be refactored soon
-//    agent->stateSpaceSize(simSize.y * simSize.x);
-}
 
 pair<float, SimResult> SimState::updateAgentPos()
 {

@@ -46,4 +46,5 @@ inline std::ostream &operator<<(std::ostream &out, Position pos)
     return out;
 }
 
+
 #endif

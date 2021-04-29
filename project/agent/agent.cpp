@@ -5,14 +5,15 @@
 using namespace std;
 bool Agent::performOneStep()
 {
-    auto [reward, newState, canContinue] = d_maze->computeNextStateAndReward(action(d_oldstate));
+    auto [reward, canContinue] = maze->computeNextStateAndReward(action(oldState));
+    Eigen::VectorXf newState = maze->getStateForAgent();
     giveFeedback(reward, newState);
     if (not canContinue)
     {
         return false;
     }
     // check if d_oldstate should be updated even if we can't continue
-    d_oldstate = newState;
+    oldState = newState;
     return true;
 }
 void Agent::run()
@@ -22,57 +23,51 @@ void Agent::run()
     // should be 0, so I guess initializing them all to 0 could be fine?
 
     // tracking stuff? avg rewards etc etc etc
-    d_runReward = 0;
-    for (size_t nrEpisode = 0; nrEpisode != d_nrEpisodes; ++nrEpisode)
+    runReward = 0;
+    for (size_t nrEpisode = 0; nrEpisode != nrEpisodes; ++nrEpisode)
     {
         // d_oldstate was modified from Maze so it's fine, anything else?
-        newEpisode(d_maze->mazeStateHash());
+        newEpisode();
         float totalReward = 0;
         while (true)
         {
             bool canContinue = performOneStep();
-            totalReward += d_maze->getLastReward();
+            totalReward += maze->getLastReward();
             if (not canContinue)
                 break;
         }
-        d_runReward += totalReward;
-        d_rewards[nrEpisode] = totalReward;
+        runReward += totalReward;
+        rewards[nrEpisode] = totalReward;
     }
     // any cleanup?
 }
 
-Agent::Agent(size_t nrEpisodes, float epsilon)
-    : d_nrEpisodes(nrEpisodes), d_rewards(vector<float>(nrEpisodes)), d_hasDied(vector<size_t>(nrEpisodes)),
-      EPSILON(epsilon)
+Agent::Agent(size_t _nrEpisodes)
+    : nrEpisodes(_nrEpisodes), rewards(vector<float>(_nrEpisodes)), hasDied(vector<size_t>(_nrEpisodes))
 {
 }
 
-void Agent::maze(SimContainer *maze)
+void Agent::setMaze(SimContainer *simCont)
 {
-    d_maze = maze;
+    maze = simCont;
 }
-void Agent::newEpisode(size_t stateIdx)
+void Agent::newEpisode()
 {
-    d_oldstate = stateIdx;
+    oldState = maze->getStateForAgent();
     // Some algorithms require this. Empty for the others.
 }
 
-vector<float> &Agent::rewards()
+vector<float> &Agent::getRewards()
 {
-    return d_rewards;
+    return rewards;
 }
 
-void Agent::initialState(size_t state)
+vector<size_t> &Agent::getHasDied()
 {
-    d_oldstate = state;
+    return hasDied;
 }
 
-vector<size_t> &Agent::hasDied()
+float Agent::getRunReward()
 {
-    return d_hasDied;
-}
-
-float Agent::runReward()
-{
-    return d_runReward;
+    return runReward;
 }

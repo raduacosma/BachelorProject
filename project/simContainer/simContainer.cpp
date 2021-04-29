@@ -13,15 +13,10 @@ SimContainer::SimContainer(std::string const &filename, Agent *agentParam)
     {
         simStates.emplace_back(file);
     }
-    agent->maze(this);
-    sendNrStatesToAgent();
+    agent->setMaze(this);
 }
 
-void SimContainer::sendNrStatesToAgent()
-{
-    Position simSize = simStates[currSimState].getSimSize();
-    agent->stateSpaceSize(simSize.x * simSize.y);
-}
+
 SimState &SimContainer::getCurrent()
 {
     return simStates[currSimState];
@@ -43,14 +38,14 @@ void SimContainer::goToBeginning()
     currSimState = 0;
 //    simStates[currSimState].resetForNextEpisode();
 }
-size_t SimContainer::mazeStateHash() const
+Eigen::VectorXf SimContainer::getStateForAgent() const
 {
-    return simStates[currSimState].mazeStateHash();
+    return simStates[currSimState].getStateForAgent();
 }
-std::tuple<float, size_t, bool>
+std::tuple<float, bool>
 SimContainer::computeNextStateAndReward(Actions action)
 {
-    auto [reward,newState,continueStatus] = simStates[currSimState].computeNextStateAndReward(action);
+    auto [reward,continueStatus] = simStates[currSimState].computeNextStateAndReward(action);
     bool canContinue = true;
     switch (continueStatus)
     {
@@ -70,19 +65,19 @@ SimContainer::computeNextStateAndReward(Actions action)
             }
             simStates[currSimState].resetForNextEpisode();
             cout << "reached goal"<<endl;
-            agent->maze(this);
+//            agent->maze(this);
             break;
         case SimResult::KILLED_BY_OPPONENT:
             cout<<"hit opponent"<<endl;
             canContinue = false;
             goToBeginning();
             simStates[currSimState].resetForNextEpisode();
-            agent->maze(this);
+//            agent->maze(this); // needed? since everything goes through simContainer probably not
             ++episodeCount;
             break;
     }
     lastReward = reward;
-    return make_tuple(reward,newState,canContinue);
+    return make_tuple(reward,canContinue);
 }
 size_t SimContainer::getCurrSimState() const
 {

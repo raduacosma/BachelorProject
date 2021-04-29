@@ -5,6 +5,7 @@
 #include "../utilities/utilities.h"
 #include "imgui.h"
 #include <string>
+#include "../Eigen/Core"
 
 class Agent;
 
@@ -41,7 +42,9 @@ class SimState
     Position goalPos;
     size_t currOpPosIdx;
     size_t traceSize = 5;
-    size_t visionGridSize = 2;
+    size_t visionGridSize = 2;  // TODO: change these in the constructor
+    size_t visionGridSideSize = 5;  // visionGridSize*2+1
+    size_t agentStateSize = 25;     // visionGridSizeSize^2
 
     std::vector<Position> opponentTrace;
     std::vector<Position> walls;
@@ -57,15 +60,14 @@ class SimState
     public:
     void resetForNextEpisode();
     // this also moves the agent
-    std::tuple<float, size_t, SimResult> computeNextStateAndReward(Actions action);
-    size_t mazeStateHash() const;
+    std::tuple<float, SimResult> computeNextStateAndReward(Actions action);
+    Eigen::VectorXf getStateForAgent() const;
     float killedByOpponentReward();
 
     private:
     std::pair<float, SimResult> updateAgentPos();
     Position computeNewAgentPos();
     void resetAgentPos();
-    void sendNrStatesToAgent();
     void updateOpponentPos();
 
 

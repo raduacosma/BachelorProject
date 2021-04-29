@@ -1,6 +1,6 @@
 #include "qlearning.ih"
 
-Actions QLearning::action(size_t stateIdx)
+Actions QLearning::action(Eigen::VectorXf const &state)
 {
 //  bool explore = Random::uniform() < EPSILON;
 //
@@ -16,6 +16,6 @@ Actions QLearning::action(size_t stateIdx)
 //        d_lastAction = action;
 //      }
 //  }
-    d_lastAction = globalRng.getUniReal01() * NR_ACTIONS;
-  return static_cast<Actions>(d_lastAction);
+lastAction = globalRng.getUniReal01() * NR_ACTIONS;
+  return static_cast<Actions>(lastAction);
 }

@@ -14,10 +14,8 @@ class QLearning : public Agent
     QLearning(size_t nrEpisodes, float discountFactor, float stepSize = 0.1, float epsilon = 0.1);
     ~QLearning();
 
-    virtual Actions action(size_t stateIdx) override;
-    virtual void giveFeedback(float reward, size_t newState) override;
-
-    virtual void stateSpaceSize(size_t size) override;
+    virtual Actions action(Eigen::VectorXf const &state) override;
+    virtual void giveFeedback(float reward, Eigen::VectorXf const &newState) override;
   private:
 };
 

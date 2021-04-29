@@ -1,6 +1,6 @@
 #include "qlearning.ih"
 
-void QLearning::giveFeedback(float reward, size_t newState)
+void QLearning::giveFeedback(float reward, Eigen::VectorXf const &newState)
 {
 //  double &Q_lastAction = d_QTable.at(d_oldstate)[d_lastAction];
 //
