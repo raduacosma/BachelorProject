@@ -12,14 +12,14 @@ class Sarsa : public Agent
     float epsilon;
     float gamma;
     size_t lastAction;
-    float lastQValue;
+    Eigen::VectorXf lastQValues;
     MLP mlp;
 
   public:
-    Sarsa(size_t _nrEpisodes, float _alpha = 0.1, float _epsilon = 0.1, float _gamma=0.9);
+    Sarsa(size_t _nrEpisodes = 10000, float _alpha = 0.001, float _epsilon = 0.1, float _gamma=0.9);
     ~Sarsa() override;
     bool performOneStep() override;
-    std::pair<size_t,float> actionWithQ(Eigen::VectorXf const &state);
+    size_t actionWithQ(Eigen::VectorXf const &qVals);
     void newEpisode() override;
   private:
 };

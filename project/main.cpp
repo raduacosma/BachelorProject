@@ -18,6 +18,7 @@
 #include <memory>
 #include <string>
 
+#include <fenv.h>
 // About Desktop OpenGL function loaders:
 //  Modern desktop OpenGL doesn't have a standard portable header file to load OpenGL function pointers.
 //  Helper libraries are often used for this purpose! Here we are supporting a few common ones (gl3w, glew, glad).
@@ -61,6 +62,8 @@ static void glfw_error_callback(int error, const char* description)
 
 int main(int argc, char** argv)
 {
+    std::cout<<"nthreads: "<<Eigen::nbThreads( )<<'\n';
+    feenableexcept(FE_ALL_EXCEPT & ~FE_INEXACT);
     if(argc == 3)
     {
         runHeadless(std::string{argv[1]}, std::stoul(argv[2]));
@@ -158,7 +161,7 @@ int main(int argc, char** argv)
     std::unique_ptr<SimContainer> simContainer = nullptr;
     size_t simSpeed = 10;
     size_t speedCounter = 0;
-    std::unique_ptr<Agent> agent = std::make_unique<Sarsa>(100,0.1,0.1,0.1);
+    std::unique_ptr<Agent> agent = std::make_unique<Sarsa>();
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -187,7 +190,7 @@ int main(int argc, char** argv)
             if (simContainer)
             {
                 simContainer = nullptr;
-                agent = std::make_unique<Sarsa>(100,0.1,0.1,0.1);
+                agent = std::make_unique<Sarsa>();
             }
             drawStartMenu(uiStateTracker);
         }
@@ -209,6 +212,7 @@ int main(int argc, char** argv)
             if (not simContainer)
             {
                 simContainer = std::make_unique<SimContainer>(uiStateTracker.nextFilename, agent.get());
+                agent->newEpisode();
             }
             if(speedCounter >= 60)
             {

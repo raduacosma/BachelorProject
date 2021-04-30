@@ -108,10 +108,11 @@ void SimState::resetForNextEpisode()
 pair<float, SimResult> SimState::updateAgentPos()
 {
     auto futurePos = computeNewAgentPos();
+    float reward = abs(static_cast<int>(agentPos.x - goalPos.x))+abs(static_cast<int>(agentPos.y - goalPos.y));
     if (futurePos.x < 0 or futurePos.x >= simSize.x or futurePos.y < 0 or
         futurePos.y >= simSize.y)
     {
-        return make_pair(d_outOfBoundsReward, SimResult::CONTINUE); // false means end episode
+        return make_pair(-reward/100, SimResult::CONTINUE); // false means end episode
     }
     if (futurePos == goalPos)
     {
@@ -122,7 +123,7 @@ pair<float, SimResult> SimState::updateAgentPos()
     {
         if (futurePos == wall)
         {
-            return make_pair(d_outOfBoundsReward, SimResult::CONTINUE);
+            return make_pair(-reward/100, SimResult::CONTINUE);
         }
     }
     size_t opLength = traceSize + 1;  // replace with trace size
@@ -146,8 +147,7 @@ pair<float, SimResult> SimState::updateAgentPos()
     }
     // check walls and stuff
     agentPos = futurePos;
-    int reward = abs(static_cast<int>(agentPos.x - goalPos.x))+abs(static_cast<int>(agentPos.y - goalPos.y));
-    return make_pair(-reward/10, SimResult::CONTINUE);
+    return make_pair(-reward/100, SimResult::CONTINUE);
 }
 
 std::vector <std::vector<ImVec4>> const & SimState::getFullMazeRepr()

@@ -99,6 +99,7 @@ float MLP::updateWithGivenDiff(Eigen::VectorXf const &diff)
         delta = diff;
     }
     float loss = diff.array().square().mean();
+//    std::cout<<"loss: "<<loss<<std::endl;
     nablaBiases.back() = delta;
     nablaWeights.back() = delta * activations[nrLayers - 2].transpose();
     for (size_t l = 2; l != nrLayers; ++l)
@@ -127,6 +128,7 @@ float MLP::update(Eigen::VectorXf const &output)
         delta = (activations.back() - output);
     }
     float loss = (activations.back() - output).array().square().mean();
+//    std::cout<<"loss: "<<loss<<std::endl;
     nablaBiases.back() = delta;
     nablaWeights.back() = delta * activations[nrLayers - 2].transpose();
     for (size_t l = 2; l != nrLayers; ++l)

@@ -5,8 +5,8 @@ pkg_search_module(GLFW REQUIRED glfw3)
 include_directories(${GLFW_INCLUDE_DIRS})
 
 set(CMAKE_CXX_STANDARD 20)
-add_compile_options(-Wall -Werror -march=native)
-#add_compile_options(-Wall -O3 -DNDEBUG -march=native)
+#add_compile_options(-Wall -Werror -march=native)
+add_compile_options(-Wall -O3 -DNDEBUG -march=native)
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BachelorProject_SOURCE_DIR})
 
 include_directories(imgui-1.81)
@@ -53,3 +53,8 @@ add_executable(BachelorProject
         project/randObj/randobj.cpp
         project/simContainer/simContainer.cpp project/simContainer/simContainer.h project/runHeadless.cpp project/runHeadless.h project/agent/sarsa/sarsa.cpp project/agent/sarsa/sarsa.h)
 target_link_libraries(BachelorProject GL ${GLFW_STATIC_LIBRARIES})
+
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(BachelorProject OpenMP::OpenMP_CXX)
+endif()

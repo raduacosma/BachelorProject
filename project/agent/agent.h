@@ -47,9 +47,9 @@ class Agent
     float getRunReward();
 
     virtual bool performOneStep();
-
-  protected:
     virtual void newEpisode();
+
+
 };
 
 
