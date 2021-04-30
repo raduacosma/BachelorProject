@@ -41,7 +41,7 @@ class SimState
     Position initialAgentPos;
     Position goalPos;
     size_t currOpPosIdx;
-    size_t traceSize = 5;
+    size_t traceSize = 10;
     size_t visionGridSize = 2;  // TODO: change these in the constructor
     size_t visionGridSideSize = 5;  // visionGridSize*2+1
     size_t agentStateSize = 25;     // visionGridSizeSize^2
