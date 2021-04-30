@@ -8,15 +8,15 @@
 #include "imgui_impl_opengl3.h"
 #include <stdio.h>
 
-#include <iostream>
-#include "uiFunctions/uiFunctions.h"
-#include "simContainer/simContainer.h"
-#include "uiStateTracker/uiStateTracker.h"
 #include "agent/agent.h"
-#include "agent/qlearning/qlearning.h"
-#include <string>
+#include "agent/sarsa/sarsa.h"
 #include "runHeadless.h"
+#include "simContainer/simContainer.h"
+#include "uiFunctions/uiFunctions.h"
+#include "uiStateTracker/uiStateTracker.h"
+#include <iostream>
 #include <memory>
+#include <string>
 
 // About Desktop OpenGL function loaders:
 //  Modern desktop OpenGL doesn't have a standard portable header file to load OpenGL function pointers.
@@ -158,7 +158,7 @@ int main(int argc, char** argv)
     std::unique_ptr<SimContainer> simContainer = nullptr;
     size_t simSpeed = 10;
     size_t speedCounter = 0;
-    std::unique_ptr<Agent> agent = std::make_unique<QLearning>(100,0.1,0.1,0.1);
+    std::unique_ptr<Agent> agent = std::make_unique<Sarsa>(100,0.1,0.1,0.1);
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -187,7 +187,7 @@ int main(int argc, char** argv)
             if (simContainer)
             {
                 simContainer = nullptr;
-                agent = std::make_unique<QLearning>(100,0.1,0.1,0.1);
+                agent = std::make_unique<Sarsa>(100,0.1,0.1,0.1);
             }
             drawStartMenu(uiStateTracker);
         }

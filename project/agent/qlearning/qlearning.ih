@@ -1,5 +1,0 @@
-#include "qlearning.h"
-#include "../../createRngObj/createRngObj.h"
-
-using namespace std;
-

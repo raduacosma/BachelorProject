@@ -16,7 +16,6 @@ class MLP
     size_t nrWeightLayers;
     size_t nrLayersBeforeActivation;
     float learningRate;
-    size_t nrEpisodes;
     ActivationFunction outputActivationFunction;
     std::vector<Eigen::MatrixXf> weights;
     std::vector<Eigen::VectorXf> biases;
@@ -30,7 +29,7 @@ class MLP
     std::vector<Eigen::VectorXf> zs;
 
   public:
-    MLP(std::vector<size_t> _sizes, float _learningRate, size_t _nrEpisodes, ActivationFunction _outputActivationFunc);
+    MLP(std::vector<size_t> _sizes, float _learningRate, ActivationFunction _outputActivationFunc);
     float train(Eigen::VectorXf const &input, Eigen::VectorXf const &output);
     Eigen::VectorXf predict(Eigen::VectorXf const &input);
     [[nodiscard]] std::vector<float> const &getLossHistory() const;
@@ -39,5 +38,6 @@ class MLP
     void printWeights();
     float update(Eigen::VectorXf const &output);
     Eigen::VectorXf feedforward(Eigen::VectorXf const &input);
+    float updateWithGivenDiff(Eigen::VectorXf const &diff);
 };
 #endif

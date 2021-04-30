@@ -89,7 +89,6 @@ Eigen::VectorXf SimState::getStateForAgent() const
         --opLength;
     }
     applyToArray(goalPos,agentStateSize*2);
-    std::cout<<agentGrid.transpose()<<std::endl;
     return agentGrid;
 }
 
@@ -108,7 +107,6 @@ void SimState::resetForNextEpisode()
 
 pair<float, SimResult> SimState::updateAgentPos()
 {
-
     auto futurePos = computeNewAgentPos();
     if (futurePos.x < 0 or futurePos.x >= simSize.x or futurePos.y < 0 or
         futurePos.y >= simSize.y)
@@ -148,8 +146,8 @@ pair<float, SimResult> SimState::updateAgentPos()
     }
     // check walls and stuff
     agentPos = futurePos;
-
-    return make_pair(d_normalReward, SimResult::CONTINUE);
+    int reward = abs(static_cast<int>(agentPos.x - goalPos.x))+abs(static_cast<int>(agentPos.y - goalPos.y));
+    return make_pair(-reward/10, SimResult::CONTINUE);
 }
 
 std::vector <std::vector<ImVec4>> const & SimState::getFullMazeRepr()
@@ -160,7 +158,7 @@ std::vector <std::vector<ImVec4>> const & SimState::getFullMazeRepr()
 
 SimState::SimState(std::string const &filename)
 :
- d_outOfBoundsReward(-0.01), d_reachedGoalReward(1),
+ d_outOfBoundsReward(-0.02), d_reachedGoalReward(1),
       d_killedByOpponentReward(-10), d_normalReward(-0.01)
 {
     ifstream in{filename};

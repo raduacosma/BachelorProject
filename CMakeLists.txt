@@ -5,7 +5,8 @@ pkg_search_module(GLFW REQUIRED glfw3)
 include_directories(${GLFW_INCLUDE_DIRS})
 
 set(CMAKE_CXX_STANDARD 20)
-add_compile_options(-Wall -Werror)
+add_compile_options(-Wall -Werror -march=native)
+#add_compile_options(-Wall -O3 -DNDEBUG -march=native)
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BachelorProject_SOURCE_DIR})
 
 include_directories(imgui-1.81)
@@ -46,11 +47,6 @@ add_executable(BachelorProject
         project/simState/simState.cpp
         project/simState/simState.h project/simBuilder/simBuilder.cpp project/simBuilder/simBuilder.h project/utilities/utilities.h project/uiStateTracker/uiStateTracker.h project/agent/agent.cpp project/agent/agent.h
         project/simState/actions.h
-        project/agent/qlearning/action.cc
-        project/agent/qlearning/giveFeedback.cc
-        project/agent/qlearning/qlearning.h
-        project/agent/qlearning/qlearning.ih
-        project/agent/qlearning/qlearning1.cc
         project/createRngObj/createRngObj.h
         project/createRngObj/createRngObj.cpp
         project/randObj/randobj.h

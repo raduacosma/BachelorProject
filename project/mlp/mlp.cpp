@@ -2,10 +2,10 @@
 #include <algorithm>
 #include <iostream>
 
-MLP::MLP(std::vector<size_t> _sizes, float _learningRate, size_t _nrEpisodes,
+MLP::MLP(std::vector<size_t> _sizes, float _learningRate,
          ActivationFunction _outputActivationFunction)
     : sizes(std::move(_sizes)), nrLayers(sizes.size()), nrWeightLayers(nrLayers - 1),
-      nrLayersBeforeActivation(nrLayers - 2), learningRate(_learningRate), nrEpisodes(_nrEpisodes),
+      nrLayersBeforeActivation(nrLayers - 2), learningRate(_learningRate),
       outputActivationFunction(_outputActivationFunction)
 {
     for (size_t idx = 1; idx != nrLayers; ++idx)
@@ -86,6 +86,34 @@ Eigen::VectorXf MLP::feedforward(Eigen::VectorXf const &input)
         return z;
     }
     throw std::runtime_error("Reached end of feedforward without returning");
+}
+float MLP::updateWithGivenDiff(Eigen::VectorXf const &diff)
+{
+    Eigen::VectorXf delta;
+    if (outputActivationFunction == ActivationFunction::SIGMOID)
+    {
+        delta = diff.cwiseProduct(zs.back().unaryExpr(&sigmoidPrime));
+    }
+    else if (outputActivationFunction == ActivationFunction::LINEAR)
+    {
+        delta = diff;
+    }
+    float loss = diff.array().square().mean();
+    nablaBiases.back() = delta;
+    nablaWeights.back() = delta * activations[nrLayers - 2].transpose();
+    for (size_t l = 2; l != nrLayers; ++l)
+    {
+        delta = (weights[nrWeightLayers - l + 1].transpose() * delta)
+                .cwiseProduct(zs[nrWeightLayers - l].unaryExpr(&sigmoidPrime));
+        nablaBiases[nrWeightLayers - l] = delta;
+        nablaWeights[nrWeightLayers - l] = delta * activations[nrLayers - l - 1].transpose();
+    }
+    for (size_t idx = 0; idx != nrWeightLayers; ++idx)
+    {
+        weights[idx] -= learningRate * nablaWeights[idx];
+        biases[idx] -= learningRate * nablaBiases[idx];
+    }
+    return loss;
 }
 float MLP::update(Eigen::VectorXf const &output)
 {

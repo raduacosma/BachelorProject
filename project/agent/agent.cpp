@@ -3,18 +3,22 @@
 #include "tuple"
 #include <iostream>
 using namespace std;
+//bool Agent::performOneStep()
+//{
+//    auto [reward, canContinue] = maze->computeNextStateAndReward(action(lastState));
+//    Eigen::VectorXf newState = maze->getStateForAgent();
+//    giveFeedback(reward, newState);
+//    if (not canContinue)
+//    {
+//        return false;
+//    }
+//    // check if d_oldstate should be updated even if we can't continue
+//    lastState = newState;
+//    return true;
+//}
 bool Agent::performOneStep()
 {
-    auto [reward, canContinue] = maze->computeNextStateAndReward(action(oldState));
-    Eigen::VectorXf newState = maze->getStateForAgent();
-    giveFeedback(reward, newState);
-    if (not canContinue)
-    {
-        return false;
-    }
-    // check if d_oldstate should be updated even if we can't continue
-    oldState = newState;
-    return true;
+    throw std::runtime_error("In Agent's performOneStep, should not be here");
 }
 void Agent::run()
 {
@@ -36,6 +40,7 @@ void Agent::run()
             if (not canContinue)
                 break;
         }
+        std::cout<<"totalReward: "<<totalReward<<std::endl;
         runReward += totalReward;
         rewards[nrEpisode] = totalReward;
     }
@@ -53,7 +58,7 @@ void Agent::setMaze(SimContainer *simCont)
 }
 void Agent::newEpisode()
 {
-    oldState = maze->getStateForAgent();
+    lastState = maze->getStateForAgent();
     // Some algorithms require this. Empty for the others.
 }
 
@@ -70,4 +75,8 @@ vector<size_t> &Agent::getHasDied()
 float Agent::getRunReward()
 {
     return runReward;
+}
+
+Agent::~Agent()
+{
 }

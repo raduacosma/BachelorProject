@@ -29,26 +29,26 @@ class Agent
     size_t simTime = 0;
     SimContainer *maze;         // The maze the agent is navigating
 
-    Eigen::VectorXf oldState;
+    Eigen::VectorXf lastState;
     size_t lastAction;
     size_t nrEpisodes;
     std::vector<float> rewards;
     std::vector<size_t> hasDied;
 
     public:
-    Agent(size_t _nrEpisodes);
-    virtual ~Agent() = default;
+    explicit Agent(size_t _nrEpisodes);
+    virtual ~Agent();
 
     void run();
-    bool performOneStep();
+
     std::vector<float> & getRewards();
     std::vector<size_t> & getHasDied();
     void setMaze(SimContainer *maze);
     float getRunReward();
 
-    protected:
-    virtual Actions action(Eigen::VectorXf const &state) = 0;
-    virtual void giveFeedback(float reward, Eigen::VectorXf const &newStateIdx) = 0;
+    virtual bool performOneStep();
+
+  protected:
     virtual void newEpisode();
 };
 
