@@ -51,6 +51,8 @@ add_executable(BachelorProject
         project/createRngObj/createRngObj.cpp
         project/randObj/randobj.h
         project/randObj/randobj.cpp
+        project/agent/qLearning/qLearning.cpp
+        project/agent/qLearning/qLearning.h
         project/simContainer/simContainer.cpp project/simContainer/simContainer.h project/runHeadless.cpp project/runHeadless.h project/agent/sarsa/sarsa.cpp project/agent/sarsa/sarsa.h)
 target_link_libraries(BachelorProject GL ${GLFW_STATIC_LIBRARIES})
 
