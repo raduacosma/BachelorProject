@@ -28,19 +28,26 @@ void Agent::run()
 
     // tracking stuff? avg rewards etc etc etc
     runReward = 0;
+
     for (size_t nrEpisode = 0; nrEpisode != nrEpisodes; ++nrEpisode)
     {
         // d_oldstate was modified from Maze so it's fine, anything else?
         newEpisode();
+        currentEpisodeLoss = 0;
+        currentEpisodeCorrectPredictions = 0;
+        size_t stepCount = 0;
         float totalReward = 0;
         while (true)
         {
+            ++stepCount;
             bool canContinue = performOneStep();
             totalReward += maze->getLastReward();
             if (not canContinue)
                 break;
         }
         std::cout<<"totalReward: "<<totalReward<<std::endl;
+        opponentPredictionLosses.push_back(currentEpisodeLoss/stepCount);
+        opponentCorrectPredictionPercentage.push_back(static_cast<float>(currentEpisodeCorrectPredictions)/stepCount);
         runReward += totalReward;
         rewards[nrEpisode] = totalReward;
     }
@@ -79,4 +86,12 @@ float Agent::getRunReward()
 
 Agent::~Agent()
 {
+}
+vector<float> const &Agent::getOpponentPredictionLosses() const
+{
+    return opponentPredictionLosses;
+}
+vector<float> const &Agent::getOpponentCorrectPredictionPercentage() const
+{
+    return opponentCorrectPredictionPercentage;
 }

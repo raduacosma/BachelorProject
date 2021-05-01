@@ -45,11 +45,23 @@ tuple<float, SimResult> SimState::computeNextStateAndReward(Actions action)
 }
 void SimState::updateOpponentPos()
 {
+    Position lastOpponentPos = opponentTrace[currOpPosIdx];
     ++currOpPosIdx;
     if(currOpPosIdx == opponentTrace.size())
     {
         currOpPosIdx = 0;
     }
+    Position newOpponentPos= opponentTrace[currOpPosIdx];
+    int xDiff = static_cast<int>(newOpponentPos.x-lastOpponentPos.x);
+    int yDiff = static_cast<int>(newOpponentPos.y-lastOpponentPos.y);
+    if(xDiff<0)
+        lastOpponentAction = Actions::LEFT;
+    else if(xDiff > 0)
+        lastOpponentAction = Actions::RIGHT;
+    else if(yDiff <0)
+        lastOpponentAction = Actions::UP;
+    else if(yDiff>0)
+        lastOpponentAction = Actions::DOWN;
 }
 
 
@@ -91,7 +103,39 @@ Eigen::VectorXf SimState::getStateForAgent() const
     applyToArray(goalPos,agentStateSize*2);
     return agentGrid;
 }
+Eigen::VectorXf SimState::getStateForOpponent() const
+{   // should the goal really be a vision grid?
+    // also, everywhere the agent center is included for avoiding the performance cost
+    // of the if and supposedly being better for 2D representations but debatable
+    Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize*2);
+    auto applyToArray = [&](Position const &pos, size_t offset)
+    {
+      long const rowIdx = pos.y-opponentTrace[currOpPosIdx].y+visionGridSize;
+      long const colIdx = pos.x-opponentTrace[currOpPosIdx].x+visionGridSize;
+      if(rowIdx >= 0 and colIdx >= 0 and rowIdx < static_cast<long>(visionGridSideSize) and colIdx < static_cast<long>(visionGridSideSize))
+          agentGrid[rowIdx*visionGridSideSize+colIdx+offset] = 1.0f;
+    };
+    for (auto const &wall:walls)
+    {
+        applyToArray(wall,0);
+    }
+    applyToArray(opponentTrace[currOpPosIdx],agentStateSize);
+    size_t opLength = traceSize;  // replace with trace size
+    // be careful, we can't do the >-1 check due to size_t and this should
+    // stop after 0 but if something is wrong good to check this
 
+    for (size_t idx = currOpPosIdx; idx-- > 0 and opLength;)
+    {
+        applyToArray(opponentTrace[idx], agentStateSize);
+        --opLength;
+    }
+    for (size_t idx = opponentTrace.size(); idx-- > 0 and opLength;)
+    {
+        applyToArray(opponentTrace[idx], agentStateSize);
+        --opLength;
+    }
+    return agentGrid;
+}
 void SimState::resetAgentPos()
 {
     agentPos = initialAgentPos;

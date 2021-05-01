@@ -32,10 +32,20 @@ class Agent
     Eigen::VectorXf lastState;
     size_t lastAction;
     size_t nrEpisodes;
+    float currentEpisodeLoss;
+    size_t currentEpisodeCorrectPredictions;
     std::vector<float> rewards;
     std::vector<size_t> hasDied;
+    std::vector<float> opponentPredictionLosses;
+    std::vector<float> opponentCorrectPredictionPercentage;
 
-    public:
+  public:
+    std::vector<float> const &getOpponentCorrectPredictionPercentage() const;
+
+  public:
+    std::vector<float> const &getOpponentPredictionLosses() const;
+
+  public:
     explicit Agent(size_t _nrEpisodes);
     virtual ~Agent();
 

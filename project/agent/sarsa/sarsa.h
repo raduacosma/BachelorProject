@@ -12,8 +12,10 @@ class Sarsa : public Agent
     float epsilon;
     float gamma;
     size_t lastAction;
+    Eigen::VectorXf lastOpponentState;
     Eigen::VectorXf lastQValues;
     MLP mlp;
+    MLP opponentMlp;
 
   public:
     Sarsa(size_t _nrEpisodes = 10000, float _alpha = 0.001, float _epsilon = 0.1, float _gamma=0.9);

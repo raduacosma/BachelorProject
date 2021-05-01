@@ -42,6 +42,10 @@ Eigen::VectorXf SimContainer::getStateForAgent() const
 {
     return simStates[currSimState].getStateForAgent();
 }
+Eigen::VectorXf SimContainer::getStateForOpponent() const
+{
+    return simStates[currSimState].getStateForOpponent();
+}
 std::tuple<float, bool>
 SimContainer::computeNextStateAndReward(Actions action)
 {

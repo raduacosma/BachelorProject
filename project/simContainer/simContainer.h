@@ -19,6 +19,7 @@ class SimContainer
 
     public:
     float getLastReward() const;
+    size_t getLastOpponentAction();
 
     public:
     size_t getCurrSimState() const;
@@ -34,5 +35,11 @@ class SimContainer
     bool nextLevel();
     void goToBeginning();
 
+    Eigen::VectorXf getStateForOpponent() const;
 };
+
+inline size_t SimContainer::getLastOpponentAction()
+{
+    return simStates[currSimState].getLastOpponentAction();
+}
 #endif

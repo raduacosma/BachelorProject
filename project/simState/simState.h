@@ -24,8 +24,9 @@ class SimState
     size_t getWidth() const;
     size_t getHeight() const;
 
+    Eigen::VectorXf getStateForOpponent() const;
 
-    private:
+  private:
 
     std::vector<std::vector<ImVec4>> stateRepresentation;
     ImVec2 canvasStepSize;
@@ -41,7 +42,8 @@ class SimState
     Position initialAgentPos;
     Position goalPos;
     size_t currOpPosIdx;
-    size_t traceSize = 10;
+    Actions lastOpponentAction;
+    size_t traceSize = 6;
     size_t visionGridSize = 2;  // TODO: change these in the constructor
     size_t visionGridSideSize = 5;  // visionGridSize*2+1
     size_t agentStateSize = 25;     // visionGridSizeSize^2
@@ -63,14 +65,13 @@ class SimState
     std::tuple<float, SimResult> computeNextStateAndReward(Actions action);
     Eigen::VectorXf getStateForAgent() const;
     float killedByOpponentReward();
+    size_t getLastOpponentAction();
 
     private:
     std::pair<float, SimResult> updateAgentPos();
     Position computeNewAgentPos();
     void resetAgentPos();
     void updateOpponentPos();
-
-
 };
 
 inline size_t SimState::getWidth() const
@@ -80,6 +81,10 @@ inline size_t SimState::getWidth() const
 inline size_t SimState::getHeight() const
 {
     return simSize.y;
+}
+inline size_t SimState::getLastOpponentAction()
+{
+    return static_cast<size_t>(lastOpponentAction);
 }
 
 
