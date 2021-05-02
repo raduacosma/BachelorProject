@@ -7,7 +7,8 @@
 enum class ActivationFunction
 {
     LINEAR,
-    SIGMOID
+    SIGMOID,
+    SOFTMAX
 };
 class MLP
 {
@@ -38,6 +39,5 @@ class MLP
     void printWeights();
     float update(Eigen::VectorXf const &output);
     Eigen::VectorXf feedforward(Eigen::VectorXf const &input);
-    float updateWithGivenDiff(Eigen::VectorXf const &diff);
 };
 #endif

@@ -35,6 +35,7 @@ bool Sarsa::performOneStep()
     opponentActionTarget(static_cast<size_t>(newOpponentAction)) = 1.0f;
     size_t opponentActionIdx;
     opponentMlp.predict(lastOpponentState).maxCoeff(&opponentActionIdx);
+//    std::cout<<opponentActionIdx<<" "<<newOpponentAction<<std::endl;
     if(newOpponentAction == opponentActionIdx)
         ++currentEpisodeCorrectPredictions;
     currentEpisodeLoss+=opponentMlp.train(lastOpponentState,opponentActionTarget);
