@@ -4,7 +4,7 @@
 Sarsa::Sarsa(size_t _nrEpisodes, float _alpha, float _epsilon, float _gamma) // TODO: check how size is passed
     : Agent(_nrEpisodes), alpha(_alpha), epsilon(_epsilon), gamma(_gamma),
       mlp({ 75, 192, 4 }, 0.001, ActivationFunction::LINEAR),
-      opponentMlp({50,100,4},0.001,ActivationFunction::SIGMOID)
+      opponentMlp({50,100,4},0.001,ActivationFunction::SOFTMAX)
 {
 }
 void Sarsa::newEpisode()

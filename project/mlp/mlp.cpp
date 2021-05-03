@@ -2,12 +2,19 @@
 #include <algorithm>
 #include <iostream>
 
-MLP::MLP(std::vector<size_t> _sizes, float _learningRate,
-         ActivationFunction _outputActivationFunction)
+MLP::MLP(std::vector<size_t> _sizes, float _learningRate, ActivationFunction _outputActivationFunction)
     : sizes(std::move(_sizes)), nrLayers(sizes.size()), nrWeightLayers(nrLayers - 1),
       nrLayersBeforeActivation(nrLayers - 2), learningRate(_learningRate),
       outputActivationFunction(_outputActivationFunction)
 {
+    for(size_t idx = 0; idx!=nrLayers; ++idx)
+    {
+        activations.push_back(Eigen::VectorXf::Zero(sizes[idx]));
+    }
+    for(size_t idx = 1; idx!=nrLayers; ++idx)
+    {
+        zs.push_back(Eigen::VectorXf::Zero(sizes[idx]));
+    }
     for (size_t idx = 1; idx != nrLayers; ++idx)
     {
         biases.push_back(Eigen::VectorXf::Random(sizes[idx]));
@@ -46,10 +53,12 @@ Eigen::VectorXf MLP::predict(const Eigen::VectorXf &input)
     {
         return weights[nrLayersBeforeActivation] * activation + biases[nrLayersBeforeActivation];
     }
-    else if(outputActivationFunction == ActivationFunction::SOFTMAX)
+    else if (outputActivationFunction == ActivationFunction::SOFTMAX)
     {
-        Eigen::VectorXf exps = (weights[nrLayersBeforeActivation] * activation + biases[nrLayersBeforeActivation]).array().exp();
-        return exps/exps.sum();
+        Eigen::VectorXf const exps =
+            (weights[nrLayersBeforeActivation] * activation + biases[nrLayersBeforeActivation]).array().exp();
+        float expsSum = exps.sum();
+        return exps / expsSum;
     }
     throw std::runtime_error("Reached end of predict without returning");
 }
@@ -64,40 +73,35 @@ float MLP::sigmoidPrime(float x)
 
 Eigen::VectorXf MLP::feedforward(Eigen::VectorXf const &input)
 {
-    Eigen::VectorXf activation = input;
-    activations = std::vector<Eigen::VectorXf>{};
-    activations.push_back(input);
-    zs = std::vector<Eigen::VectorXf>{};
+    activations[0] = input;
     for (size_t idx = 0; idx != nrLayersBeforeActivation; ++idx)
     {
-        Eigen::VectorXf z = weights[idx] * activation + biases[idx];
-        zs.push_back(z);
-        activation = z.unaryExpr(&sigmoid);
-        activations.push_back(activation);
+        Eigen::VectorXf &currZs = zs[idx];
+        currZs = weights[idx] * activations[idx] + biases[idx];
+        activations[idx + 1] = currZs.unaryExpr(&sigmoid);
     }
+    //    std::cout<<"activations: "<<activations.size()<<std::endl;
+    //    std::cout<<"zs: "<<zs.size()<<std::endl;
+    Eigen::VectorXf &currZs = zs[nrLayersBeforeActivation];
+    currZs = weights[nrLayersBeforeActivation] * activations[nrLayersBeforeActivation] +
+             biases[nrLayersBeforeActivation];
+    Eigen::VectorXf &activationRef = activations[nrLayersBeforeActivation + 1];
     if (outputActivationFunction == ActivationFunction::SIGMOID)
     {
-        Eigen::VectorXf z = weights[nrLayersBeforeActivation] * activation + biases[nrLayersBeforeActivation];
-        zs.push_back(z);
-        activation = z.unaryExpr(&sigmoid);
-        activations.push_back(activation);
-        return activation;
+        activationRef = currZs.unaryExpr(&sigmoid);
+        return activationRef;
     }
     else if (outputActivationFunction == ActivationFunction::LINEAR)
     {
-        Eigen::VectorXf z = weights[nrLayersBeforeActivation] * activation + biases[nrLayersBeforeActivation];
-        zs.push_back(z);
-        activations.push_back(z);
-        return z;
+        activationRef = currZs;
+        return activationRef;
     }
     else if (outputActivationFunction == ActivationFunction::SOFTMAX)
     {
-        Eigen::VectorXf z = weights[nrLayersBeforeActivation] * activation + biases[nrLayersBeforeActivation];
-        zs.push_back(z);
-        Eigen::VectorXf exps = z.array().exp();
-        activation = exps/exps.sum();
-        activations.push_back(activation);
-        return activation;
+        Eigen::VectorXf const exps = currZs.array().exp();
+        float expsSum = exps.sum();
+        activationRef = exps/expsSum;
+        return activationRef;
     }
     throw std::runtime_error("Reached end of feedforward without returning");
 }
@@ -117,27 +121,33 @@ float MLP::update(Eigen::VectorXf const &output)
         size_t idx;
         output.maxCoeff(&idx);
         delta = activations.back();
-        delta(idx) -=1.0f;
+        delta(idx) -= 1.0f;
     }
     float loss;
-    if(outputActivationFunction == ActivationFunction::SOFTMAX)
+    if (outputActivationFunction == ActivationFunction::SOFTMAX)
     {
-        loss = (-output.array()*activations.back().array().log()-(1-output.array())*(1-activations.back().array()).log()).array().sum();
+        Eigen::VectorXf logActivations = activations.back().array().log();
+        loss = (-output.array() *  logActivations.array()-
+                (1 - output.array()) * (1 - logActivations.array()))
+                   .array()
+                   .sum(); // optimize this
     }
     else
     {
-        loss = (activations.back() - output).array().square().mean(); // change this for cross-entropy
+        loss = (activations.back() - output).array().square().mean();
     }
-//    std::cout<<"loss: "<<loss<<std::endl;
-    nablaBiases.back() = delta;
-//    std::cout<<delta.transpose()<<std::endl;
-    nablaWeights.back() = delta * activations[nrLayers - 2].transpose();
+    //    std::cout<<"loss: "<<loss<<std::endl;
+    Eigen::VectorXf &biasesBack = nablaBiases.back();
+    biasesBack = delta;
+    //    std::cout<<delta.transpose()<<std::endl;
+    nablaWeights.back() = biasesBack * activations[nrLayers - 2].transpose();
     for (size_t l = 2; l != nrLayers; ++l)
     {
-        delta = (weights[nrWeightLayers - l + 1].transpose() * delta)
-            .cwiseProduct(zs[nrWeightLayers - l].unaryExpr(&sigmoidPrime));
-        nablaBiases[nrWeightLayers - l] = delta;
-        nablaWeights[nrWeightLayers - l] = delta * activations[nrLayers - l - 1].transpose();
+        size_t const idx = nrWeightLayers-l;
+        Eigen::VectorXf &currNablaBiases = nablaBiases[idx];
+        currNablaBiases = (weights[idx + 1].transpose() * nablaBiases[idx+1])
+            .cwiseProduct(zs[idx].unaryExpr(&sigmoidPrime));
+        nablaWeights[idx] = currNablaBiases * activations[idx].transpose();
     }
     for (size_t idx = 0; idx != nrWeightLayers; ++idx)
     {

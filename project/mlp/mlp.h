@@ -13,9 +13,9 @@ enum class ActivationFunction
 class MLP
 {
     std::vector<size_t> sizes;
-    size_t nrLayers;
-    size_t nrWeightLayers;
-    size_t nrLayersBeforeActivation;
+    size_t const nrLayers;
+    size_t const nrWeightLayers;
+    size_t const nrLayersBeforeActivation;
     float learningRate;
     ActivationFunction outputActivationFunction;
     std::vector<Eigen::MatrixXf> weights;
