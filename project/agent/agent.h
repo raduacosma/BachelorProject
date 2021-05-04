@@ -38,6 +38,10 @@ class Agent
     std::vector<size_t> hasDied;
     std::vector<float> opponentPredictionLosses;
     std::vector<float> opponentCorrectPredictionPercentage;
+    std::vector<float> thisEpisodeLoss;
+
+  public:
+    std::vector<float> const &getThisEpisodeLoss() const;
 
   public:
     std::vector<float> const &getOpponentCorrectPredictionPercentage() const;

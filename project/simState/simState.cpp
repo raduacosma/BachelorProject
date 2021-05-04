@@ -10,7 +10,51 @@
 
 using namespace std;
 
+SimState::SimState(std::string const &filename)
+    :
+    d_outOfBoundsReward(-0.02), d_reachedGoalReward(1),
+    d_killedByOpponentReward(-10), d_normalReward(-0.01)
+{
+    ifstream in{filename};
+    if(not in)
+    {
+        cout << "could not open file" << endl;
+        return;
+    }
+    std::string label;
+    in >> label;
+    in >> canvasStepSize.x>>canvasStepSize.y;
+    in >> label;
+    in >> canvasBegPos.x>>canvasBegPos.y;
+    in >> label;
+    in >> canvasEndPos.x>>canvasEndPos.y;
+    in >> label;
+    in >> simSize.x>>simSize.y;
+    in >> label;
+    in >> initialAgentPos.x>>initialAgentPos.y;
+    in >> label;
+    in >> goalPos.x>>goalPos.y;
+    size_t opStartPosx,opStartPosy;
+    in >> label;
+    in >> opStartPosx>>opStartPosy;
+    in >> label;
+    size_t tracex,tracey;
+    opponentTrace.push_back({opStartPosx,opStartPosy});
+    while (in >> tracex>>tracey)
+    {
+        opponentTrace.push_back({tracex,tracey});
+    }
+    in.clear();
+    in >> label;
+    size_t wallsx,wallsy;
+    while (in >> wallsx>>wallsy)
+    {
+        walls.push_back({wallsx,wallsy});
+    }
 
+//    sendNrStatesToAgent();
+    resetForNextEpisode();
+}
 
 Position SimState::computeNewAgentPos()
 {
@@ -200,51 +244,7 @@ std::vector <std::vector<ImVec4>> const & SimState::getFullMazeRepr()
     return stateRepresentation;
 }
 
-SimState::SimState(std::string const &filename)
-:
- d_outOfBoundsReward(-0.02), d_reachedGoalReward(1),
-      d_killedByOpponentReward(-10), d_normalReward(-0.01)
-{
-    ifstream in{filename};
-    if(not in)
-    {
-        cout << "could not open file" << endl;
-        return;
-    }
-    std::string label;
-    in >> label;
-    in >> canvasStepSize.x>>canvasStepSize.y;
-    in >> label;
-    in >> canvasBegPos.x>>canvasBegPos.y;
-    in >> label;
-    in >> canvasEndPos.x>>canvasEndPos.y;
-    in >> label;
-    in >> simSize.x>>simSize.y;
-    in >> label;
-    in >> initialAgentPos.x>>initialAgentPos.y;
-    in >> label;
-    in >> goalPos.x>>goalPos.y;
-    size_t opStartPosx,opStartPosy;
-    in >> label;
-    in >> opStartPosx>>opStartPosy;
-    in >> label;
-    size_t tracex,tracey;
-    opponentTrace.push_back({opStartPosx,opStartPosy});
-    while (in >> tracex>>tracey)
-    {
-        opponentTrace.push_back({tracex,tracey});
-    }
-    in.clear();
-    in >> label;
-    size_t wallsx,wallsy;
-    while (in >> wallsx>>wallsy)
-    {
-        walls.push_back({wallsx,wallsy});
-    }
 
-//    sendNrStatesToAgent();
-    resetForNextEpisode();
-}
 
 void SimState::generateStateRepresentation()
 {

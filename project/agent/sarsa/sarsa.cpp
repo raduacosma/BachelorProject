@@ -38,8 +38,9 @@ bool Sarsa::performOneStep()
 //    std::cout<<opponentActionIdx<<" "<<newOpponentAction<<std::endl;
     if(newOpponentAction == opponentActionIdx)
         ++currentEpisodeCorrectPredictions;
-    currentEpisodeLoss+=opponentMlp.train(lastOpponentState,opponentActionTarget);
-
+    float currentLoss = opponentMlp.train(lastOpponentState,opponentActionTarget);
+//    thisEpisodeLoss.push_back(currentLoss);
+    currentEpisodeLoss+=currentLoss;
     Eigen::VectorXf newQValues = mlp.predict(newState);
     size_t newAction =
         actionWithQ(newQValues); // this needs to be only predict, and store the activations for next time

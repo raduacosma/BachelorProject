@@ -95,3 +95,7 @@ vector<float> const &Agent::getOpponentCorrectPredictionPercentage() const
 {
     return opponentCorrectPredictionPercentage;
 }
+vector<float> const &Agent::getThisEpisodeLoss() const
+{
+    return thisEpisodeLoss;
+}

@@ -126,11 +126,12 @@ float MLP::update(Eigen::VectorXf const &output)
     float loss;
     if (outputActivationFunction == ActivationFunction::SOFTMAX)
     {
-        Eigen::VectorXf logActivations = activations.back().array().log();
-        loss = (-output.array() *  logActivations.array()-
-                (1 - output.array()) * (1 - logActivations.array()))
-                   .array()
-                   .sum(); // optimize this
+        loss= -(output.array()*activations.back().array().log()).sum();
+//        Eigen::VectorXf logActivations = activations.back().array().log();
+//        loss = (-output.array() *  logActivations.array()-
+//                (1 - output.array()) * (1 - logActivations.array()))
+//                   .array()
+//                   .sum(); // optimize this
     }
     else
     {
