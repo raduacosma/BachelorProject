@@ -10,12 +10,19 @@ enum class ActivationFunction
     SIGMOID,
     SOFTMAX
 };
+
+enum class MLPUpdateType
+{
+    NORMAL,
+    MINIBATCH
+};
 class MLP
 {
     std::vector<size_t> sizes;
     size_t const nrLayers;
     size_t const nrWeightLayers;
     size_t const nrLayersBeforeActivation;
+    size_t const miniBatchSize;
     float learningRate;
     ActivationFunction outputActivationFunction;
     std::vector<Eigen::MatrixXf> weights;
@@ -23,22 +30,27 @@ class MLP
 
     std::vector<Eigen::MatrixXf> nablaWeights;
     std::vector<Eigen::VectorXf> nablaBiases;
+    std::vector<Eigen::MatrixXf> nablaWeightsMiniBatch;
+    std::vector<Eigen::VectorXf> nablaBiasesMiniBatch;
 
     std::vector<float> lossHistory;
 
     std::vector<Eigen::VectorXf> activations;
     std::vector<Eigen::VectorXf> zs;
-
+    void updateMiniBatchNablas();
   public:
-    MLP(std::vector<size_t> _sizes, float _learningRate, ActivationFunction _outputActivationFunc);
-    float train(Eigen::VectorXf const &input, Eigen::VectorXf const &output);
+    MLP(std::vector<size_t> _sizes, float _learningRate, ActivationFunction _outputActivationFunc, size_t pMiniBatchSize = 4);
+    float train(Eigen::VectorXf const &input, Eigen::VectorXf const &output, MLPUpdateType updateType = MLPUpdateType::NORMAL);
     Eigen::VectorXf predict(Eigen::VectorXf const &input);
     [[nodiscard]] std::vector<float> const &getLossHistory() const;
     static float sigmoid(float x);
     static float sigmoidPrime(float x);
     void printWeights();
-    float update(Eigen::VectorXf const &output);
+    float update(Eigen::VectorXf const &output, MLPUpdateType updateType = MLPUpdateType::NORMAL);
     Eigen::VectorXf feedforward(Eigen::VectorXf const &input);
     void updateWeights();
+    void updateMiniBatchWeights();
+    void initMiniBatchNablas();
+
 };
 #endif
