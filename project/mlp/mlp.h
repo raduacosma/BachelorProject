@@ -39,5 +39,6 @@ class MLP
     void printWeights();
     float update(Eigen::VectorXf const &output);
     Eigen::VectorXf feedforward(Eigen::VectorXf const &input);
+    void updateWeights();
 };
 #endif

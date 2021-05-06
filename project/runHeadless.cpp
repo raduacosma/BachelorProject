@@ -27,6 +27,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     std::vector<float> const &opponentPredPerc = agent->getOpponentCorrectPredictionPercentage();
     copy(opponentPredPerc.begin(), opponentPredPerc.end(),
          std::ostream_iterator<float>(opponentPerc, "\n"));
+
 //    std::ofstream opponentLoss{"results/opponentFirstEpLoss.txt"};
 //    std::vector<float> const &opponentThisLoss = agent->getThisEpisodeLoss();
 //    copy(opponentThisLoss.begin(), opponentThisLoss.end(),

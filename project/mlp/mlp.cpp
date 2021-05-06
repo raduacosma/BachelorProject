@@ -107,7 +107,7 @@ Eigen::VectorXf MLP::feedforward(Eigen::VectorXf const &input)
 }
 float MLP::update(Eigen::VectorXf const &output)
 {
-    Eigen::VectorXf delta;
+    Eigen::VectorXf delta;  // maybe directly modify nablaBiases.back()?
     if (outputActivationFunction == ActivationFunction::SIGMOID)
     {
         delta = (activations.back() - output).cwiseProduct(zs.back().unaryExpr(&sigmoidPrime));
@@ -150,12 +150,16 @@ float MLP::update(Eigen::VectorXf const &output)
             .cwiseProduct(zs[idx].unaryExpr(&sigmoidPrime));
         nablaWeights[idx] = currNablaBiases * activations[idx].transpose();
     }
+    updateWeights();
+    return loss;
+}
+void MLP::updateWeights()
+{
     for (size_t idx = 0; idx != nrWeightLayers; ++idx)
     {
         weights[idx] -= learningRate * nablaWeights[idx];
         biases[idx] -= learningRate * nablaBiases[idx];
     }
-    return loss;
 }
 float MLP::train(Eigen::VectorXf const &input, Eigen::VectorXf const &output)
 {
