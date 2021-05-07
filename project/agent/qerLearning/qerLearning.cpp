@@ -6,6 +6,11 @@ QERLearning::QERLearning(size_t _nrEpisodes, float _alpha, float _epsilon,
     : Agent(_nrEpisodes), alpha(_alpha), epsilon(_epsilon), gamma(_gamma),
       mlp({ 75, 192, 4 }, 0.001, ActivationFunction::LINEAR, 16), targetMLP(mlp)
 {
+    experiences.reserve(sizeExperience);
+    for(size_t idx = 0; idx != sizeExperience; ++idx)
+    {
+        experiences.push_back({0,0,true,Eigen::VectorXf(75),Eigen::VectorXf(75)});
+    }
 }
 void QERLearning::newEpisode()
 {
@@ -18,9 +23,8 @@ bool QERLearning::performOneStep()
     {
         if (expCounter == expResetPeriod)
         {
-            experiences = std::vector<Experience>();
             shouldGatherExperience = true;
-            expCounter = -1;
+            expCounter = 0;
         }
 
     }
@@ -29,14 +33,14 @@ bool QERLearning::performOneStep()
         if(expCounter == sizeExperience)
         {
             shouldGatherExperience = false;
-            expCounter = -1;
+            expCounter = 0;
         }
     }
     ++cCounter;
     if (cCounter == cSwapPeriod)
     {
         targetMLP = mlp;
-        cCounter = -1; // don't forget about the -1 stuff if we are doing this here
+        cCounter = 0;
     }
     Eigen::VectorXf qValues = mlp.feedforward(lastState);
     size_t action = actionWithQ(qValues);
@@ -49,7 +53,7 @@ bool QERLearning::performOneStep()
             updateWithExperienceReplay();
         }
         else
-            experiences.push_back({ action, reward, true, lastState, newState });
+            experiences[expCounter] = { action, reward, true, lastState, newState };
 
         // lastState and lastAction will probably be handled by newEpisode so they should not matter
         return false;
@@ -59,7 +63,7 @@ bool QERLearning::performOneStep()
         updateWithExperienceReplay();
     }
     else
-        experiences.push_back({ action, reward, false, lastState, newState });
+        experiences[expCounter] = { action, reward, false, lastState, newState };
     // do I need lastState somewhere? Since learning rate is 1 it reduces in the equation and
     // the backprop is already done on the deltas from lastState
     // check if d_oldstate should be updated even if we can't continue

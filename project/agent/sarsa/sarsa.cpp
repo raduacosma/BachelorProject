@@ -15,6 +15,7 @@ void Sarsa::newEpisode()
 }
 bool Sarsa::performOneStep()
 {
+
     lastQValues = mlp.feedforward(lastState);
     auto [reward, canContinue] = maze->computeNextStateAndReward(static_cast<Actions>(lastAction));
     Eigen::VectorXf newState = maze->getStateForAgent();
