@@ -53,10 +53,12 @@ add_executable(BachelorProject
         project/randObj/randobj.cpp
         project/agent/qLearning/qLearning.cpp
         project/agent/qLearning/qLearning.h
+        project/agent/qerLearning/qerLearning.cpp
+        project/agent/qerLearning/qerLearning.h
         project/simContainer/simContainer.cpp project/simContainer/simContainer.h project/runHeadless.cpp project/runHeadless.h project/agent/sarsa/sarsa.cpp project/agent/sarsa/sarsa.h)
 target_link_libraries(BachelorProject GL ${GLFW_STATIC_LIBRARIES})
 
 find_package(OpenMP)
-if(OpenMP_CXX_FOUND)
+if (OpenMP_CXX_FOUND)
     target_link_libraries(BachelorProject OpenMP::OpenMP_CXX)
-endif()
+endif ()

@@ -3,6 +3,7 @@
 #include "simContainer/simContainer.h"
 #include "agent/sarsa/sarsa.h"
 #include "agent/qLearning/qLearning.h"
+#include "agent/qerLearning/qerLearning.h"
 #include <memory>
 #include <fstream>
 #include <iterator>
@@ -10,12 +11,12 @@
 
 void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
 {
-    std::string files = "opponentWithWalls.txt";
+    std::string files = "simple_opponent.txt";
     // could also use stack but meh, this way is more certain
-    std::unique_ptr<Agent> agent = std::make_unique<Sarsa>(1);
+    std::unique_ptr<Agent> agent = std::make_unique<QERLearning>(10000);
     SimContainer simContainer{ files, agent.get() };
     agent->run();
-    std::ofstream out{"results/rewardsTwo.txt"};
+    std::ofstream out{"results/rewardsTwoSimple.txt"};
     std::vector<float> const &rewards = agent->getRewards();
     copy(rewards.begin(), rewards.end(),
          std::ostream_iterator<float>(out, "\n"));

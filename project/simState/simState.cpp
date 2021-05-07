@@ -12,8 +12,8 @@ using namespace std;
 
 SimState::SimState(std::string const &filename)
     :
-    d_outOfBoundsReward(-0.02), d_reachedGoalReward(1),
-    d_killedByOpponentReward(-10), d_normalReward(-0.01)
+    d_outOfBoundsReward(-0.01), d_reachedGoalReward(1),
+    d_killedByOpponentReward(-100), d_normalReward(-0.01)
 {
     ifstream in{filename};
     if(not in)
