@@ -23,7 +23,6 @@ class QERLearning : public Agent
     size_t miniBatchSize = 16;
     size_t sizeExperience = 10000;
     size_t lastAction;
-    MLP mlp;
     MLP targetMLP;
     std::vector<Experience> experiences;
 

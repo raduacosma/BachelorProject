@@ -2,16 +2,13 @@
 #include <iostream>
 
 Sarsa::Sarsa(size_t _nrEpisodes, float _alpha, float _epsilon, float _gamma) // TODO: check how size is passed
-    : Agent(_nrEpisodes), alpha(_alpha), epsilon(_epsilon), gamma(_gamma),
-      mlp({ 75, 192, 4 }, 0.001, ActivationFunction::LINEAR),
-      opponentMlp({50,100,4},0.001,ActivationFunction::SOFTMAX)
+    : Agent(_nrEpisodes), alpha(_alpha), epsilon(_epsilon), gamma(_gamma)
 {
 }
 void Sarsa::newEpisode()
 {
     Agent::newEpisode();
     lastAction = actionWithQ(mlp.predict(lastState));
-    lastOpponentState = maze->getStateForOpponent();
 }
 bool Sarsa::performOneStep()
 {
@@ -30,18 +27,7 @@ bool Sarsa::performOneStep()
         // lastState and lastAction will probably be handled by newEpisode so they should not matter
         return false;
     }
-    Eigen::VectorXf newOpponentState = maze->getStateForOpponent();
-    size_t newOpponentAction = maze->getLastOpponentAction();
-    Eigen::VectorXf opponentActionTarget = Eigen::VectorXf::Zero(4);
-    opponentActionTarget(static_cast<size_t>(newOpponentAction)) = 1.0f;
-    size_t opponentActionIdx;
-    opponentMlp.predict(lastOpponentState).maxCoeff(&opponentActionIdx);
-//    std::cout<<opponentActionIdx<<" "<<newOpponentAction<<std::endl;
-    if(newOpponentAction == opponentActionIdx)
-        ++currentEpisodeCorrectPredictions;
-    float currentLoss = opponentMlp.train(lastOpponentState,opponentActionTarget);
-//    thisEpisodeLoss.push_back(currentLoss);
-    currentEpisodeLoss+=currentLoss;
+
     Eigen::VectorXf newQValues = mlp.predict(newState);
     size_t newAction =
         actionWithQ(newQValues); // this needs to be only predict, and store the activations for next time
@@ -54,7 +40,6 @@ bool Sarsa::performOneStep()
     // check if d_oldstate should be updated even if we can't continue
     lastState = newState;
     lastAction = newAction;
-    lastOpponentState = newOpponentState;
     return true;
 }
 size_t Sarsa::actionWithQ(Eigen::VectorXf const &qVals)

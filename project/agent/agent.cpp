@@ -3,19 +3,12 @@
 #include "tuple"
 #include <iostream>
 using namespace std;
-//bool Agent::performOneStep()
-//{
-//    auto [reward, canContinue] = maze->computeNextStateAndReward(action(lastState));
-//    Eigen::VectorXf newState = maze->getStateForAgent();
-//    giveFeedback(reward, newState);
-//    if (not canContinue)
-//    {
-//        return false;
-//    }
-//    // check if d_oldstate should be updated even if we can't continue
-//    lastState = newState;
-//    return true;
-//}
+Agent::Agent(size_t _nrEpisodes)
+    : nrEpisodes(_nrEpisodes), rewards(vector<float>(_nrEpisodes)), hasDied(vector<size_t>(_nrEpisodes)),
+      mlp({ 75, 192, 4 }, 0.001, ActivationFunction::LINEAR),
+      opponentMlp({50,100,4},0.001,ActivationFunction::SOFTMAX)
+{
+}
 bool Agent::performOneStep()
 {
     throw std::runtime_error("In Agent's performOneStep, should not be here");
@@ -42,6 +35,20 @@ void Agent::run()
             ++stepCount;
             bool canContinue = performOneStep();
             totalReward += maze->getLastReward();
+            Eigen::VectorXf newOpponentState = maze->getStateForOpponent();
+            size_t newOpponentAction = maze->getLastOpponentAction();
+            Eigen::VectorXf opponentActionTarget = Eigen::VectorXf::Zero(4);
+            opponentActionTarget(static_cast<size_t>(newOpponentAction)) = 1.0f;
+            size_t opponentActionIdx;
+            opponentMlp.feedforward(lastOpponentState).maxCoeff(&opponentActionIdx);
+//    std::cout<<opponentActionIdx<<" "<<newOpponentAction<<std::endl;
+            if(newOpponentAction == opponentActionIdx)
+                ++currentEpisodeCorrectPredictions;
+            float currentLoss = opponentMlp.update(opponentActionTarget);
+            // TODO: Be careful with end of episode and reset and such
+//    thisEpisodeLoss.push_back(currentLoss);
+            currentEpisodeLoss+=currentLoss;
+            lastOpponentState = newOpponentState;
             if (not canContinue)
                 break;
         }
@@ -54,10 +61,7 @@ void Agent::run()
     // any cleanup?
 }
 
-Agent::Agent(size_t _nrEpisodes)
-    : nrEpisodes(_nrEpisodes), rewards(vector<float>(_nrEpisodes)), hasDied(vector<size_t>(_nrEpisodes))
-{
-}
+
 
 void Agent::setMaze(SimContainer *simCont)
 {
@@ -66,6 +70,7 @@ void Agent::setMaze(SimContainer *simCont)
 void Agent::newEpisode()
 {
     lastState = maze->getStateForAgent();
+    lastOpponentState = maze->getStateForOpponent();
     // Some algorithms require this. Empty for the others.
 }
 

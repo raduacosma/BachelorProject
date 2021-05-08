@@ -7,7 +7,7 @@
 #include <vector>
 #include "../simState/actions.h"
 #include "../Eigen/Core"
-
+#include "../mlp/mlp.h"
 
 enum class AgentType
 {
@@ -30,6 +30,7 @@ class Agent
     SimContainer *maze;         // The maze the agent is navigating
 
     Eigen::VectorXf lastState;
+    Eigen::VectorXf lastOpponentState;
     size_t lastAction;
     size_t nrEpisodes;
     float currentEpisodeLoss;
@@ -39,6 +40,8 @@ class Agent
     std::vector<float> opponentPredictionLosses;
     std::vector<float> opponentCorrectPredictionPercentage;
     std::vector<float> thisEpisodeLoss;
+    MLP mlp;
+    MLP opponentMlp;
 
   public:
     std::vector<float> const &getThisEpisodeLoss() const;

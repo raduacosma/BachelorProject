@@ -16,7 +16,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
 //    std::cout.setstate(std::ios_base::failbit);
     std::string files = "super_simple.txt";
     // could also use stack but meh, this way is more certain
-    std::unique_ptr<Agent> agent = std::make_unique<QERQueueLearning>(10000);
+    std::unique_ptr<Agent> agent = std::make_unique<Sarsa>(10000);
     SimContainer simContainer{ files, agent.get() };
     agent->run();
     std::ofstream out{"results/rewardsSimpleQ.txt"};
