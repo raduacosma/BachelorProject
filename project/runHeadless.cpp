@@ -4,16 +4,19 @@
 #include "agent/sarsa/sarsa.h"
 #include "agent/qLearning/qLearning.h"
 #include "agent/qerLearning/qerLearning.h"
+#include "agent/qerqueueLearning/qerQueueLearning.h"
 #include <memory>
 #include <fstream>
 #include <iterator>
 #include <algorithm>
+#include <iostream>
 
 void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
 {
+//    std::cout.setstate(std::ios_base::failbit);
     std::string files = "super_simple.txt";
     // could also use stack but meh, this way is more certain
-    std::unique_ptr<Agent> agent = std::make_unique<QERLearning>(10000);
+    std::unique_ptr<Agent> agent = std::make_unique<QERQueueLearning>(10000);
     SimContainer simContainer{ files, agent.get() };
     agent->run();
     std::ofstream out{"results/rewardsSimpleQ.txt"};

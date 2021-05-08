@@ -18,7 +18,6 @@ void QERLearning::newEpisode()
 }
 bool QERLearning::performOneStep()
 {
-    ++expCounter;
     if (not shouldGatherExperience)
     {
         if (expCounter == expResetPeriod)
@@ -36,7 +35,6 @@ bool QERLearning::performOneStep()
             expCounter = 0;
         }
     }
-    ++cCounter;
     if (cCounter == cSwapPeriod)
     {
         targetMLP = mlp;
@@ -56,6 +54,8 @@ bool QERLearning::performOneStep()
             experiences[expCounter] = { action, reward, true, lastState, newState };
 
         // lastState and lastAction will probably be handled by newEpisode so they should not matter
+        ++expCounter;
+        ++cCounter;
         return false;
     }
     if (not shouldGatherExperience)
@@ -68,6 +68,8 @@ bool QERLearning::performOneStep()
     // the backprop is already done on the deltas from lastState
     // check if d_oldstate should be updated even if we can't continue
     lastState = newState;
+    ++expCounter;
+    ++cCounter;
     return true;
 }
 void QERLearning::updateWithExperienceReplay()

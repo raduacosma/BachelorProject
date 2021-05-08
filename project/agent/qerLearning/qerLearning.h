@@ -5,15 +5,8 @@
 #include "../../Eigen/Core"
 #include "../../mlp/mlp.h"
 #include "../../createRngObj/createRngObj.h"
+#include "../experience.h"
 
-struct Experience
-{
-    size_t action;
-    float reward;
-    bool isTerminal;
-    Eigen::VectorXf lastState;
-    Eigen::VectorXf newState;
-};
 
 class QERLearning : public Agent
 {
@@ -22,10 +15,10 @@ class QERLearning : public Agent
     float epsilon;
     float gamma;
     size_t C;
-    int expCounter = -1;
+    int expCounter = 0;
     size_t expResetPeriod = 100000;
     bool shouldGatherExperience = true;
-    int cCounter = -1;
+    int cCounter = 0;
     size_t cSwapPeriod = 1000;
     size_t miniBatchSize = 16;
     size_t sizeExperience = 10000;
