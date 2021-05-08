@@ -15,10 +15,10 @@ class QERLearning : public Agent
     float epsilon;
     float gamma;
     size_t C;
-    int expCounter = 0;
+    size_t expCounter = 0;
     size_t expResetPeriod = 100000;
     bool shouldGatherExperience = true;
-    int cCounter = 0;
+    size_t cCounter = 0;
     size_t cSwapPeriod = 1000;
     size_t miniBatchSize = 16;
     size_t sizeExperience = 10000;

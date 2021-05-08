@@ -15,9 +15,9 @@ class QERQueueLearning : public Agent
     float epsilon;
     float gamma;
     size_t C;
-    int expCounter = 0;
+    size_t expCounter = 0;
     bool shouldGatherExperience = true;
-    int cCounter = 0;
+    size_t cCounter = 0;
     size_t cSwapPeriod = 1000;
     size_t miniBatchSize = 16;
     size_t sizeExperience = 10000;
@@ -34,6 +34,7 @@ class QERQueueLearning : public Agent
     void newEpisode() override;
   private:
     void updateWithExperienceReplay();
+    void handleExperience();
 };
 
 

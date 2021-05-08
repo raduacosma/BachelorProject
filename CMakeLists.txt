@@ -3,10 +3,10 @@ project(BachelorProject)
 INCLUDE(FindPkgConfig)
 pkg_search_module(GLFW REQUIRED glfw3)
 include_directories(${GLFW_INCLUDE_DIRS})
-
+set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_STANDARD 20)
 #add_compile_options(-Wall -Werror -march=native)
-add_compile_options(-Wall -O3 -DNDEBUG -march=native)
+add_compile_options(-Wall -march=native)
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BachelorProject_SOURCE_DIR})
 
 include_directories(imgui-1.81)
