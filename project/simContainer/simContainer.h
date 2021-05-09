@@ -16,10 +16,16 @@ class SimContainer
     size_t currSimState;
     size_t episodeCount;
     float lastReward;
+    size_t lastOpponentAction;
+    Eigen::VectorXf lastOpponentState;
+    bool lastSwitchedLevel;
 
-    public:
+  public:
+    bool getLastSwitchedLevel() const;
+
+  public:
     float getLastReward() const;
-    size_t getLastOpponentAction();
+    size_t getLastOpponentAction() const;
 
     public:
     size_t getCurrSimState() const;
@@ -38,8 +44,5 @@ class SimContainer
     Eigen::VectorXf getStateForOpponent() const;
 };
 
-inline size_t SimContainer::getLastOpponentAction()
-{
-    return simStates[currSimState].getLastOpponentAction();
-}
+
 #endif

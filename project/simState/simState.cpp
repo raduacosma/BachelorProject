@@ -77,13 +77,9 @@ Position SimState::computeNewAgentPos()
 tuple<float, SimResult> SimState::computeNextStateAndReward(Actions action)
 {
     currAction = action;
-
+    updateOpponentPos();
     auto [reward, canContinue] = updateAgentPos();
-    // make sure this and hash should be updated before opponent
-    if(canContinue == SimResult::CONTINUE)
-    {
-        updateOpponentPos();
-    }
+    // make sure this and hash should be updated before opponent ?? what is this
 
     return make_tuple(reward, canContinue);
 }

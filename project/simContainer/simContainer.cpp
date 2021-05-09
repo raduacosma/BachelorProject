@@ -39,17 +39,24 @@ void SimContainer::goToBeginning()
 //    simStates[currSimState].resetForNextEpisode();
 }
 Eigen::VectorXf SimContainer::getStateForAgent() const
-{
+{  // TODO: check that this does not get messed up by level switching
     return simStates[currSimState].getStateForAgent();
 }
 Eigen::VectorXf SimContainer::getStateForOpponent() const
 {
-    return simStates[currSimState].getStateForOpponent();
+    return lastOpponentState;
+}
+size_t SimContainer::getLastOpponentAction() const
+{
+    return lastOpponentAction;
 }
 std::tuple<float, bool>
 SimContainer::computeNextStateAndReward(Actions action)
 {
     auto [reward,continueStatus] = simStates[currSimState].computeNextStateAndReward(action);
+    lastOpponentAction = simStates[currSimState].getLastOpponentAction();
+    lastOpponentState = simStates[currSimState].getStateForOpponent();
+    lastSwitchedLevel = false;
     bool canContinue = true;
     switch (continueStatus)
     {
@@ -69,6 +76,7 @@ SimContainer::computeNextStateAndReward(Actions action)
             }
             simStates[currSimState].resetForNextEpisode();
             cout << "reached goal"<<endl;
+            lastSwitchedLevel = true;
 //            agent->maze(this);
             break;
         case SimResult::KILLED_BY_OPPONENT:
@@ -78,6 +86,7 @@ SimContainer::computeNextStateAndReward(Actions action)
             simStates[currSimState].resetForNextEpisode();
 //            agent->maze(this); // needed? since everything goes through simContainer probably not
             ++episodeCount;
+            lastSwitchedLevel = true;
             break;
     }
     lastReward = reward;
@@ -94,4 +103,8 @@ size_t SimContainer::getEpisodeCount() const
 float SimContainer::getLastReward() const
 {
     return lastReward;
+}
+bool SimContainer::getLastSwitchedLevel() const
+{
+    return lastSwitchedLevel;
 }

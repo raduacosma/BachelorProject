@@ -3,7 +3,7 @@
 #include "tuple"
 #include <iostream>
 using namespace std;
-Agent::Agent(size_t _nrEpisodes)
+Agent::Agent(size_t _nrEpisodes) // TODO: check how size is passed
     : nrEpisodes(_nrEpisodes), rewards(vector<float>(_nrEpisodes)), hasDied(vector<size_t>(_nrEpisodes)),
       mlp({ 75, 192, 4 }, 0.001, ActivationFunction::LINEAR),
       opponentMlp({50,100,4},0.001,ActivationFunction::SOFTMAX)
@@ -30,27 +30,17 @@ void Agent::run()
         currentEpisodeCorrectPredictions = 0;
         size_t stepCount = 0;
         float totalReward = 0;
+        opponentNotInit = true;
         while (true)
         {
             ++stepCount;
             bool canContinue = performOneStep();
             totalReward += maze->getLastReward();
-            Eigen::VectorXf newOpponentState = maze->getStateForOpponent();
-            size_t newOpponentAction = maze->getLastOpponentAction();
-            Eigen::VectorXf opponentActionTarget = Eigen::VectorXf::Zero(4);
-            opponentActionTarget(static_cast<size_t>(newOpponentAction)) = 1.0f;
-            size_t opponentActionIdx;
-            opponentMlp.feedforward(lastOpponentState).maxCoeff(&opponentActionIdx);
-//    std::cout<<opponentActionIdx<<" "<<newOpponentAction<<std::endl;
-            if(newOpponentAction == opponentActionIdx)
-                ++currentEpisodeCorrectPredictions;
-            float currentLoss = opponentMlp.update(opponentActionTarget);
-            // TODO: Be careful with end of episode and reset and such
-//    thisEpisodeLoss.push_back(currentLoss);
-            currentEpisodeLoss+=currentLoss;
-            lastOpponentState = newOpponentState;
+            handleOpponentAction();
             if (not canContinue)
                 break;
+            if(maze->getLastSwitchedLevel())
+                opponentNotInit = true;
         }
         std::cout<<"totalReward: "<<totalReward<<std::endl;
         opponentPredictionLosses.push_back(currentEpisodeLoss/stepCount);
@@ -60,8 +50,29 @@ void Agent::run()
     }
     // any cleanup?
 }
-
-
+void Agent::handleOpponentAction()
+{
+    if(opponentNotInit)
+    {
+        lastOpponentState = maze->getStateForOpponent();
+        opponentNotInit = false;
+        return;
+    }
+    Eigen::VectorXf newOpponentState = maze->getStateForOpponent();
+    size_t newOpponentAction = maze->getLastOpponentAction();
+    Eigen::VectorXf opponentActionTarget = Eigen::VectorXf::Zero(4);
+    opponentActionTarget(static_cast<size_t>(newOpponentAction)) = 1.0f;
+    size_t opponentActionIdx;
+    opponentMlp.feedforward(lastOpponentState).maxCoeff(&opponentActionIdx);
+    //    std::cout<<opponentActionIdx<<" "<<newOpponentAction<<std::endl;
+    if(newOpponentAction == opponentActionIdx)
+        ++currentEpisodeCorrectPredictions;
+    float currentLoss = opponentMlp.update(opponentActionTarget);
+    // TODO: Be careful with end of episode and reset and such
+    currentEpisodeLoss += currentLoss;
+    //    thisEpisodeLoss.push_back(currentLoss);
+    lastOpponentState = newOpponentState;
+}
 
 void Agent::setMaze(SimContainer *simCont)
 {

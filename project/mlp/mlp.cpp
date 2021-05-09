@@ -28,6 +28,18 @@ MLP::MLP(std::vector<size_t> _sizes, float _learningRate, ActivationFunction _ou
         nablaWeightsMiniBatch.emplace_back(sizes[y], sizes[x]);
     }
 }
+
+void MLP::randomizeWeights()
+{
+    for (size_t idx = 1; idx != nrLayers; ++idx)
+    {
+        biases[idx-1] = Eigen::VectorXf::Random(sizes[idx]);
+    }
+    for (size_t x = 0, y = 1; x != nrWeightLayers and y != nrLayers; ++x, ++y)
+    {
+        weights[x] = Eigen::MatrixXf::Random(sizes[y], sizes[x]);
+    }
+}
 void MLP::printWeights()
 {
     for (size_t idx = 0; idx != nrWeightLayers; ++idx)

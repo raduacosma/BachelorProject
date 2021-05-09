@@ -28,7 +28,7 @@ class Agent
 
     size_t simTime = 0;
     SimContainer *maze;         // The maze the agent is navigating
-
+    bool opponentNotInit = true;
     Eigen::VectorXf lastState;
     Eigen::VectorXf lastOpponentState;
     size_t lastAction;
@@ -66,7 +66,7 @@ class Agent
     virtual bool performOneStep();
     virtual void newEpisode();
 
-
+    void handleOpponentAction();
 };
 
 

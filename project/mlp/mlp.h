@@ -54,5 +54,6 @@ class MLP
     void updateWeights();
     void updateMiniBatchWeights();
     void initMiniBatchNablas();
+    void randomizeWeights();
 };
 #endif

@@ -2,7 +2,7 @@
 #include <iostream>
 
 QERQueueLearning::QERQueueLearning(size_t _nrEpisodes, float _alpha, float _epsilon,
-                         float _gamma) // TODO: check how size is passed
+                         float _gamma)
     : Agent(_nrEpisodes), alpha(_alpha), epsilon(_epsilon), gamma(_gamma),
       targetMLP(mlp)
 {
