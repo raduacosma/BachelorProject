@@ -2,11 +2,13 @@
 #include "../simContainer/simContainer.h"
 #include "tuple"
 #include <iostream>
+#include <random>
+
 using namespace std;
-Agent::Agent(size_t _nrEpisodes) // TODO: check how size is passed
+Agent::Agent(size_t _nrEpisodes, OpModellingType pOpModellingType) // TODO: check how size is passed
     : nrEpisodes(_nrEpisodes), rewards(vector<float>(_nrEpisodes)), hasDied(vector<size_t>(_nrEpisodes)),
       mlp({ 75, 192, 4 }, 0.001, ActivationFunction::LINEAR),
-      opponentMlp({50,100,4},0.001,ActivationFunction::SOFTMAX)
+      opponentMlp({ 50, 100, 4 }, 0.001, ActivationFunction::SOFTMAX), opModellingType(pOpModellingType)
 {
 }
 bool Agent::performOneStep()
@@ -31,6 +33,7 @@ void Agent::run()
         size_t stepCount = 0;
         float totalReward = 0;
         opponentNotInit = true;
+        thisEpisodeLoss = std::vector<float>();
         while (true)
         {
             ++stepCount;
@@ -38,13 +41,28 @@ void Agent::run()
             totalReward += maze->getLastReward();
             handleOpponentAction();
             if (not canContinue)
+            {
+                //                if(isNewLevel)
+                //                {
+                //                    nrEpisode = nrEpisodes - 1;
+                //                    break;
+                //                }
                 break;
-            if(maze->getLastSwitchedLevel())
+            }
+            if (maze->getLastSwitchedLevel())
+            {
                 opponentNotInit = true;
+                //                isNewLevel = !isNewLevel;
+                //                if(not isNewLevel)
+                //                {
+                //                    nrEpisode = nrEpisodes - 1;
+                //                    break;
+                //                }
+            }
         }
-        std::cout<<"totalReward: "<<totalReward<<std::endl;
-        opponentPredictionLosses.push_back(currentEpisodeLoss/stepCount);
-        opponentCorrectPredictionPercentage.push_back(static_cast<float>(currentEpisodeCorrectPredictions)/stepCount);
+        std::cout << "totalReward: " << totalReward << std::endl;
+        opponentPredictionLosses.push_back(currentEpisodeLoss / stepCount);
+        opponentCorrectPredictionPercentage.push_back(static_cast<float>(currentEpisodeCorrectPredictions) / stepCount);
         runReward += totalReward;
         rewards[nrEpisode] = totalReward;
     }
@@ -52,8 +70,16 @@ void Agent::run()
 }
 void Agent::handleOpponentAction()
 {
-    if(opponentNotInit)
+    if (opponentNotInit)
     {
+        switch (opModellingType)
+        {
+            case OpModellingType::NEWEVERYTIME:
+                opponentMlp.randomizeWeights();
+                break;
+            case OpModellingType::ONEFORALL:
+                break;
+        }
         lastOpponentState = maze->getStateForOpponent();
         opponentNotInit = false;
         return;
@@ -65,18 +91,36 @@ void Agent::handleOpponentAction()
     size_t opponentActionIdx;
     opponentMlp.feedforward(lastOpponentState).maxCoeff(&opponentActionIdx);
     //    std::cout<<opponentActionIdx<<" "<<newOpponentAction<<std::endl;
-    if(newOpponentAction == opponentActionIdx)
+    if (newOpponentAction == opponentActionIdx)
         ++currentEpisodeCorrectPredictions;
     float currentLoss = opponentMlp.update(opponentActionTarget);
     // TODO: Be careful with end of episode and reset and such
     currentEpisodeLoss += currentLoss;
-    //    thisEpisodeLoss.push_back(currentLoss);
+    thisEpisodeLoss.push_back(currentLoss);
     lastOpponentState = newOpponentState;
 }
 
 void Agent::setMaze(SimContainer *simCont)
 {
     maze = simCont;
+}
+float Agent::MonteCarloRollout(size_t m, size_t action, Eigen::VectorXf const &agentState,
+                               Eigen::VectorXf const &opState)
+{
+    float totalReward = 0;
+    for (size_t mIdx = 0; mIdx != m; ++mIdx)
+    {
+        float rolloutReward = 0;
+        size_t i = 0;
+        Eigen::VectorXf opProbs = opponentMlp.predict(opState);
+        std::discrete_distribution<> distr({opProbs[0],opProbs[1],opProbs[2],opProbs[3]});
+        size_t opAction = distr(globalRng);
+        auto [reward, canContinue] = maze->computeNextStateAndReward(static_cast<Actions>(action));
+        while(canContinue)
+        {
+            ++i;
+        }
+    }
 }
 void Agent::newEpisode()
 {

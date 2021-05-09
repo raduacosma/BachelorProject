@@ -1,9 +1,9 @@
 #include "qerQueueLearning.h"
 #include <iostream>
 
-QERQueueLearning::QERQueueLearning(size_t _nrEpisodes, float _alpha, float _epsilon,
+QERQueueLearning::QERQueueLearning(size_t _nrEpisodes, OpModellingType pOpModellingType, float _alpha, float _epsilon,
                          float _gamma)
-    : Agent(_nrEpisodes), alpha(_alpha), epsilon(_epsilon), gamma(_gamma),
+    : Agent(_nrEpisodes, pOpModellingType), alpha(_alpha), epsilon(_epsilon), gamma(_gamma),
       targetMLP(mlp)
 {
 }

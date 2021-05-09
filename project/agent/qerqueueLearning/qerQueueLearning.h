@@ -26,7 +26,7 @@ class QERQueueLearning : public Agent
     std::deque<Experience> experiences;
 
   public:
-    QERQueueLearning(size_t _nrEpisodes = 10000, float _alpha = 0.001, float _epsilon = 0.1, float _gamma=0.9);
+    QERQueueLearning(size_t _nrEpisodes = 10000, OpModellingType pOpModellingType = OpModellingType::ONEFORALL, float _alpha = 0.001, float _epsilon = 0.1, float _gamma=0.9);
     ~QERQueueLearning() override;
     bool performOneStep() override;
     size_t actionWithQ(Eigen::VectorXf const &qVals);

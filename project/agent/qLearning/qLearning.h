@@ -14,7 +14,7 @@ class QLearning : public Agent
     size_t lastAction;
 
   public:
-    QLearning(size_t _nrEpisodes = 10000, float _alpha = 0.001, float _epsilon = 0.1, float _gamma=0.9);
+    QLearning(size_t _nrEpisodes = 10000, OpModellingType pOpModellingType = OpModellingType::ONEFORALL, float _alpha = 0.001, float _epsilon = 0.1, float _gamma=0.9);
     ~QLearning() override;
     bool performOneStep() override;
     size_t actionWithQ(Eigen::VectorXf const &qVals);

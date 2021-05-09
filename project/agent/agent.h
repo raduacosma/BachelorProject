@@ -8,6 +8,7 @@
 #include "../simState/actions.h"
 #include "../Eigen/Core"
 #include "../mlp/mlp.h"
+#include "../createRngObj/createRngObj.h"
 
 enum class AgentType
 {
@@ -15,6 +16,12 @@ enum class AgentType
     DQLEARNING,
     SARSA,
     EXPECTEDSARSA
+};
+
+enum class OpModellingType
+{
+    NEWEVERYTIME,
+    ONEFORALL
 };
 
 class Agent
@@ -42,6 +49,9 @@ class Agent
     std::vector<float> thisEpisodeLoss;
     MLP mlp;
     MLP opponentMlp;
+    bool isNewLevel = false;
+
+    OpModellingType opModellingType;
 
   public:
     std::vector<float> const &getThisEpisodeLoss() const;
@@ -53,7 +63,7 @@ class Agent
     std::vector<float> const &getOpponentPredictionLosses() const;
 
   public:
-    explicit Agent(size_t _nrEpisodes);
+    explicit Agent(size_t _nrEpisodes, OpModellingType pOpModellingType = OpModellingType::ONEFORALL);
     virtual ~Agent();
 
     void run();
@@ -67,6 +77,7 @@ class Agent
     virtual void newEpisode();
 
     void handleOpponentAction();
+    float MonteCarloRollout(size_t m, size_t action, Eigen::VectorXf const &agentState, Eigen::VectorXf const &opState);
 };
 
 

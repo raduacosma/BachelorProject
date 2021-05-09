@@ -1,8 +1,8 @@
 #include "qLearning.h"
 #include <iostream>
 
-QLearning::QLearning(size_t _nrEpisodes, float _alpha, float _epsilon, float _gamma) // TODO: check how size is passed
-    : Agent(_nrEpisodes), alpha(_alpha), epsilon(_epsilon), gamma(_gamma)
+QLearning::QLearning(size_t _nrEpisodes, OpModellingType pOpModellingType, float _alpha, float _epsilon, float _gamma) // TODO: check how size is passed
+    : Agent(_nrEpisodes, pOpModellingType), alpha(_alpha), epsilon(_epsilon), gamma(_gamma)
 {
 }
 void QLearning::newEpisode()

@@ -87,8 +87,6 @@ float MLP::sigmoidPrime(float x)
 
 Eigen::VectorXf MLP::feedforward(Eigen::VectorXf const &input)
 {
-    if(input.size() == 0)
-        std::cout<<"yup,size is 0"<<std::endl;
     activations[0] = input;
     for (size_t idx = 0; idx != nrLayersBeforeActivation; ++idx)
     {

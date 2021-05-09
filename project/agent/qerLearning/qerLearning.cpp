@@ -1,9 +1,9 @@
 #include "qerLearning.h"
 #include <iostream>
 
-QERLearning::QERLearning(size_t _nrEpisodes, float _alpha, float _epsilon,
+QERLearning::QERLearning(size_t _nrEpisodes, OpModellingType pOpModellingType, float _alpha, float _epsilon,
                          float _gamma) // TODO: check how size is passed
-    : Agent(_nrEpisodes), alpha(_alpha), epsilon(_epsilon), gamma(_gamma),
+    : Agent(_nrEpisodes, pOpModellingType), alpha(_alpha), epsilon(_epsilon), gamma(_gamma),
       targetMLP(mlp)
 {
     experiences.reserve(sizeExperience);
