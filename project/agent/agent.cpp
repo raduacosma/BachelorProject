@@ -104,23 +104,40 @@ void Agent::setMaze(SimContainer *simCont)
 {
     maze = simCont;
 }
-float Agent::MonteCarloRollout(size_t m, size_t action, Eigen::VectorXf const &agentState,
+float Agent::MonteCarloRollout(size_t m, size_t N, size_t action, Eigen::VectorXf const &agentState,
                                Eigen::VectorXf const &opState)
 {
     float totalReward = 0;
     for (size_t mIdx = 0; mIdx != m; ++mIdx)
     {
         float rolloutReward = 0;
-        size_t i = 0;
+        size_t i = 1;
         Eigen::VectorXf opProbs = opponentMlp.predict(opState);
         std::discrete_distribution<> distr({opProbs[0],opProbs[1],opProbs[2],opProbs[3]});
         size_t opAction = distr(globalRng);
-        auto [reward, canContinue] = maze->computeNextStateAndReward(static_cast<Actions>(action));
+        auto [reward, canContinue] = maze->computeNextStateAndReward(static_cast<Actions>(action),opAction);
+        rolloutReward+=gamma*reward; // move gamma into agent
         while(canContinue)
         {
             ++i;
+            size_t agentAction = actionWithQ(maze->getStateForAgent());
+            Eigen::VectorXf innerOpProbs = opponentMlp.predict(maze->getStateForOpponent());
+            std::discrete_distribution<> innerDistr({innerOpProbs[0],innerOpProbs[1],innerOpProbs[2],innerOpProbs[3]});
+            size_t innerOpAction = innerDistr(globalRng);
+            auto [innerReward, innerCanContinue] = maze->computeNextStateAndReward(static_cast<Actions>(agentAction),innerOpAction);
+            canContinue = innerCanContinue;
+            if(not canContinue)
+            {
+                rolloutReward+=std::pow(gamma,i)*innerReward;
+            }
+            else if(i==N)
+            {
+                rolloutReward+=std::pow(gamma,i)*mlp.predict(maze->getStateForAgent());
+            }
         }
+        totalReward+=rolloutReward;
     }
+    return totalReward/N;
 }
 void Agent::newEpisode()
 {
