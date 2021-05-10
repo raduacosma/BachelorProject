@@ -13,6 +13,7 @@ class Agent;
 
 class SimState
 {
+    friend class MonteCarloSim;
     public:
     SimState() = default;
     SimState(std::string const &filename);
@@ -41,7 +42,6 @@ class SimState
     Position agentPos;
     Position initialAgentPos;
     Position goalPos;
-    Position currOpPos;
     size_t currOpPosIdx;
     Actions lastOpponentAction;
     size_t traceSize = 6;

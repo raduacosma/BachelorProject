@@ -62,7 +62,7 @@ add_executable(BachelorProject
         project/agent/qerLearning/qerLearning.h
         project/agent/qerqueueLearning/qerQueueLearning.cpp
         project/agent/qerqueueLearning/qerQueueLearning.h
-        project/simContainer/simContainer.cpp project/simContainer/simContainer.h project/runHeadless.cpp project/runHeadless.h project/agent/sarsa/sarsa.cpp project/agent/sarsa/sarsa.h project/agent/experience.h)
+        project/simContainer/simContainer.cpp project/simContainer/simContainer.h project/runHeadless.cpp project/runHeadless.h project/agent/sarsa/sarsa.cpp project/agent/sarsa/sarsa.h project/agent/experience.h project/monteCarloSim/monteCarloSim.cpp project/monteCarloSim/monteCarloSim.h)
 target_link_libraries(BachelorProject GL ${GLFW_STATIC_LIBRARIES})
 
 find_package(OpenMP)

@@ -38,7 +38,6 @@ class SimContainer
     SimState &getCurrent();
     Eigen::VectorXf getStateForAgent() const;
     std::tuple<float, bool> computeNextStateAndReward(Actions action);
-    std::tuple<float, bool> computeNextStateAndRewardWithOp(Actions action, );
     bool nextLevel();
     void goToBeginning();
 
