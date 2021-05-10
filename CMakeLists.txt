@@ -22,7 +22,7 @@ include_directories(libs/gl3w/GL)
 include_directories(libs/glfw)
 include_directories(libs/glfw/include)
 include_directories(libs/glfw/include/GLFW)
-include_directories(${project/Eigen})
+include_directories(${Eigen})
 
 add_executable(BachelorProject
         imgui-1.81/backends/imgui_impl_glfw.cpp
