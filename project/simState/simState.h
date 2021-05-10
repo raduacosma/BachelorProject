@@ -41,6 +41,7 @@ class SimState
     Position agentPos;
     Position initialAgentPos;
     Position goalPos;
+    Position currOpPos;
     size_t currOpPosIdx;
     Actions lastOpponentAction;
     size_t traceSize = 6;

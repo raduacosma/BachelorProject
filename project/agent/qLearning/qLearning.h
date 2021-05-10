@@ -10,7 +10,6 @@ class QLearning : public Agent
 
     float alpha;
     float epsilon;
-    float gamma;
     size_t lastAction;
 
   public:

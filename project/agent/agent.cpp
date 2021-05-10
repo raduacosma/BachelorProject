@@ -5,10 +5,11 @@
 #include <random>
 
 using namespace std;
-Agent::Agent(size_t _nrEpisodes, OpModellingType pOpModellingType) // TODO: check how size is passed
+Agent::Agent(size_t _nrEpisodes, OpModellingType pOpModellingType, float pGamma) // TODO: check how size is passed
     : nrEpisodes(_nrEpisodes), rewards(vector<float>(_nrEpisodes)), hasDied(vector<size_t>(_nrEpisodes)),
       mlp({ 75, 192, 4 }, 0.001, ActivationFunction::LINEAR),
-      opponentMlp({ 50, 100, 4 }, 0.001, ActivationFunction::SOFTMAX), opModellingType(pOpModellingType)
+      opponentMlp({ 50, 100, 4 }, 0.001, ActivationFunction::SOFTMAX), opModellingType(pOpModellingType),
+      gamma(pGamma)
 {
 }
 bool Agent::performOneStep()
@@ -115,16 +116,17 @@ float Agent::MonteCarloRollout(size_t m, size_t N, size_t action, Eigen::VectorX
         Eigen::VectorXf opProbs = opponentMlp.predict(opState);
         std::discrete_distribution<> distr({opProbs[0],opProbs[1],opProbs[2],opProbs[3]});
         size_t opAction = distr(globalRng);
-        auto [reward, canContinue] = maze->computeNextStateAndReward(static_cast<Actions>(action),opAction);
+        SimContainer copyMaze(*maze);
+        auto [reward, canContinue] = copyMaze.computeNextStateAndReward(static_cast<Actions>(action),opAction);
         rolloutReward+=gamma*reward; // move gamma into agent
         while(canContinue)
         {
             ++i;
-            size_t agentAction = actionWithQ(maze->getStateForAgent());
-            Eigen::VectorXf innerOpProbs = opponentMlp.predict(maze->getStateForOpponent());
+            size_t agentAction = actionWithQ(copyMaze.getStateForAgent());
+            Eigen::VectorXf innerOpProbs = opponentMlp.predict(copyMaze.getStateForOpponent());
             std::discrete_distribution<> innerDistr({innerOpProbs[0],innerOpProbs[1],innerOpProbs[2],innerOpProbs[3]});
             size_t innerOpAction = innerDistr(globalRng);
-            auto [innerReward, innerCanContinue] = maze->computeNextStateAndReward(static_cast<Actions>(agentAction),innerOpAction);
+            auto [innerReward, innerCanContinue] = copyMaze.computeNextStateAndReward(static_cast<Actions>(agentAction),innerOpAction);
             canContinue = innerCanContinue;
             if(not canContinue)
             {
@@ -132,7 +134,7 @@ float Agent::MonteCarloRollout(size_t m, size_t N, size_t action, Eigen::VectorX
             }
             else if(i==N)
             {
-                rolloutReward+=std::pow(gamma,i)*mlp.predict(maze->getStateForAgent());
+                rolloutReward+=std::pow(gamma,i)*mlp.predict(copyMaze.getStateForAgent());
             }
         }
         totalReward+=rolloutReward;
@@ -175,4 +177,8 @@ vector<float> const &Agent::getOpponentCorrectPredictionPercentage() const
 vector<float> const &Agent::getThisEpisodeLoss() const
 {
     return thisEpisodeLoss;
+}
+size_t Agent::actionWithQ(Eigen::VectorXf const &qVals)
+{
+    throw std::runtime_error("In Agent's actionWithQ, should not be here");
 }

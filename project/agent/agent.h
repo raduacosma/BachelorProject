@@ -32,7 +32,6 @@ class Agent
     size_t d_killedByAshTime = 500;
     float Q_0 = 0;
     float runReward;
-
     size_t simTime = 0;
     SimContainer *maze;         // The maze the agent is navigating
     bool opponentNotInit = true;
@@ -52,6 +51,7 @@ class Agent
     bool isNewLevel = false;
 
     OpModellingType opModellingType;
+    float gamma;
 
   public:
     std::vector<float> const &getThisEpisodeLoss() const;
@@ -63,7 +63,7 @@ class Agent
     std::vector<float> const &getOpponentPredictionLosses() const;
 
   public:
-    explicit Agent(size_t _nrEpisodes, OpModellingType pOpModellingType = OpModellingType::ONEFORALL);
+    explicit Agent(size_t _nrEpisodes, OpModellingType pOpModellingType = OpModellingType::ONEFORALL, float pGamma = 0.99);
     virtual ~Agent();
 
     void run();
@@ -75,9 +75,11 @@ class Agent
 
     virtual bool performOneStep();
     virtual void newEpisode();
+    virtual size_t actionWithQ(Eigen::VectorXf const &qVals);
 
     void handleOpponentAction();
-    float MonteCarloRollout(size_t m, size_t action, Eigen::VectorXf const &agentState, Eigen::VectorXf const &opState);
+    float MonteCarloRollout(size_t m, size_t N, size_t action, Eigen::VectorXf const &agentState,
+                            Eigen::VectorXf const &opState);
 };
 
 

@@ -10,7 +10,6 @@ class Sarsa : public Agent
 
     float alpha;
     float epsilon;
-    float gamma;
     size_t lastAction;
     Eigen::VectorXf lastQValues;
 

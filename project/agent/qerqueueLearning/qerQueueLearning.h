@@ -13,7 +13,6 @@ class QERQueueLearning : public Agent
 
     float alpha;
     float epsilon;
-    float gamma;
     size_t C;
     size_t expCounter = 0;
     bool shouldGatherExperience = true;
