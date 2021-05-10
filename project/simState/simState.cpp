@@ -56,10 +56,10 @@ SimState::SimState(std::string const &filename)
     resetForNextEpisode();
 }
 
-Position SimState::computeNewAgentPos()
+Position SimState::computeNewAgentPos(Actions agentAction)
 {
     // TODO: decide if x and y start from lower or higher
-    switch (currAction)
+    switch (agentAction)
     {
         case Actions::UP:
             return { agentPos.x, agentPos.y -1};
@@ -76,9 +76,8 @@ Position SimState::computeNewAgentPos()
 
 tuple<float, SimResult> SimState::computeNextStateAndReward(Actions action)
 {
-    currAction = action;
     updateOpponentPos();
-    auto [reward, canContinue] = updateAgentPos();
+    auto [reward, canContinue] = updateAgentPos(action);
     // make sure this and hash should be updated before opponent ?? what is this
 
     return make_tuple(reward, canContinue);
@@ -192,9 +191,9 @@ void SimState::resetForNextEpisode()
 }
 
 
-pair<float, SimResult> SimState::updateAgentPos()
+pair<float, SimResult> SimState::updateAgentPos(Actions action)
 {
-    auto futurePos = computeNewAgentPos();
+    auto futurePos = computeNewAgentPos(action);
 //    float reward = abs(static_cast<int>(agentPos.x - goalPos.x))+abs(static_cast<int>(agentPos.y - goalPos.y));
     if (futurePos.x < 0 or futurePos.x >= simSize.x or futurePos.y < 0 or
         futurePos.y >= simSize.y)

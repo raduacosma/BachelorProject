@@ -52,8 +52,6 @@ class SimState
     std::vector<Position> opponentTrace;
     std::vector<Position> walls;
 
-    Actions currAction;
-
     // REWARDS TODO: decide on these
     float d_outOfBoundsReward;
     float d_reachedGoalReward;
@@ -69,8 +67,8 @@ class SimState
     size_t getLastOpponentAction();
 
     private:
-    std::pair<float, SimResult> updateAgentPos();
-    Position computeNewAgentPos();
+    std::pair<float, SimResult> updateAgentPos(Actions action);
+    Position computeNewAgentPos(Actions action);
     void resetAgentPos();
     void updateOpponentPos();
 };

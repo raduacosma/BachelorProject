@@ -154,9 +154,7 @@ Eigen::VectorXf MonteCarloSim::getStateForOpponent() const
     {
         applyToArray(wall,0);
     }
-    size_t opLength = traceSize;  // replace with trace size
-    // be careful, we can't do the >-1 check due to size_t and this should
-    // stop after 0 but if something is wrong good to check this
+
     for(auto const &opPos:opponentTrace)
     {
         applyToArray(opPos,agentStateSize);
