@@ -6,6 +6,11 @@
 class RandObj
 {
     std::mt19937 rngEngine;
+
+  public:
+    std::mt19937 &getRngEngine();
+
+  private:
     std::uniform_real_distribution<float> uniReal01;
     std::uniform_int_distribution<int> expReplayIdx;
 

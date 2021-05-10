@@ -34,21 +34,19 @@ class MonteCarloSim
     float d_reachedGoalReward;
     float d_killedByOpponentReward;
     float d_normalReward;
-    Actions currAction;
     std::deque<Position> opponentTrace;
 
   public:
     MonteCarloSim(SimState const &simState);
     // this also moves the agent
-    std::tuple<float, SimResult> computeNextStateAndReward(Actions action, Actions opAction);
+    std::tuple<float, SimResult> computeNextStateAndReward(Actions action);
     Eigen::VectorXf getStateForAgent() const;
     Eigen::VectorXf getStateForOpponent() const;
-
-  private:
-    std::pair<float, SimResult> updateAgentPos();
-    Position computeNewAgentPos();
-    Position computeNewOpPos(Actions currAction);
     void updateOpPos(Actions opAction);
+  private:
+    std::pair<float, SimResult> updateAgentPos(Actions action);
+    Position computeNewPos(Actions currAction, Position pos);
+
 };
 
 

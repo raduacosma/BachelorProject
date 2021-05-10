@@ -11,7 +11,10 @@ void QLearning::newEpisode()
 }
 bool QLearning::performOneStep()
 {
-    Eigen::VectorXf qValues = mlp.feedforward(lastState);
+//    Eigen::VectorXf qValues = mlp.feedforward(lastState); // this probably theoretically could be replaced with maze->getStateForAgent()?
+
+        Eigen::VectorXf qValues = MonteCarloAllActions();
+//    std::cout<<qValues.transpose()<<std::endl;
     size_t action = actionWithQ(qValues);
     auto [reward, canContinue] = maze->computeNextStateAndReward(static_cast<Actions>(action));
     Eigen::VectorXf newState = maze->getStateForAgent();

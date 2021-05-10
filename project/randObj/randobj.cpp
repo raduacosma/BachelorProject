@@ -14,3 +14,7 @@ int RandObj::getExpReplayIdx()
 {
    return expReplayIdx(rngEngine);
 }
+std::mt19937 &RandObj::getRngEngine()
+{
+    return rngEngine;
+}

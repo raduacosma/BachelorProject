@@ -35,7 +35,7 @@ class SimContainer
     public:
     SimContainer() = default;     // needed? probably not since I removed those move stuff and rely on unique_pt
     SimContainer(std::string const &filename, Agent *agentParam);
-    SimState &getCurrent();
+    SimState &getCurrentLevel();
     Eigen::VectorXf getStateForAgent() const;
     std::tuple<float, bool> computeNextStateAndReward(Actions action);
     bool nextLevel();

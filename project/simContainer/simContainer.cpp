@@ -17,7 +17,7 @@ SimContainer::SimContainer(std::string const &filename, Agent *agentParam)
 }
 
 
-SimState &SimContainer::getCurrent()
+SimState &SimContainer::getCurrentLevel()
 {
     return simStates[currSimState];
 }

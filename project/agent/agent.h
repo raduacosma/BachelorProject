@@ -9,6 +9,8 @@
 #include "../Eigen/Core"
 #include "../mlp/mlp.h"
 #include "../createRngObj/createRngObj.h"
+#include "../monteCarloSim/monteCarloSim.h"
+#include <cmath>
 
 enum class AgentType
 {
@@ -52,6 +54,8 @@ class Agent
 
     OpModellingType opModellingType;
     float gamma;
+    size_t maxNrSteps = 10;
+    size_t nrRollouts = 5;
 
   public:
     std::vector<float> const &getThisEpisodeLoss() const;
@@ -78,8 +82,8 @@ class Agent
     virtual size_t actionWithQ(Eigen::VectorXf const &qVals);
 
     void handleOpponentAction();
-    float MonteCarloRollout(size_t m, size_t N, size_t action, Eigen::VectorXf const &agentState,
-                            Eigen::VectorXf const &opState);
+    float MonteCarloRollout(size_t action);
+    Eigen::VectorXf MonteCarloAllActions();
 };
 
 

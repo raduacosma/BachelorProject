@@ -226,7 +226,7 @@ int main(int argc, char** argv)
                 uiStateTracker.playOneStep = false;
             }
             drawMenuBar(*simContainer, uiStateTracker);
-            drawGameState(simContainer->getCurrent());
+            drawGameState(simContainer->getCurrentLevel());
 
 
         }

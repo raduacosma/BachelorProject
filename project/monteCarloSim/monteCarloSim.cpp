@@ -32,54 +32,35 @@ MonteCarloSim::MonteCarloSim(SimState const &simState)
     }
 }
 // constructor from MonteCarloSim
-Position MonteCarloSim::computeNewOpPos(Actions newOpAction)
+Position MonteCarloSim::computeNewPos(Actions currAction, Position pos)
 {
-    Position opPos = opponentTrace.back();
-    // TODO: decide if x and y start from lower or higher
-    switch (newOpAction)
-    {
-        case Actions::UP:
-            return { opPos.x, opPos.y -1};
-        case Actions::DOWN:
-            return { opPos.x, opPos.y + 1};
-        case Actions::LEFT:
-            return { opPos.x - 1, opPos.y };
-        case Actions::RIGHT:
-            return { opPos.x + 1, opPos.y };
-    }
-    // should throw something but meh
-    return { opPos.x, opPos.y };
-}
-Position MonteCarloSim::computeNewAgentPos()
-{
-    // TODO: decide if x and y start from lower or higher
+    // TODO: decide if x and y start from lower or higher should be fine now
     switch (currAction)
     {
         case Actions::UP:
-            return { agentPos.x, agentPos.y -1};
+            return { pos.x, pos.y -1};
         case Actions::DOWN:
-            return { agentPos.x, agentPos.y + 1};
+            return { pos.x, pos.y + 1};
         case Actions::LEFT:
-            return { agentPos.x - 1, agentPos.y };
+            return { pos.x - 1, pos.y };
         case Actions::RIGHT:
-            return { agentPos.x + 1, agentPos.y };
+            return { pos.x + 1, pos.y };
     }
     // should throw something but meh
-    return { agentPos.x, agentPos.y };
+    return { pos.x, pos.y };
 }
 
-tuple<float, SimResult> MonteCarloSim::computeNextStateAndReward(Actions action, Actions opAction)
+
+tuple<float, SimResult> MonteCarloSim::computeNextStateAndReward(Actions action)
 {
-    currAction = action;
-    updateOpPos(opAction);
-    auto [reward, canContinue] = updateAgentPos();
+    auto [reward, canContinue] = updateAgentPos(action);
     // make sure this and hash should be updated before opponent ?? what is this
 
     return make_tuple(reward, canContinue);
 }
 void MonteCarloSim::updateOpPos(Actions opAction)
 {
-    Position futurePos = computeNewOpPos(opAction);
+    Position futurePos = computeNewPos(opAction, opponentTrace.back());
     //    float reward = abs(static_cast<int>(agentPos.x - goalPos.x))+abs(static_cast<int>(agentPos.y - goalPos.y));
     if (futurePos.x < 0 or futurePos.x >= simSize.x or futurePos.y < 0 or
         futurePos.y >= simSize.y)
@@ -163,9 +144,9 @@ Eigen::VectorXf MonteCarloSim::getStateForOpponent() const
 }
 
 
-pair<float, SimResult> MonteCarloSim::updateAgentPos()
+pair<float, SimResult> MonteCarloSim::updateAgentPos(Actions action)
 {
-    auto futurePos = computeNewAgentPos();
+    auto futurePos = computeNewPos(action, agentPos);
 //    float reward = abs(static_cast<int>(agentPos.x - goalPos.x))+abs(static_cast<int>(agentPos.y - goalPos.y));
     if (futurePos.x < 0 or futurePos.x >= simSize.x or futurePos.y < 0 or
         futurePos.y >= simSize.y)
