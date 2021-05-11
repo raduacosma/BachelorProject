@@ -1,0 +1,16 @@
+canvasStepSize
+74.3529 68.5
+canvasBegPos
+8 27
+canvasEndPos
+1272 712
+simSize
+17 10
+agentPos
+12 4
+goalPos
+2 4
+opponentPos
+17 10
+opponentTrace
+walls

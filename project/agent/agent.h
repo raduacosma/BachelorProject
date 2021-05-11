@@ -6,7 +6,7 @@
 #include "../simContainer/simContainer.h"
 #include <vector>
 #include "../simState/actions.h"
-#include "../Eigen/Core"
+#include "../../../Eigen/Core"
 #include "../mlp/mlp.h"
 #include "../createRngObj/createRngObj.h"
 #include "../monteCarloSim/monteCarloSim.h"
@@ -56,6 +56,7 @@ class Agent
     float gamma;
     size_t maxNrSteps = 10;
     size_t nrRollouts = 5;
+    std::vector<float> gammaVals;
 
   public:
     std::vector<float> const &getThisEpisodeLoss() const;

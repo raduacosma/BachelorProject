@@ -1,7 +1,7 @@
 #ifndef _INCLUDED_MLP
 #define _INCLUDED_MLP
 
-#include "../Eigen/Core"
+#include "../../Eigen/Core"
 #include <cstddef>
 #include <vector>
 enum class ActivationFunction

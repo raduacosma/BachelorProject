@@ -2,7 +2,7 @@
 #define _INCLUDED_QERQueueLearning
 
 #include "../agent.h"
-#include "../../Eigen/Core"
+#include "../../../Eigen/Core"
 #include "../../mlp/mlp.h"
 #include "../../createRngObj/createRngObj.h"
 #include "../experience.h"

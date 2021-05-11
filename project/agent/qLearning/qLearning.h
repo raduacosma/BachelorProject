@@ -2,7 +2,7 @@
 #define _INCLUDED_QLEARNING
 
 #include "../agent.h"
-#include "../../Eigen/Core"
+#include "../../../Eigen/Core"
 #include "../../mlp/mlp.h"
 #include "../../createRngObj/createRngObj.h"
 class QLearning : public Agent

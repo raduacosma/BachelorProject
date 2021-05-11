@@ -63,7 +63,7 @@ static void glfw_error_callback(int error, const char* description)
 int main(int argc, char** argv)
 {
     std::cout<<"nthreads: "<<Eigen::nbThreads( )<<'\n';
-    feenableexcept(FE_ALL_EXCEPT & ~FE_INEXACT);
+//    feenableexcept(FE_ALL_EXCEPT & ~FE_INEXACT);
     if(argc == 3)
     {
         runHeadless(std::string{argv[1]}, std::stoul(argv[2]));

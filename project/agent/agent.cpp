@@ -7,10 +7,17 @@
 using namespace std;
 Agent::Agent(size_t _nrEpisodes, OpModellingType pOpModellingType, float pGamma) // TODO: check how size is passed
     : nrEpisodes(_nrEpisodes), rewards(vector<float>(_nrEpisodes)), hasDied(vector<size_t>(_nrEpisodes)),
-      mlp({ 75, 192, 4 }, 0.001, ActivationFunction::LINEAR),
+      mlp({ 52, 192, 4 }, 0.001, ActivationFunction::LINEAR),
       opponentMlp({ 50, 100, 4 }, 0.001, ActivationFunction::SOFTMAX), opModellingType(pOpModellingType),
       gamma(pGamma)
 {
+    gammaVals.push_back(1); // in order to save some i-1s in monte carlo
+    float tmpGamma = gamma;
+    for(size_t idx = 0; idx <=maxNrSteps;++idx) // although gammaVals[idx+1] is added
+    {
+        gammaVals.push_back(tmpGamma);
+        tmpGamma*=gamma;
+    }
 }
 bool Agent::performOneStep()
 {
@@ -40,7 +47,7 @@ void Agent::run()
             ++stepCount;
             bool canContinue = performOneStep();
             totalReward += maze->getLastReward();
-            handleOpponentAction();
+//            handleOpponentAction();
             if (not canContinue)
             {
                 //                if(isNewLevel)
@@ -62,8 +69,8 @@ void Agent::run()
             }
         }
         std::cout << "totalReward: " << totalReward << std::endl;
-        opponentPredictionLosses.push_back(currentEpisodeLoss / stepCount);
-        opponentCorrectPredictionPercentage.push_back(static_cast<float>(currentEpisodeCorrectPredictions) / stepCount);
+//        opponentPredictionLosses.push_back(currentEpisodeLoss / stepCount);
+//        opponentCorrectPredictionPercentage.push_back(static_cast<float>(currentEpisodeCorrectPredictions) / stepCount);
         runReward += totalReward;
         rewards[nrEpisode] = totalReward;
     }
@@ -97,7 +104,7 @@ void Agent::handleOpponentAction()
     float currentLoss = opponentMlp.update(opponentActionTarget);
     // TODO: Be careful with end of episode and reset and such
     currentEpisodeLoss += currentLoss;
-    thisEpisodeLoss.push_back(currentLoss);
+//    thisEpisodeLoss.push_back(currentLoss);
     lastOpponentState = newOpponentState;
 }
 
@@ -138,16 +145,21 @@ float Agent::MonteCarloRollout(size_t action)
             std::discrete_distribution<> innerDistr({innerOpProbs[0],innerOpProbs[1],innerOpProbs[2],innerOpProbs[3]});
             size_t innerOpAction = innerDistr(rngEngine);
             copyMaze.updateOpPos(static_cast<Actions>(innerOpAction));
-            size_t agentAction = actionWithQ(copyMaze.getStateForAgent());
+            size_t agentAction = actionWithQ(mlp.predict(copyMaze.getStateForAgent()));
             auto [innerReward, innerCanContinue] = copyMaze.computeNextStateAndReward(static_cast<Actions>(agentAction));
-            rolloutReward+=std::pow(gamma,i)*innerReward;
-            if(innerCanContinue == SimResult::KILLED_BY_OPPONENT or innerCanContinue == SimResult::REACHED_GOAL)
+            rolloutReward+=gammaVals[i]*innerReward;
+            if(innerCanContinue == SimResult::KILLED_BY_OPPONENT)
             {
+                break;
+            }
+            if(innerCanContinue == SimResult::REACHED_GOAL)
+            {
+                rolloutReward+=gammaVals[i+1]*mlp.predict(Eigen::VectorXf::Zero(75)).maxCoeff();
                 break;
             }
             else if(i == maxNrSteps)
             {
-                rolloutReward+=std::pow(gamma,i+1)*mlp.predict(copyMaze.getStateForAgent()).maxCoeff();
+                rolloutReward+=gammaVals[i+1]*mlp.predict(copyMaze.getStateForAgent()).maxCoeff();
                 break;
             }
 

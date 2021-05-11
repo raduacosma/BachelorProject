@@ -6,7 +6,7 @@
 #include <string>
 class Agent;
 #include "../simState/simState.h"
-#include "../Eigen/Core"
+#include "../../Eigen/Core"
 
 
 class SimContainer
