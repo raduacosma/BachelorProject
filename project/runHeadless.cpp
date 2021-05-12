@@ -14,12 +14,12 @@
 void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
 {
 //    std::cout.setstate(std::ios_base::failbit);
-    std::string files = "simple_opponent.txt,opponentWithWalls.txt";
+    std::string files = "clearStart1.txt,clearStart2.txt";
     // could also use stack but meh, this way is more certain
     std::unique_ptr<Agent> agent = std::make_unique<QERQueueLearning>(10000);
     SimContainer simContainer{ files, agent.get() };
     agent->run();
-    std::ofstream out{"results/rewardsSimpleQ.txt"};
+    std::ofstream out{"results/rewardsSimpleQMonte2.txt"};
     std::vector<float> const &rewards = agent->getRewards();
     copy(rewards.begin(), rewards.end(),
          std::ostream_iterator<float>(out, "\n"));

@@ -92,6 +92,7 @@ void Agent::handleOpponentAction()
         opponentNotInit = false;
         return;
     }
+    // TODO: check that level switching works properly
     Eigen::VectorXf newOpponentState = maze->getStateForOpponent();
     size_t newOpponentAction = maze->getLastOpponentAction();
     Eigen::VectorXf opponentActionTarget = Eigen::VectorXf::Zero(4);
@@ -140,12 +141,12 @@ float Agent::MonteCarloRollout(size_t action)
         while(true)
         {
             ++i;
-
             Eigen::VectorXf innerOpProbs = opponentMlp.predict(copyMaze.getStateForOpponent());
             std::discrete_distribution<> innerDistr({innerOpProbs[0],innerOpProbs[1],innerOpProbs[2],innerOpProbs[3]});
             size_t innerOpAction = innerDistr(rngEngine);
+            size_t agentAction;
+            mlp.predict(copyMaze.getStateForAgent()).maxCoeff(&agentAction);
             copyMaze.updateOpPos(static_cast<Actions>(innerOpAction));
-            size_t agentAction = actionWithQ(mlp.predict(copyMaze.getStateForAgent()));
             auto [innerReward, innerCanContinue] = copyMaze.computeNextStateAndReward(static_cast<Actions>(agentAction));
             rolloutReward+=gammaVals[i]*innerReward;
             if(innerCanContinue == SimResult::KILLED_BY_OPPONENT)
