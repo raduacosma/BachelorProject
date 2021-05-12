@@ -26,8 +26,9 @@ bool QERQueueLearning::performOneStep()
         targetMLP = mlp;
         cCounter = 0;
     }
-//    Eigen::VectorXf qValues = mlp.feedforward(lastState);
+//    Eigen::VectorXf qValues = mlp.predict(lastState);
     Eigen::VectorXf qValues = MonteCarloAllActions();
+//    std::cout<<qValues.transpose()<<std::endl;
     size_t action = actionWithQ(qValues);
     auto [reward, canContinue] = maze->computeNextStateAndReward(static_cast<Actions>(action));
     Eigen::VectorXf newState = maze->getStateForAgent();

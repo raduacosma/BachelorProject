@@ -131,32 +131,31 @@ float Agent::MonteCarloRollout(size_t action)
         copyMaze.updateOpPos(static_cast<Actions>(opAction));
         auto [reward, canContinue] = copyMaze.computeNextStateAndReward(static_cast<Actions>(action));
         rolloutReward+=gamma*reward;
-        if(canContinue == SimResult::KILLED_BY_OPPONENT or canContinue == SimResult::REACHED_GOAL)
+        if(canContinue != SimResult::KILLED_BY_OPPONENT and canContinue != SimResult::REACHED_GOAL and maxNrSteps>1)
         {
-            totalReward+=rolloutReward;
-            continue;
-        }
-
-
-        while(true)
-        {
-            ++i;
-            Eigen::VectorXf innerOpProbs = opponentMlp.predict(copyMaze.getStateForOpponent());
-            std::discrete_distribution<> innerDistr({innerOpProbs[0],innerOpProbs[1],innerOpProbs[2],innerOpProbs[3]});
-            size_t innerOpAction = innerDistr(rngEngine);
-            size_t agentAction;
-            mlp.predict(copyMaze.getStateForAgent()).maxCoeff(&agentAction);  // this and last if should have the same agent state
-            copyMaze.updateOpPos(static_cast<Actions>(innerOpAction));
-            auto [innerReward, innerCanContinue] = copyMaze.computeNextStateAndReward(static_cast<Actions>(agentAction));
-            rolloutReward+=gammaVals[i]*innerReward;
-            if(innerCanContinue == SimResult::KILLED_BY_OPPONENT or innerCanContinue == SimResult::REACHED_GOAL)
+            while (true)
             {
-                break;
-            }
-            if(i == maxNrSteps)
-            {
-                rolloutReward+=gammaVals[i]*mlp.predict(copyMaze.getStateForAgent()).maxCoeff();
-                break;
+                ++i;
+                Eigen::VectorXf innerOpProbs = opponentMlp.predict(copyMaze.getStateForOpponent());
+                std::discrete_distribution<> innerDistr(
+                    { innerOpProbs[0], innerOpProbs[1], innerOpProbs[2], innerOpProbs[3] });
+                size_t innerOpAction = innerDistr(rngEngine);
+                size_t agentAction;
+                float actionQVal = mlp.predict(copyMaze.getStateForAgent())
+                    .maxCoeff(&agentAction); // this and last if should have the same agent state
+                copyMaze.updateOpPos(static_cast<Actions>(innerOpAction));
+                auto [innerReward, innerCanContinue] =
+                    copyMaze.computeNextStateAndReward(static_cast<Actions>(agentAction));
+                rolloutReward += gammaVals[i] * innerReward;
+                if (innerCanContinue == SimResult::KILLED_BY_OPPONENT or innerCanContinue == SimResult::REACHED_GOAL)
+                {
+                    break;
+                }
+                if (i == maxNrSteps)
+                {
+                    rolloutReward += gammaVals[i] * actionQVal;
+                    break;
+                }
             }
         }
         totalReward+=rolloutReward;
