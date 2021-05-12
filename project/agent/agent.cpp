@@ -7,7 +7,7 @@
 using namespace std;
 Agent::Agent(size_t _nrEpisodes, OpModellingType pOpModellingType, float pGamma) // TODO: check how size is passed
     : nrEpisodes(_nrEpisodes), rewards(vector<float>(_nrEpisodes)), hasDied(vector<size_t>(_nrEpisodes)),
-      mlp({ 52, 192, 4 }, 0.001, ActivationFunction::LINEAR),
+      mlp({ 75, 192, 4 }, 0.001, ActivationFunction::LINEAR),
       opponentMlp({ 50, 100, 4 }, 0.001, ActivationFunction::SOFTMAX), opModellingType(pOpModellingType),
       gamma(pGamma)
 {
@@ -47,7 +47,7 @@ void Agent::run()
             ++stepCount;
             bool canContinue = performOneStep();
             totalReward += maze->getLastReward();
-//            handleOpponentAction();
+            handleOpponentAction();
             if (not canContinue)
             {
                 //                if(isNewLevel)
@@ -69,8 +69,8 @@ void Agent::run()
             }
         }
         std::cout << "totalReward: " << totalReward << std::endl;
-//        opponentPredictionLosses.push_back(currentEpisodeLoss / stepCount);
-//        opponentCorrectPredictionPercentage.push_back(static_cast<float>(currentEpisodeCorrectPredictions) / stepCount);
+        opponentPredictionLosses.push_back(currentEpisodeLoss / stepCount);
+        opponentCorrectPredictionPercentage.push_back(static_cast<float>(currentEpisodeCorrectPredictions) / stepCount);
         runReward += totalReward;
         rewards[nrEpisode] = totalReward;
     }
