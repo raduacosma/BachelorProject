@@ -88,7 +88,7 @@ void Agent::handleOpponentAction()
             case OpModellingType::ONEFORALL:
                 break;
         }
-        lastOpponentState = maze->getStateForOpponent();
+        lastOpponentState = maze->getStateForOpponent();   // same as a bit below? weird
         opponentNotInit = false;
         return;
     }
@@ -145,25 +145,19 @@ float Agent::MonteCarloRollout(size_t action)
             std::discrete_distribution<> innerDistr({innerOpProbs[0],innerOpProbs[1],innerOpProbs[2],innerOpProbs[3]});
             size_t innerOpAction = innerDistr(rngEngine);
             size_t agentAction;
-            mlp.predict(copyMaze.getStateForAgent()).maxCoeff(&agentAction);
+            mlp.predict(copyMaze.getStateForAgent()).maxCoeff(&agentAction);  // this and last if should have the same agent state
             copyMaze.updateOpPos(static_cast<Actions>(innerOpAction));
             auto [innerReward, innerCanContinue] = copyMaze.computeNextStateAndReward(static_cast<Actions>(agentAction));
             rolloutReward+=gammaVals[i]*innerReward;
-            if(innerCanContinue == SimResult::KILLED_BY_OPPONENT)
+            if(innerCanContinue == SimResult::KILLED_BY_OPPONENT or innerCanContinue == SimResult::REACHED_GOAL)
             {
                 break;
             }
-            if(innerCanContinue == SimResult::REACHED_GOAL)
+            if(i == maxNrSteps)
             {
-                rolloutReward+=gammaVals[i+1]*mlp.predict(Eigen::VectorXf::Zero(75)).maxCoeff();
+                rolloutReward+=gammaVals[i]*mlp.predict(copyMaze.getStateForAgent()).maxCoeff();
                 break;
             }
-            else if(i == maxNrSteps)
-            {
-                rolloutReward+=gammaVals[i+1]*mlp.predict(copyMaze.getStateForAgent()).maxCoeff();
-                break;
-            }
-
         }
         totalReward+=rolloutReward;
     }

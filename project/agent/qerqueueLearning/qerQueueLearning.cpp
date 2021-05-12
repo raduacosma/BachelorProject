@@ -26,8 +26,8 @@ bool QERQueueLearning::performOneStep()
         targetMLP = mlp;
         cCounter = 0;
     }
-    Eigen::VectorXf qValues = mlp.feedforward(lastState);
-//    Eigen::VectorXf qValues = MonteCarloAllActions();
+//    Eigen::VectorXf qValues = mlp.feedforward(lastState);
+    Eigen::VectorXf qValues = MonteCarloAllActions();
     size_t action = actionWithQ(qValues);
     auto [reward, canContinue] = maze->computeNextStateAndReward(static_cast<Actions>(action));
     Eigen::VectorXf newState = maze->getStateForAgent();
@@ -40,8 +40,16 @@ bool QERQueueLearning::performOneStep()
 
         return false;
     }
+
     handleExperience();
-    experiences.push_back({ action, reward, false, lastState, newState });
+    if(maze->getLastSwitchedLevel())
+    {
+        experiences.push_back({ action, reward, true, lastState, newState });
+    }
+    else
+    {
+        experiences.push_back({ action, reward, false, lastState, newState });
+    }
     // do I need lastState somewhere? Since learning rate is 1 it reduces in the equation and
     // the backprop is already done on the deltas from lastState
     // check if d_oldstate should be updated even if we can't continue
