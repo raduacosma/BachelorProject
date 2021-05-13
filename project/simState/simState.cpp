@@ -12,7 +12,7 @@ using namespace std;
 
 SimState::SimState(std::string const &filename)
     :
-    d_outOfBoundsReward(-0.01), d_reachedGoalReward(1),
+    d_outOfBoundsReward(-0.01), d_reachedGoalReward(10),
     d_killedByOpponentReward(-10), d_normalReward(-0.01)
 {
     ifstream in{filename};
@@ -152,7 +152,7 @@ Eigen::VectorXf SimState::getStateForOpponent() const
     Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize*2);
     auto applyToArray = [&](Position const &pos, size_t offset)
     {
-      long const rowIdx = pos.y-opponentTrace[currOpPosIdx].y+visionGridSize;
+      long const rowIdx = pos.y-opponentTrace[currOpPosIdx].y+visionGridSize; // maybe cache these out?
       long const colIdx = pos.x-opponentTrace[currOpPosIdx].x+visionGridSize;
       if(rowIdx >= 0 and colIdx >= 0 and rowIdx < static_cast<long>(visionGridSideSize) and colIdx < static_cast<long>(visionGridSideSize))
           agentGrid[rowIdx*visionGridSideSize+colIdx+offset] = 1.0f;
@@ -161,7 +161,7 @@ Eigen::VectorXf SimState::getStateForOpponent() const
     {
         applyToArray(wall,0);
     }
-    applyToArray(opponentTrace[currOpPosIdx],agentStateSize);
+    applyToArray(opponentTrace[currOpPosIdx],agentStateSize);  // this is different to the agent one, should check
     size_t opLength = traceSize;  // replace with trace size
     // be careful, we can't do the >-1 check due to size_t and this should
     // stop after 0 but if something is wrong good to check this

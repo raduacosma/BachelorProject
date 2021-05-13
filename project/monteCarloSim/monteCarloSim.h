@@ -39,7 +39,7 @@ class MonteCarloSim
   public:
     MonteCarloSim(SimState const &simState);
     // this also moves the agent
-    std::tuple<float, SimResult> computeNextStateAndReward(Actions action);
+    std::tuple<float, SimResult> computeNextStateAndReward(Actions action, Actions opAction);
     Eigen::VectorXf getStateForAgent() const;
     Eigen::VectorXf getStateForOpponent() const;
     void updateOpPos(Actions opAction);

@@ -19,7 +19,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     std::unique_ptr<Agent> agent = std::make_unique<QERQueueLearning>(10000);
     SimContainer simContainer{ files, agent.get() };
     agent->run();
-    std::ofstream out{"results/rewardsSimpleMonte.txt"};
+    std::ofstream out{"results/rewardsSimpleMonteGoal.txt"};
     std::vector<float> const &rewards = agent->getRewards();
     copy(rewards.begin(), rewards.end(),
          std::ostream_iterator<float>(out, "\n"));

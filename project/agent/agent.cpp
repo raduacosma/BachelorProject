@@ -128,8 +128,7 @@ float Agent::MonteCarloRollout(size_t action)
         size_t opAction = distr(rngEngine);
 
         // always call updateOpPos before computeNextState and getting the state
-        copyMaze.updateOpPos(static_cast<Actions>(opAction));
-        auto [reward, canContinue] = copyMaze.computeNextStateAndReward(static_cast<Actions>(action));
+        auto [reward, canContinue] = copyMaze.computeNextStateAndReward(static_cast<Actions>(action), static_cast<Actions>(opAction));
         rolloutReward+=gamma*reward;
         if(canContinue != SimResult::KILLED_BY_OPPONENT and canContinue != SimResult::REACHED_GOAL and maxNrSteps>1)
         {
@@ -141,11 +140,10 @@ float Agent::MonteCarloRollout(size_t action)
                     { innerOpProbs[0], innerOpProbs[1], innerOpProbs[2], innerOpProbs[3] });
                 size_t innerOpAction = innerDistr(rngEngine);
                 size_t agentAction;
-                float actionQVal = mlp.predict(copyMaze.getStateForAgent())
-                    .maxCoeff(&agentAction); // this and last if should have the same agent state
-                copyMaze.updateOpPos(static_cast<Actions>(innerOpAction));
+                mlp.predict(copyMaze.getStateForAgent())
+                    .maxCoeff(&agentAction); // this and last if should have the same agent state one call to the other
                 auto [innerReward, innerCanContinue] =
-                    copyMaze.computeNextStateAndReward(static_cast<Actions>(agentAction));
+                    copyMaze.computeNextStateAndReward(static_cast<Actions>(agentAction),static_cast<Actions>(innerOpAction));
                 rolloutReward += gammaVals[i] * innerReward;
                 if (innerCanContinue == SimResult::KILLED_BY_OPPONENT or innerCanContinue == SimResult::REACHED_GOAL)
                 {
@@ -153,10 +151,15 @@ float Agent::MonteCarloRollout(size_t action)
                 }
                 if (i == maxNrSteps)
                 {
-                    rolloutReward += gammaVals[i] * actionQVal;
+                    rolloutReward += gammaVals[i] * mlp.predict(copyMaze.getStateForAgent())
+                                                        .maxCoeff();
                     break;
                 }
             }
+        }
+        else if(canContinue == SimResult::CONTINUE and maxNrSteps==1)
+        {
+            rolloutReward+=gamma*mlp.predict(copyMaze.getStateForAgent()).maxCoeff();
         }
         totalReward+=rolloutReward;
     }

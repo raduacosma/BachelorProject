@@ -51,8 +51,9 @@ Position MonteCarloSim::computeNewPos(Actions currAction, Position pos)
 }
 
 
-tuple<float, SimResult> MonteCarloSim::computeNextStateAndReward(Actions action)
+tuple<float, SimResult> MonteCarloSim::computeNextStateAndReward(Actions action, Actions opAction)
 {
+    updateOpPos(opAction);
     auto [reward, canContinue] = updateAgentPos(action);
     // make sure this and hash should be updated before opponent ?? what is this
 
@@ -85,7 +86,7 @@ void MonteCarloSim::updateOpPos(Actions opAction)
     }
 
     // check walls and stuff  ??
-    if(opponentTrace.size()==traceSize)
+    if(opponentTrace.size() > traceSize)
     {
         opponentTrace.pop_front();
     }
@@ -155,7 +156,7 @@ pair<float, SimResult> MonteCarloSim::updateAgentPos(Actions action)
     }
     if (futurePos == goalPos)
     {
-        agentPos = futurePos;
+        agentPos = futurePos;   // should it go over the goal? probably does not matter at this point
         return make_pair(d_reachedGoalReward, SimResult::REACHED_GOAL);
     }
     for (auto const &wall:walls)
