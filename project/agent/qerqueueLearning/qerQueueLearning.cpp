@@ -26,6 +26,7 @@ bool QERQueueLearning::performOneStep()
         targetMLP = mlp;
         cCounter = 0;
     }
+    // TODO: make monte carlo vs normal configurable
 //    Eigen::VectorXf qValues = mlp.predict(lastState);
     Eigen::VectorXf qValues = MonteCarloAllActions();
 //    std::cout<<qValues.transpose()<<std::endl;
