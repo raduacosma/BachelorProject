@@ -7,7 +7,7 @@
 using namespace std;
 Agent::Agent(size_t _nrEpisodes, OpModellingType pOpModellingType, float pGamma) // TODO: check how size is passed
     : nrEpisodes(_nrEpisodes), rewards(vector<float>(_nrEpisodes)), hasDied(vector<size_t>(_nrEpisodes)),
-      mlp({ 75, 192, 4 }, 0.001, ActivationFunction::LINEAR),
+      mlp({ 52, 192, 4 }, 0.001, ActivationFunction::LINEAR),
       opponentMlp({ 50, 100, 4 }, 0.001, ActivationFunction::SOFTMAX), opModellingType(pOpModellingType),
       gamma(pGamma)
 {

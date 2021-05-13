@@ -5,6 +5,7 @@
 #include "agent/qLearning/qLearning.h"
 #include "agent/qerLearning/qerLearning.h"
 #include "agent/qerqueueLearning/qerQueueLearning.h"
+#include "agent/dqerQueueLearning/dqerQueueLearning.h"
 #include <memory>
 #include <fstream>
 #include <iterator>
@@ -19,7 +20,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     std::unique_ptr<Agent> agent = std::make_unique<QERQueueLearning>(10000);
     SimContainer simContainer{ files, agent.get() };
     agent->run();
-    std::ofstream out{"results/rewardsSimpleMonteGoal.txt"};
+    std::ofstream out{"results/rewardsDQER.txt"};
     std::vector<float> const &rewards = agent->getRewards();
     copy(rewards.begin(), rewards.end(),
          std::ostream_iterator<float>(out, "\n"));

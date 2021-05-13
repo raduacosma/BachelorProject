@@ -1,17 +1,17 @@
-#include "qerQueueLearning.h"
+#include "dqerQueueLearning.h"
 #include <iostream>
 
-QERQueueLearning::QERQueueLearning(size_t _nrEpisodes, OpModellingType pOpModellingType, float _alpha, float _epsilon,
+DQERQueueLearning::DQERQueueLearning(size_t _nrEpisodes, OpModellingType pOpModellingType, float _alpha, float _epsilon,
                          float _gamma)
     : Agent(_nrEpisodes, pOpModellingType, _gamma), alpha(_alpha), epsilon(_epsilon),
       targetMLP(mlp)
 {
 }
-void QERQueueLearning::newEpisode()
+void DQERQueueLearning::newEpisode()
 {
     Agent::newEpisode();
 }
-bool QERQueueLearning::performOneStep()
+bool DQERQueueLearning::performOneStep()
 {
     if (shouldGatherExperience)
     {
@@ -58,7 +58,7 @@ bool QERQueueLearning::performOneStep()
 
     return true;
 }
-void QERQueueLearning::handleExperience()
+void DQERQueueLearning::handleExperience()
 {
     if (not shouldGatherExperience)
     {
@@ -69,7 +69,7 @@ void QERQueueLearning::handleExperience()
         ++expCounter;
     ++cCounter;
 }
-void QERQueueLearning::updateWithExperienceReplay()
+void DQERQueueLearning::updateWithExperienceReplay()
 {
     mlp.initMiniBatchNablas();
     for (size_t exIdx = 0; exIdx != miniBatchSize; ++exIdx)
@@ -84,14 +84,16 @@ void QERQueueLearning::updateWithExperienceReplay()
         else
         {
             Eigen::VectorXf expNewQValues = targetMLP.predict(exp.newState);
-            float expDiff = exp.reward + gamma * expNewQValues.maxCoeff();
+            size_t maxIdx;
+            mlp.predict(exp.newState).maxCoeff(&maxIdx);
+            float expDiff = exp.reward + gamma * expNewQValues(maxIdx);
             expQValues(exp.action) = expDiff;
         }
         mlp.update(expQValues, MLPUpdateType::MINIBATCH);
     }
     mlp.updateMiniBatchWeights();
 }
-size_t QERQueueLearning::actionWithQ(Eigen::VectorXf const &qVals)
+size_t DQERQueueLearning::actionWithQ(Eigen::VectorXf const &qVals)
 {
     bool explore = globalRng.getUniReal01() < epsilon;
     size_t choice;
@@ -107,6 +109,6 @@ size_t QERQueueLearning::actionWithQ(Eigen::VectorXf const &qVals)
     return choice;
 }
 
-QERQueueLearning::~QERQueueLearning()
+DQERQueueLearning::~DQERQueueLearning()
 {
 }

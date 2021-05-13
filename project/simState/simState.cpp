@@ -12,8 +12,8 @@ using namespace std;
 
 SimState::SimState(std::string const &filename)
     :
-    d_outOfBoundsReward(-0.01), d_reachedGoalReward(10),
-    d_killedByOpponentReward(-10), d_normalReward(-0.01)
+    d_outOfBoundsReward(-0.1), d_reachedGoalReward(100),
+    d_killedByOpponentReward(-100), d_normalReward(-0.1)
 {
     ifstream in{filename};
     if(not in)
@@ -112,8 +112,8 @@ Eigen::VectorXf SimState::getStateForAgent() const
 {   // should the goal really be a vision grid?
     // also, everywhere the agent center is included for avoiding the performance cost
     // of the if and supposedly being better for 2D representations but debatable
-//    size_t offsetForGoal = agentStateSize*2;
-    Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize*3);
+    size_t offsetForGoal = agentStateSize*2;
+    Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize*2+2);
     auto applyToArray = [&](Position const &pos, size_t offset)
     {
         long const rowIdx = pos.y-agentPos.y+visionGridSize;
@@ -140,9 +140,9 @@ Eigen::VectorXf SimState::getStateForAgent() const
         applyToArray(opponentTrace[idx], agentStateSize);
         --opLength;
     }
-    applyToArray(goalPos,agentStateSize*2);
-//    agentGrid[offsetForGoal] = static_cast<int>(goalPos.x-agentPos.x)/10.0f;
-//    agentGrid[offsetForGoal+1] = static_cast<int>(goalPos.y-agentPos.y)/10.0f;
+//    applyToArray(goalPos,agentStateSize*2);
+    agentGrid[offsetForGoal] = static_cast<int>(goalPos.x-agentPos.x)/10.0f;
+    agentGrid[offsetForGoal+1] = static_cast<int>(goalPos.y-agentPos.y)/10.0f;
     return agentGrid;
 }
 Eigen::VectorXf SimState::getStateForOpponent() const
@@ -185,7 +185,8 @@ void SimState::resetAgentPos()
 
 void SimState::resetForNextEpisode()
 {
-    currOpPosIdx = 0;
+    std::uniform_int_distribution<> distr(0,opponentTrace.size()-1);
+    currOpPosIdx = distr(globalRng.getRngEngine());
     // reset the state but needs to feed back in the cycle I guess
     resetAgentPos();
 }
