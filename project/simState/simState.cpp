@@ -1,58 +1,54 @@
-#include "../agent/agent.h"
 #include "simState.h"
+#include "../agent/agent.h"
+#include <algorithm>
+#include <cmath>
 #include <fstream>
 #include <iostream>
-#include <algorithm>
-#include <iostream>
-#include <cmath>
 #include <tuple>
-
 
 using namespace std;
 
 SimState::SimState(std::string const &filename)
-    :
-    d_outOfBoundsReward(-0.1), d_reachedGoalReward(100),
-    d_killedByOpponentReward(-100), d_normalReward(-0.1)
+    : d_outOfBoundsReward(-0.1), d_reachedGoalReward(100), d_killedByOpponentReward(-100), d_normalReward(-0.1)
 {
-    ifstream in{filename};
-    if(not in)
+    ifstream in{ filename };
+    if (not in)
     {
         cout << "could not open file" << endl;
         return;
     }
     std::string label;
     in >> label;
-    in >> canvasStepSize.x>>canvasStepSize.y;
+    in >> canvasStepSize.x >> canvasStepSize.y;
     in >> label;
-    in >> canvasBegPos.x>>canvasBegPos.y;
+    in >> canvasBegPos.x >> canvasBegPos.y;
     in >> label;
-    in >> canvasEndPos.x>>canvasEndPos.y;
+    in >> canvasEndPos.x >> canvasEndPos.y;
     in >> label;
-    in >> simSize.x>>simSize.y;
+    in >> simSize.x >> simSize.y;
     in >> label;
-    in >> initialAgentPos.x>>initialAgentPos.y;
+    in >> initialAgentPos.x >> initialAgentPos.y;
     in >> label;
-    in >> goalPos.x>>goalPos.y;
-    size_t opStartPosx,opStartPosy;
+    in >> goalPos.x >> goalPos.y;
+    size_t opStartPosx, opStartPosy;
     in >> label;
-    in >> opStartPosx>>opStartPosy;
+    in >> opStartPosx >> opStartPosy;
     in >> label;
-    size_t tracex,tracey;
-    opponentTrace.push_back({opStartPosx,opStartPosy});
-    while (in >> tracex>>tracey)
+    size_t tracex, tracey;
+    opponentTrace.push_back({ opStartPosx, opStartPosy });
+    while (in >> tracex >> tracey)
     {
-        opponentTrace.push_back({tracex,tracey});
+        opponentTrace.push_back({ tracex, tracey });
     }
     in.clear();
     in >> label;
-    size_t wallsx,wallsy;
-    while (in >> wallsx>>wallsy)
+    size_t wallsx, wallsy;
+    while (in >> wallsx >> wallsy)
     {
-        walls.push_back({wallsx,wallsy});
+        walls.push_back({ wallsx, wallsy });
     }
 
-//    sendNrStatesToAgent();
+    //    sendNrStatesToAgent();
     resetForNextEpisode();
 }
 
@@ -62,9 +58,9 @@ Position SimState::computeNewAgentPos(Actions agentAction)
     switch (agentAction)
     {
         case Actions::UP:
-            return { agentPos.x, agentPos.y -1};
+            return { agentPos.x, agentPos.y - 1 };
         case Actions::DOWN:
-            return { agentPos.x, agentPos.y + 1};
+            return { agentPos.x, agentPos.y + 1 };
         case Actions::LEFT:
             return { agentPos.x - 1, agentPos.y };
         case Actions::RIGHT:
@@ -86,48 +82,48 @@ void SimState::updateOpponentPos()
 {
     Position lastOpponentPos = opponentTrace[currOpPosIdx];
     ++currOpPosIdx;
-    if(currOpPosIdx == opponentTrace.size())
+    if (currOpPosIdx == opponentTrace.size())
     {
         currOpPosIdx = 0;
     }
-    Position newOpponentPos= opponentTrace[currOpPosIdx];
-    int xDiff = static_cast<int>(newOpponentPos.x-lastOpponentPos.x);
-    int yDiff = static_cast<int>(newOpponentPos.y-lastOpponentPos.y);
-    if(xDiff<0)
+    Position newOpponentPos = opponentTrace[currOpPosIdx];
+    int xDiff = static_cast<int>(newOpponentPos.x - lastOpponentPos.x);
+    int yDiff = static_cast<int>(newOpponentPos.y - lastOpponentPos.y);
+    if (xDiff < 0)
         lastOpponentAction = Actions::LEFT;
-    else if(xDiff > 0)
+    else if (xDiff > 0)
         lastOpponentAction = Actions::RIGHT;
-    else if(yDiff <0)
+    else if (yDiff < 0)
         lastOpponentAction = Actions::UP;
-    else if(yDiff>0)
+    else if (yDiff > 0)
         lastOpponentAction = Actions::DOWN;
 }
-
 
 float SimState::killedByOpponentReward()
 {
     return d_killedByOpponentReward;
 }
 Eigen::VectorXf SimState::getStateForAgent() const
-{   // should the goal really be a vision grid?
+{ // should the goal really be a vision grid?
     // also, everywhere the agent center is included for avoiding the performance cost
     // of the if and supposedly being better for 2D representations but debatable
     // TODO: maybe make the goal/non-goal configurable
-    size_t offsetForGoal = agentStateSize*2;
-    Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize*2+2);
+    size_t offsetForGoal = agentStateSize * 2;
+    Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize * 2 + 2);
     auto applyToArray = [&](Position const &pos, size_t offset)
     {
-        long const rowIdx = pos.y-agentPos.y+visionGridSize;
-        long const colIdx = pos.x-agentPos.x+visionGridSize;
-        if(rowIdx >= 0 and colIdx >= 0 and rowIdx < static_cast<long>(visionGridSideSize) and colIdx < static_cast<long>(visionGridSideSize))
-            agentGrid[rowIdx*visionGridSideSize+colIdx+offset] = 1.0f;
+        long const rowIdx = pos.y - agentPos.y + visionGridSize;
+        long const colIdx = pos.x - agentPos.x + visionGridSize;
+        if (rowIdx >= 0 and colIdx >= 0 and rowIdx < static_cast<long>(visionGridSideSize) and
+            colIdx < static_cast<long>(visionGridSideSize))
+            agentGrid[rowIdx * visionGridSideSize + colIdx + offset] = 1.0f;
     };
-    for (auto const &wall:walls)
+    for (auto const &wall : walls)
     {
-        applyToArray(wall,0);
+        applyToArray(wall, 0);
     }
-    applyToArray(opponentTrace[currOpPosIdx],agentStateSize);
-    size_t opLength = traceSize;  // replace with trace size
+    applyToArray(opponentTrace[currOpPosIdx], agentStateSize);
+    size_t opLength = traceSize; // replace with trace size
     // be careful, we can't do the >-1 check due to size_t and this should
     // stop after 0 but if something is wrong good to check this
 
@@ -141,29 +137,30 @@ Eigen::VectorXf SimState::getStateForAgent() const
         applyToArray(opponentTrace[idx], agentStateSize);
         --opLength;
     }
-//    applyToArray(goalPos,agentStateSize*2);
-    agentGrid[offsetForGoal] = static_cast<int>(goalPos.x-agentPos.x)/10.0f;
-    agentGrid[offsetForGoal+1] = static_cast<int>(goalPos.y-agentPos.y)/10.0f;
+    //    applyToArray(goalPos,agentStateSize*2);
+    agentGrid[offsetForGoal] = static_cast<int>(goalPos.x - agentPos.x) / 10.0f;
+    agentGrid[offsetForGoal + 1] = static_cast<int>(goalPos.y - agentPos.y) / 10.0f;
     return agentGrid;
 }
 Eigen::VectorXf SimState::getStateForOpponent() const
-{   // should the goal really be a vision grid?
+{ // should the goal really be a vision grid?
     // also, everywhere the agent center is included for avoiding the performance cost
     // of the if and supposedly being better for 2D representations but debatable
-    Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize*2);
+    Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize * 2);
     auto applyToArray = [&](Position const &pos, size_t offset)
     {
-      long const rowIdx = pos.y-opponentTrace[currOpPosIdx].y+visionGridSize; // maybe cache these out?
-      long const colIdx = pos.x-opponentTrace[currOpPosIdx].x+visionGridSize;
-      if(rowIdx >= 0 and colIdx >= 0 and rowIdx < static_cast<long>(visionGridSideSize) and colIdx < static_cast<long>(visionGridSideSize))
-          agentGrid[rowIdx*visionGridSideSize+colIdx+offset] = 1.0f;
+        long const rowIdx = pos.y - opponentTrace[currOpPosIdx].y + visionGridSize; // maybe cache these out?
+        long const colIdx = pos.x - opponentTrace[currOpPosIdx].x + visionGridSize;
+        if (rowIdx >= 0 and colIdx >= 0 and rowIdx < static_cast<long>(visionGridSideSize) and
+            colIdx < static_cast<long>(visionGridSideSize))
+            agentGrid[rowIdx * visionGridSideSize + colIdx + offset] = 1.0f;
     };
-    for (auto const &wall:walls)
+    for (auto const &wall : walls)
     {
-        applyToArray(wall,0);
+        applyToArray(wall, 0);
     }
-    applyToArray(opponentTrace[currOpPosIdx],agentStateSize);  // this is different to the agent one, should check
-    size_t opLength = traceSize;  // replace with trace size
+    applyToArray(opponentTrace[currOpPosIdx], agentStateSize); // this is different to the agent one, should check
+    size_t opLength = traceSize;                               // replace with trace size
     // be careful, we can't do the >-1 check due to size_t and this should
     // stop after 0 but if something is wrong good to check this
 
@@ -186,19 +183,17 @@ void SimState::resetAgentPos()
 
 void SimState::resetForNextEpisode()
 { // TODO: make cache this distr in globalrng
-    std::uniform_int_distribution<> distr(0,opponentTrace.size()-1);
+    std::uniform_int_distribution<> distr(0, opponentTrace.size() - 1);
     currOpPosIdx = distr(globalRng.getRngEngine());
     // reset the state but needs to feed back in the cycle I guess
     resetAgentPos();
 }
 
-
 pair<float, SimResult> SimState::updateAgentPos(Actions action)
 {
     auto futurePos = computeNewAgentPos(action);
-//    float reward = abs(static_cast<int>(agentPos.x - goalPos.x))+abs(static_cast<int>(agentPos.y - goalPos.y));
-    if (futurePos.x < 0 or futurePos.x >= simSize.x or futurePos.y < 0 or
-        futurePos.y >= simSize.y)
+    //    float reward = abs(static_cast<int>(agentPos.x - goalPos.x))+abs(static_cast<int>(agentPos.y - goalPos.y));
+    if (futurePos.x < 0 or futurePos.x >= simSize.x or futurePos.y < 0 or futurePos.y >= simSize.y)
     {
         return make_pair(d_outOfBoundsReward, SimResult::CONTINUE); // false means end episode
     }
@@ -207,14 +202,14 @@ pair<float, SimResult> SimState::updateAgentPos(Actions action)
         agentPos = futurePos;
         return make_pair(d_reachedGoalReward, SimResult::REACHED_GOAL);
     }
-    for (auto const &wall:walls)
+    for (auto const &wall : walls)
     {
         if (futurePos == wall)
         {
             return make_pair(d_outOfBoundsReward, SimResult::CONTINUE);
         }
     }
-    size_t opLength = traceSize + 1;  // replace with trace size
+    size_t opLength = traceSize + 1; // replace with trace size
     // be careful, we can't do the >-1 check due to size_t and this should
     // stop after 0 but if something is wrong good to check this
     for (size_t idx = currOpPosIdx + 1; idx-- > 0 and opLength;)
@@ -238,18 +233,16 @@ pair<float, SimResult> SimState::updateAgentPos(Actions action)
     return make_pair(d_normalReward, SimResult::CONTINUE);
 }
 
-std::vector <std::vector<ImVec4>> const & SimState::getFullMazeRepr()
+std::vector<std::vector<ImVec4>> const &SimState::getFullMazeRepr()
 {
     generateStateRepresentation();
     return stateRepresentation;
 }
 
-
-
 void SimState::generateStateRepresentation()
 {
-    vector<ImVec4> row{simSize.y, { 211,211,211,255 } };
-    vector<vector<ImVec4>> repr{simSize.x,row};
+    vector<ImVec4> row{ simSize.y, { 211, 211, 211, 255 } };
+    vector<vector<ImVec4>> repr{ simSize.x, row };
 
     // Since default pos's are initialized to 0, the (0,0) tile gets colored
     // even though it should not. Therefore, initialize in the constructor
@@ -258,27 +251,27 @@ void SimState::generateStateRepresentation()
     // does not really matter so it's fine
     auto assignWithBoundCheck = [&](Position pos, ImVec4 color)
     {
-      if (pos.x >= getWidth() || pos.y >= getHeight() || pos.x < 0 || pos.y < 0)
-          return;
-      else
-          repr[pos.x][pos.y] = color;
+        if (pos.x >= getWidth() || pos.y >= getHeight() || pos.x < 0 || pos.y < 0)
+            return;
+        else
+            repr[pos.x][pos.y] = color;
     };
-    ImVec4 agentColor = {0,0,255,255};
-    ImVec4 goalColor = {0,128,0,255};
-    ImVec4 wallColor = {128,128,128,255};
-    ImVec4 opponentColor = {255,0,0,255};
-    ImVec4 opponentTraceColor = {243,122,122,255};
-    ImVec4 agentViewColor = {135,206,235,255};
-    ImVec4 opponentViewColor = {202,119,119,255};
-    assignWithBoundCheck(agentPos,agentColor);
-    assignWithBoundCheck(goalPos,goalColor);
-    for (auto const & wall: walls)
+    ImVec4 agentColor = { 0, 0, 255, 255 };
+    ImVec4 goalColor = { 0, 128, 0, 255 };
+    ImVec4 wallColor = { 128, 128, 128, 255 };
+    ImVec4 opponentColor = { 255, 0, 0, 255 };
+    ImVec4 opponentTraceColor = { 243, 122, 122, 255 };
+    ImVec4 agentViewColor = { 135, 206, 235, 255 };
+    ImVec4 opponentViewColor = { 202, 119, 119, 255 };
+    assignWithBoundCheck(agentPos, agentColor);
+    assignWithBoundCheck(goalPos, goalColor);
+    for (auto const &wall : walls)
     {
-        assignWithBoundCheck(wall,wallColor);
+        assignWithBoundCheck(wall, wallColor);
     }
-//    assignWithBoundCheck(opponentPos,SimObject::OPPONENT);
-    assignWithBoundCheck(opponentTrace[currOpPosIdx],opponentColor);
-    size_t opLength = traceSize;  // replace with trace size
+    //    assignWithBoundCheck(opponentPos,SimObject::OPPONENT);
+    assignWithBoundCheck(opponentTrace[currOpPosIdx], opponentColor);
+    size_t opLength = traceSize; // replace with trace size
     // be careful, we can't do the >-1 check due to size_t and this should
     // stop after 0 but if something is wrong good to check this
 
@@ -297,14 +290,11 @@ void SimState::generateStateRepresentation()
         for (size_t i = 0; i < simSize.x; ++i)
             for (size_t j = 0; j < simSize.y; ++j)
             {
-                if (abs(static_cast<int>(i - pos.x)) <=
-                        visionGridSize and
+                if (abs(static_cast<int>(i - pos.x)) <= visionGridSize and
                     abs(static_cast<int>(j - pos.y)) <= visionGridSize)
                 {
-                    repr[i][j] = { (repr[i][j].x + color.x) / 2,
-                                   (repr[i][j].y + color.y) / 2,
-                                   (repr[i][j].z + color.z) / 2,
-                                   255 };
+                    repr[i][j] = { (repr[i][j].x + color.x) / 2, (repr[i][j].y + color.y) / 2,
+                                   (repr[i][j].z + color.z) / 2, 255 };
                 }
             }
     };

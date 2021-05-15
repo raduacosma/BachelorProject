@@ -3,13 +3,12 @@
 
 QERLearning::QERLearning(size_t _nrEpisodes, OpModellingType pOpModellingType, float _alpha, float _epsilon,
                          float _gamma) // TODO: check how size is passed
-    : Agent(_nrEpisodes, pOpModellingType, _gamma), alpha(_alpha), epsilon(_epsilon),
-      targetMLP(mlp)
+    : Agent(_nrEpisodes, pOpModellingType, _gamma), alpha(_alpha), epsilon(_epsilon), targetMLP(mlp)
 {
     experiences.reserve(sizeExperience);
-    for(size_t idx = 0; idx != sizeExperience; ++idx)
+    for (size_t idx = 0; idx != sizeExperience; ++idx)
     {
-        experiences.push_back({0,0,true,Eigen::VectorXf(75),Eigen::VectorXf(75)});
+        experiences.push_back({ 0, 0, true, Eigen::VectorXf(75), Eigen::VectorXf(75) });
     }
 }
 void QERLearning::newEpisode()
@@ -25,11 +24,10 @@ bool QERLearning::performOneStep()
             shouldGatherExperience = true;
             expCounter = 0;
         }
-
     }
     else
     {
-        if(expCounter == sizeExperience)
+        if (expCounter == sizeExperience)
         {
             shouldGatherExperience = false;
             expCounter = 0;

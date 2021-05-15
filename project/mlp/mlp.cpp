@@ -2,16 +2,17 @@
 #include <algorithm>
 #include <iostream>
 
-MLP::MLP(std::vector<size_t> _sizes, float _learningRate, ActivationFunction _outputActivationFunction, size_t pMiniBatchSize)
+MLP::MLP(std::vector<size_t> _sizes, float _learningRate, ActivationFunction _outputActivationFunction,
+         size_t pMiniBatchSize)
     : sizes(std::move(_sizes)), nrLayers(sizes.size()), nrWeightLayers(nrLayers - 1),
       nrLayersBeforeActivation(nrLayers - 2), miniBatchSize(pMiniBatchSize), learningRate(_learningRate),
       outputActivationFunction(_outputActivationFunction)
 {
-    for(size_t idx = 0; idx!=nrLayers; ++idx)
+    for (size_t idx = 0; idx != nrLayers; ++idx)
     {
         activations.push_back(Eigen::VectorXf::Zero(sizes[idx]));
     }
-    for(size_t idx = 1; idx!=nrLayers; ++idx)
+    for (size_t idx = 1; idx != nrLayers; ++idx)
     {
         zs.push_back(Eigen::VectorXf::Zero(sizes[idx]));
     }
@@ -33,7 +34,7 @@ void MLP::randomizeWeights()
 {
     for (size_t idx = 1; idx != nrLayers; ++idx)
     {
-        biases[idx-1] = Eigen::VectorXf::Random(sizes[idx]);
+        biases[idx - 1] = Eigen::VectorXf::Random(sizes[idx]);
     }
     for (size_t x = 0, y = 1; x != nrWeightLayers and y != nrLayers; ++x, ++y)
     {
@@ -97,8 +98,8 @@ Eigen::VectorXf MLP::feedforward(Eigen::VectorXf const &input)
     //    std::cout<<"activations: "<<activations.size()<<std::endl;
     //    std::cout<<"zs: "<<zs.size()<<std::endl;
     Eigen::VectorXf &currZs = zs[nrLayersBeforeActivation];
-    currZs = weights[nrLayersBeforeActivation] * activations[nrLayersBeforeActivation] +
-             biases[nrLayersBeforeActivation];
+    currZs =
+        weights[nrLayersBeforeActivation] * activations[nrLayersBeforeActivation] + biases[nrLayersBeforeActivation];
     Eigen::VectorXf &activationRef = activations[nrLayersBeforeActivation + 1];
     if (outputActivationFunction == ActivationFunction::SIGMOID)
     {
@@ -114,14 +115,14 @@ Eigen::VectorXf MLP::feedforward(Eigen::VectorXf const &input)
     {
         Eigen::VectorXf const exps = currZs.array().exp();
         float expsSum = exps.sum();
-        activationRef = exps/expsSum;
+        activationRef = exps / expsSum;
         return activationRef;
     }
     throw std::runtime_error("Reached end of feedforward without returning");
 }
-float MLP::update(Eigen::VectorXf const &output,MLPUpdateType updateType)
+float MLP::update(Eigen::VectorXf const &output, MLPUpdateType updateType)
 {
-    Eigen::VectorXf delta;  // maybe directly modify nablaBiases.back()?
+    Eigen::VectorXf delta; // maybe directly modify nablaBiases.back()?
     if (outputActivationFunction == ActivationFunction::SIGMOID)
     {
         delta = (activations.back() - output).cwiseProduct(zs.back().unaryExpr(&sigmoidPrime));
@@ -140,12 +141,12 @@ float MLP::update(Eigen::VectorXf const &output,MLPUpdateType updateType)
     float loss;
     if (outputActivationFunction == ActivationFunction::SOFTMAX)
     {
-        loss= -(output.array()*activations.back().array().log()).sum();
-//        Eigen::VectorXf logActivations = activations.back().array().log();
-//        loss = (-output.array() *  logActivations.array()-
-//                (1 - output.array()) * (1 - logActivations.array()))
-//                   .array()
-//                   .sum(); // optimize this
+        loss = -(output.array() * activations.back().array().log()).sum();
+        //        Eigen::VectorXf logActivations = activations.back().array().log();
+        //        loss = (-output.array() *  logActivations.array()-
+        //                (1 - output.array()) * (1 - logActivations.array()))
+        //                   .array()
+        //                   .sum(); // optimize this
     }
     else
     {
@@ -158,13 +159,13 @@ float MLP::update(Eigen::VectorXf const &output,MLPUpdateType updateType)
     nablaWeights.back() = biasesBack * activations[nrLayers - 2].transpose();
     for (size_t l = 2; l != nrLayers; ++l)
     {
-        size_t const idx = nrWeightLayers-l;
+        size_t const idx = nrWeightLayers - l;
         Eigen::VectorXf &currNablaBiases = nablaBiases[idx];
-        currNablaBiases = (weights[idx + 1].transpose() * nablaBiases[idx+1])
-            .cwiseProduct(zs[idx].unaryExpr(&sigmoidPrime));
+        currNablaBiases =
+            (weights[idx + 1].transpose() * nablaBiases[idx + 1]).cwiseProduct(zs[idx].unaryExpr(&sigmoidPrime));
         nablaWeights[idx] = currNablaBiases * activations[idx].transpose();
     }
-    if(updateType == MLPUpdateType::NORMAL)
+    if (updateType == MLPUpdateType::NORMAL)
         updateWeights();
     else
         updateMiniBatchNablas();
@@ -174,7 +175,7 @@ void MLP::initMiniBatchNablas()
 {
     for (size_t idx = 1; idx != nrLayers; ++idx)
     {
-        nablaBiasesMiniBatch[idx-1] = Eigen::VectorXf::Zero(sizes[idx]);
+        nablaBiasesMiniBatch[idx - 1] = Eigen::VectorXf::Zero(sizes[idx]);
     }
     for (size_t x = 0, y = 1; x != nrWeightLayers and y != nrLayers; ++x, ++y)
     {
@@ -191,7 +192,7 @@ void MLP::updateMiniBatchNablas()
 }
 void MLP::updateMiniBatchWeights()
 {
-    float const updateCoeff = learningRate/miniBatchSize;
+    float const updateCoeff = learningRate / miniBatchSize;
     for (size_t idx = 0; idx != nrWeightLayers; ++idx)
     {
         weights[idx] -= updateCoeff * nablaWeightsMiniBatch[idx];

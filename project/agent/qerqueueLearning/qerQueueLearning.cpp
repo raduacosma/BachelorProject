@@ -2,9 +2,8 @@
 #include <iostream>
 
 QERQueueLearning::QERQueueLearning(size_t _nrEpisodes, OpModellingType pOpModellingType, float _alpha, float _epsilon,
-                         float _gamma)
-    : Agent(_nrEpisodes, pOpModellingType, _gamma), alpha(_alpha), epsilon(_epsilon),
-      targetMLP(mlp)
+                                   float _gamma)
+    : Agent(_nrEpisodes, pOpModellingType, _gamma), alpha(_alpha), epsilon(_epsilon), targetMLP(mlp)
 {
 }
 void QERQueueLearning::newEpisode()
@@ -15,10 +14,9 @@ bool QERQueueLearning::performOneStep()
 {
     if (shouldGatherExperience)
     {
-        if(expCounter > sizeExperience)
+        if (expCounter > sizeExperience)
         {
             shouldGatherExperience = false;
-
         }
     }
     if (cCounter == cSwapPeriod)
@@ -27,9 +25,9 @@ bool QERQueueLearning::performOneStep()
         cCounter = 0;
     }
     // TODO: make monte carlo vs normal configurable
-//    Eigen::VectorXf qValues = mlp.predict(lastState);
+    //    Eigen::VectorXf qValues = mlp.predict(lastState);
     Eigen::VectorXf qValues = MonteCarloAllActions();
-//    std::cout<<qValues.transpose()<<std::endl;
+    //    std::cout<<qValues.transpose()<<std::endl;
     size_t action = actionWithQ(qValues);
     auto [reward, canContinue] = maze->computeNextStateAndReward(static_cast<Actions>(action));
     Eigen::VectorXf newState = maze->getStateForAgent();
@@ -44,7 +42,7 @@ bool QERQueueLearning::performOneStep()
     }
 
     handleExperience();
-    if(maze->getLastSwitchedLevel())
+    if (maze->getLastSwitchedLevel())
     {
         experiences.push_back({ action, reward, true, lastState, newState });
     }

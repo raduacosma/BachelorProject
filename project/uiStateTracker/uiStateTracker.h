@@ -1,7 +1,6 @@
 #ifndef _INCLUDED_UISTATETRACKER
 #define _INCLUDED_UISTATETRACKER
 
-
 struct UiStateTracker
 {
     std::string nextFilename;

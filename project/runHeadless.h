@@ -3,6 +3,6 @@
 
 #include <string>
 
-void runHeadless(std::string const & fileList, unsigned long nrEpisodes);
+void runHeadless(std::string const &fileList, unsigned long nrEpisodes);
 
 #endif

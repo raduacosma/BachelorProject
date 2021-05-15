@@ -1,7 +1,8 @@
 #include "sarsa.h"
 #include <iostream>
 
-Sarsa::Sarsa(size_t _nrEpisodes, OpModellingType pOpModellingType, float _alpha, float _epsilon, float _gamma) // TODO: check how size is passed
+Sarsa::Sarsa(size_t _nrEpisodes, OpModellingType pOpModellingType, float _alpha, float _epsilon,
+             float _gamma) // TODO: check how size is passed
     : Agent(_nrEpisodes, pOpModellingType, _gamma), alpha(_alpha), epsilon(_epsilon)
 {
 }
@@ -16,7 +17,6 @@ bool Sarsa::performOneStep()
     lastQValues = mlp.feedforward(lastState);
     auto [reward, canContinue] = maze->computeNextStateAndReward(static_cast<Actions>(lastAction));
     Eigen::VectorXf newState = maze->getStateForAgent();
-
 
     //    float lastBestQValue = lastQValues(lastAction);
     if (not canContinue)

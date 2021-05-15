@@ -3,14 +3,14 @@
 
 #include <cstddef>
 
-#include "../simContainer/simContainer.h"
-#include <vector>
-#include "../simState/actions.h"
 #include "../../../Eigen/Core"
-#include "../mlp/mlp.h"
 #include "../createRngObj/createRngObj.h"
+#include "../mlp/mlp.h"
 #include "../monteCarloSim/monteCarloSim.h"
+#include "../simContainer/simContainer.h"
+#include "../simState/actions.h"
 #include <cmath>
+#include <vector>
 
 enum class AgentType
 {
@@ -28,14 +28,13 @@ enum class OpModellingType
 
 class Agent
 {
-    protected:
-
+  protected:
     static constexpr size_t NR_ACTIONS = 4; // Hardcoded number of actions
     size_t d_killedByAshTime = 500;
     float Q_0 = 0;
     float runReward;
     size_t simTime = 0;
-    SimContainer *maze;         // The maze the agent is navigating
+    SimContainer *maze; // The maze the agent is navigating
     bool opponentNotInit = true;
     Eigen::VectorXf lastState;
     Eigen::VectorXf lastOpponentState;
@@ -68,13 +67,14 @@ class Agent
     std::vector<float> const &getOpponentPredictionLosses() const;
 
   public:
-    explicit Agent(size_t _nrEpisodes, OpModellingType pOpModellingType = OpModellingType::ONEFORALL, float pGamma = 0.99);
+    explicit Agent(size_t _nrEpisodes, OpModellingType pOpModellingType = OpModellingType::ONEFORALL,
+                   float pGamma = 0.99);
     virtual ~Agent();
 
     void run();
 
-    std::vector<float> & getRewards();
-    std::vector<size_t> & getHasDied();
+    std::vector<float> &getRewards();
+    std::vector<size_t> &getHasDied();
     void setMaze(SimContainer *maze);
     float getRunReward();
 
@@ -86,6 +86,5 @@ class Agent
     float MonteCarloRollout(size_t action);
     Eigen::VectorXf MonteCarloAllActions();
 };
-
 
 #endif

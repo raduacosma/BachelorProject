@@ -2,10 +2,9 @@
 #define _INCLUDED_SIMBUILDER
 
 #include "../utilities/utilities.h"
-#include <vector>
-#include <iostream>
 #include "imgui.h"
-
+#include <iostream>
+#include <vector>
 
 struct SimBuilder
 {
@@ -13,7 +12,7 @@ struct SimBuilder
     SimBuilder(size_t width, size_t height);
     SimBuilder() = default;
     SimBuilder &operator=(SimBuilder &&tmp);
-//    void swap(SimBuilder &other);
+    //    void swap(SimBuilder &other);
     std::vector<std::vector<ImVec4>> const &getFullMazeRepr();
     void updateCanvasStepSize(ImVec2 stepSize);
     void updateCanvasBegPos(ImVec2 pos);
@@ -43,7 +42,6 @@ struct SimBuilder
 
     void writeToFile(std::string const &fileName);
 };
-
 
 inline size_t SimBuilder::getWidth() const
 {

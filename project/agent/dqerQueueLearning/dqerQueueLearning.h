@@ -1,10 +1,10 @@
 #ifndef _INCLUDED_DQERQueueLearning
 #define _INCLUDED_DQERQueueLearning
 
-#include "../agent.h"
 #include "../../../Eigen/Core"
-#include "../../mlp/mlp.h"
 #include "../../createRngObj/createRngObj.h"
+#include "../../mlp/mlp.h"
+#include "../agent.h"
 #include "../experience.h"
 #include <deque>
 
@@ -25,15 +25,16 @@ class DQERQueueLearning : public Agent
     std::deque<Experience> experiences;
 
   public:
-    DQERQueueLearning(size_t _nrEpisodes = 10000, OpModellingType pOpModellingType = OpModellingType::ONEFORALL, float _alpha = 0.001, float _epsilon = 0.1, float _gamma=0.9);
+    DQERQueueLearning(size_t _nrEpisodes = 10000, OpModellingType pOpModellingType = OpModellingType::ONEFORALL,
+                      float _alpha = 0.001, float _epsilon = 0.1, float _gamma = 0.9);
     ~DQERQueueLearning() override;
     bool performOneStep() override;
     size_t actionWithQ(Eigen::VectorXf const &qVals);
     void newEpisode() override;
+
   private:
     void updateWithExperienceReplay();
     void handleExperience();
 };
-
 
 #endif

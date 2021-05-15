@@ -1,13 +1,11 @@
 #ifndef _INCLUDED_SIMCONTAINER
 #define _INCLUDED_SIMCONTAINER
 
-
-#include <vector>
 #include <string>
+#include <vector>
 class Agent;
-#include "../simState/simState.h"
 #include "../../Eigen/Core"
-
+#include "../simState/simState.h"
 
 class SimContainer
 {
@@ -27,13 +25,12 @@ class SimContainer
     float getLastReward() const;
     size_t getLastOpponentAction() const;
 
-    public:
+  public:
     size_t getCurrSimState() const;
     size_t getEpisodeCount() const;
 
-
-    public:
-    SimContainer() = default;     // needed? probably not since I removed those move stuff and rely on unique_pt
+  public:
+    SimContainer() = default; // needed? probably not since I removed those move stuff and rely on unique_pt
     SimContainer(std::string const &filename, Agent *agentParam);
     SimState &getCurrentLevel();
     Eigen::VectorXf getStateForAgent() const;
@@ -43,6 +40,5 @@ class SimContainer
 
     Eigen::VectorXf getStateForOpponent() const;
 };
-
 
 #endif

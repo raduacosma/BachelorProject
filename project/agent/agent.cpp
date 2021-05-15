@@ -8,15 +8,14 @@ using namespace std;
 Agent::Agent(size_t _nrEpisodes, OpModellingType pOpModellingType, float pGamma) // TODO: check how size is passed
     : nrEpisodes(_nrEpisodes), rewards(vector<float>(_nrEpisodes)), hasDied(vector<size_t>(_nrEpisodes)),
       mlp({ 52, 192, 4 }, 0.001, ActivationFunction::LINEAR),
-      opponentMlp({ 50, 100, 4 }, 0.001, ActivationFunction::SOFTMAX), opModellingType(pOpModellingType),
-      gamma(pGamma)
+      opponentMlp({ 50, 100, 4 }, 0.001, ActivationFunction::SOFTMAX), opModellingType(pOpModellingType), gamma(pGamma)
 {
     gammaVals.push_back(1); // in order to save some i-1s in monte carlo
     float tmpGamma = gamma;
-    for(size_t idx = 0; idx <=maxNrSteps;++idx) // although gammaVals[idx+1] is added
+    for (size_t idx = 0; idx <= maxNrSteps; ++idx) // although gammaVals[idx+1] is added
     {
         gammaVals.push_back(tmpGamma);
-        tmpGamma*=gamma;
+        tmpGamma *= gamma;
     }
 }
 bool Agent::performOneStep()
@@ -50,22 +49,22 @@ void Agent::run()
             handleOpponentAction();
             if (not canContinue)
             {
-                //                if(isNewLevel)
-                //                {
-                //                    nrEpisode = nrEpisodes - 1;
-                //                    break;
-                //                }
+                if (isNewLevel)
+                {
+                    nrEpisode = nrEpisodes - 1;
+                    break;
+                }
                 break;
             }
             if (maze->getLastSwitchedLevel())
             {
                 opponentNotInit = true;
-                //                isNewLevel = !isNewLevel;
-                //                if(not isNewLevel)
-                //                {
-                //                    nrEpisode = nrEpisodes - 1;
-                //                    break;
-                //                }
+                isNewLevel = !isNewLevel;
+                if (not isNewLevel)
+                {
+                    nrEpisode = nrEpisodes - 1;
+                    break;
+                }
             }
         }
         std::cout << "totalReward: " << totalReward << std::endl;
@@ -88,7 +87,7 @@ void Agent::handleOpponentAction()
             case OpModellingType::ONEFORALL:
                 break;
         }
-        lastOpponentState = maze->getStateForOpponent();   // same as a bit below? weird
+        lastOpponentState = maze->getStateForOpponent(); // same as a bit below? weird
         opponentNotInit = false;
         return;
     }
@@ -105,7 +104,7 @@ void Agent::handleOpponentAction()
     float currentLoss = opponentMlp.update(opponentActionTarget);
     // TODO: Be careful with end of episode and reset and such
     currentEpisodeLoss += currentLoss;
-//    thisEpisodeLoss.push_back(currentLoss);
+    //    thisEpisodeLoss.push_back(currentLoss); // TODO: only turn this on when needed
     lastOpponentState = newOpponentState;
 }
 
@@ -124,13 +123,14 @@ float Agent::MonteCarloRollout(size_t action)
         size_t i = 1;
         MonteCarloSim copyMaze(maze->getCurrentLevel());
         Eigen::VectorXf opProbs = opponentMlp.predict(copyMaze.getStateForOpponent());
-        std::discrete_distribution<> distr({opProbs[0],opProbs[1],opProbs[2],opProbs[3]});
+        std::discrete_distribution<> distr({ opProbs[0], opProbs[1], opProbs[2], opProbs[3] });
         size_t opAction = distr(rngEngine);
 
         // always call updateOpPos before computeNextState and getting the state
-        auto [reward, canContinue] = copyMaze.computeNextStateAndReward(static_cast<Actions>(action), static_cast<Actions>(opAction));
-        rolloutReward+=gamma*reward;
-        if(canContinue != SimResult::KILLED_BY_OPPONENT and canContinue != SimResult::REACHED_GOAL and maxNrSteps>1)
+        auto [reward, canContinue] =
+            copyMaze.computeNextStateAndReward(static_cast<Actions>(action), static_cast<Actions>(opAction));
+        rolloutReward += gamma * reward;
+        if (canContinue != SimResult::KILLED_BY_OPPONENT and canContinue != SimResult::REACHED_GOAL and maxNrSteps > 1)
         {
             while (true)
             {
@@ -142,8 +142,8 @@ float Agent::MonteCarloRollout(size_t action)
                 size_t agentAction;
                 mlp.predict(copyMaze.getStateForAgent())
                     .maxCoeff(&agentAction); // this and last if should have the same agent state one call to the other
-                auto [innerReward, innerCanContinue] =
-                    copyMaze.computeNextStateAndReward(static_cast<Actions>(agentAction),static_cast<Actions>(innerOpAction));
+                auto [innerReward, innerCanContinue] = copyMaze.computeNextStateAndReward(
+                    static_cast<Actions>(agentAction), static_cast<Actions>(innerOpAction));
                 rolloutReward += gammaVals[i] * innerReward;
                 if (innerCanContinue == SimResult::KILLED_BY_OPPONENT or innerCanContinue == SimResult::REACHED_GOAL)
                 {
@@ -151,24 +151,23 @@ float Agent::MonteCarloRollout(size_t action)
                 }
                 if (i == maxNrSteps)
                 {
-                    rolloutReward += gammaVals[i] * mlp.predict(copyMaze.getStateForAgent())
-                                                        .maxCoeff();
+                    rolloutReward += gammaVals[i] * mlp.predict(copyMaze.getStateForAgent()).maxCoeff();
                     break;
                 }
             }
         }
-        else if(canContinue == SimResult::CONTINUE and maxNrSteps==1)
+        else if (canContinue == SimResult::CONTINUE and maxNrSteps == 1)
         {
-            rolloutReward+=gamma*mlp.predict(copyMaze.getStateForAgent()).maxCoeff();
+            rolloutReward += gamma * mlp.predict(copyMaze.getStateForAgent()).maxCoeff();
         }
-        totalReward+=rolloutReward;
+        totalReward += rolloutReward;
     }
-    return totalReward/ nrRollouts;
+    return totalReward / nrRollouts;
 }
 Eigen::VectorXf Agent::MonteCarloAllActions()
 {
     Eigen::VectorXf estimatedQValues(4);
-    for(size_t idx = 0; idx !=NR_ACTIONS; ++idx)
+    for (size_t idx = 0; idx != NR_ACTIONS; ++idx)
         estimatedQValues[idx] = MonteCarloRollout(idx);
     return estimatedQValues;
 }

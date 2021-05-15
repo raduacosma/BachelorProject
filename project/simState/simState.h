@@ -1,11 +1,11 @@
 #ifndef _INCLUDED_SIMSTATE
 #define _INCLUDED_SIMSTATE
 
-#include <vector>
+#include "../../Eigen/Core"
 #include "../utilities/utilities.h"
 #include "imgui.h"
 #include <string>
-#include "../../Eigen/Core"
+#include <vector>
 
 class Agent;
 
@@ -14,11 +14,12 @@ class Agent;
 class SimState
 {
     friend class MonteCarloSim;
-    public:
+
+  public:
     SimState() = default;
     SimState(std::string const &filename);
     void generateStateRepresentation();
-    std::vector<std::vector<ImVec4>> const & getFullMazeRepr();
+    std::vector<std::vector<ImVec4>> const &getFullMazeRepr();
     void updateCanvasStepSize(ImVec2 stepSize);
     void updateCanvasBegPos(ImVec2 pos);
     void updateCanvasEndPos(ImVec2 pos);
@@ -28,7 +29,6 @@ class SimState
     Eigen::VectorXf getStateForOpponent() const;
 
   private:
-
     std::vector<std::vector<ImVec4>> stateRepresentation;
     ImVec2 canvasStepSize;
     ImVec2 canvasBegPos;
@@ -36,18 +36,19 @@ class SimState
 
     Position simSize;
 
-    public:
+  public:
     Position const &getSimSize() const;
-    private:
+
+  private:
     Position agentPos;
     Position initialAgentPos;
     Position goalPos;
     size_t currOpPosIdx;
     Actions lastOpponentAction;
     size_t traceSize = 6;
-    size_t visionGridSize = 2;  // TODO: change these in the constructor
-    size_t visionGridSideSize = 5;  // visionGridSize*2+1
-    size_t agentStateSize = 25;     // visionGridSizeSize^2
+    size_t visionGridSize = 2;     // TODO: change these in the constructor
+    size_t visionGridSideSize = 5; // visionGridSize*2+1
+    size_t agentStateSize = 25;    // visionGridSizeSize^2
 
     std::vector<Position> opponentTrace;
     std::vector<Position> walls;
@@ -58,7 +59,7 @@ class SimState
     float d_killedByOpponentReward;
     float d_normalReward;
 
-    public:
+  public:
     void resetForNextEpisode();
     // this also moves the agent
     std::tuple<float, SimResult> computeNextStateAndReward(Actions action);
@@ -66,7 +67,7 @@ class SimState
     float killedByOpponentReward();
     size_t getLastOpponentAction();
 
-    private:
+  private:
     std::pair<float, SimResult> updateAgentPos(Actions action);
     Position computeNewAgentPos(Actions action);
     void resetAgentPos();
@@ -85,7 +86,5 @@ inline size_t SimState::getLastOpponentAction()
 {
     return static_cast<size_t>(lastOpponentAction);
 }
-
-
 
 #endif

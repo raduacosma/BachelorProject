@@ -10,24 +10,21 @@
 
 class Agent;
 
-#include "../simState/simState.h"
 #include "../agent/agent.h"
+#include "../simState/simState.h"
 
 class MonteCarloSim
 {
-
 
     Position agentPos;
     Position simSize;
     Position goalPos;
     size_t traceSize;
-    size_t visionGridSize;  // TODO: change these in the constructor
-    size_t visionGridSideSize;  // visionGridSize*2+1
+    size_t visionGridSize;     // TODO: change these in the constructor
+    size_t visionGridSideSize; // visionGridSize*2+1
     size_t agentStateSize;     // visionGridSizeSize^2
 
     std::vector<Position> const &walls;
-
-
 
     // REWARDS TODO: decide on these
     float d_outOfBoundsReward;
@@ -43,13 +40,10 @@ class MonteCarloSim
     Eigen::VectorXf getStateForAgent() const;
     Eigen::VectorXf getStateForOpponent() const;
     void updateOpPos(Actions opAction);
+
   private:
     std::pair<float, SimResult> updateAgentPos(Actions action);
     Position computeNewPos(Actions currAction, Position pos);
-
 };
-
-
-
 
 #endif

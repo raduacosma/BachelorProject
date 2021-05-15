@@ -1,15 +1,14 @@
 #ifndef _INCLUDED_UIFUNCTIONS
 #define _INCLUDED_UIFUNCTIONS
 
-#include "../simState/simState.h"
 #include "../simBuilder/simBuilder.h"
+#include "../simState/simState.h"
 #include "../uiStateTracker/uiStateTracker.h"
 
-
+#include "../imgui-1.81/misc/cpp/imgui_stdlib.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
-#include "../imgui-1.81/misc/cpp/imgui_stdlib.h"
 
 #undef IMGUI_DEFINE_PLACEMENT_NEW
 #define IMGUI_DEFINE_PLACEMENT_NEW
@@ -38,27 +37,22 @@ void updateSimBuilder(SimBuilder &simBuilder);
 template <typename StateRepr>
 void drawGameState(StateRepr &simState)
 {
-    ImGuiViewportP *viewport =
-        (ImGuiViewportP *)(void *)ImGui::GetMainViewport();
+    ImGuiViewportP *viewport = (ImGuiViewportP *)(void *)ImGui::GetMainViewport();
 
     ImGui::SetNextWindowPos(viewport->WorkPos);
     ImGui::SetNextWindowSize(viewport->WorkSize);
-    ImGui::Begin(
-        "MainWindow", 0,
-        ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
-        ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoSavedSettings |
-        ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar |
-        ImGuiWindowFlags_NoScrollWithMouse);
+    ImGui::Begin("MainWindow", 0,
+                 ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
+                     ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar |
+                     ImGuiWindowFlags_NoScrollWithMouse);
     ImVec2 canvas_p0 = ImGui::GetCursorScreenPos(); // ImDrawList API uses
     // screen coordinates!
-    ImVec2 canvas_sz =
-        ImGui::GetContentRegionAvail(); // Resize canvas to what's available
+    ImVec2 canvas_sz = ImGui::GetContentRegionAvail(); // Resize canvas to what's available
     if (canvas_sz.x < 50.0f)
         canvas_sz.x = 50.0f;
     if (canvas_sz.y < 50.0f)
         canvas_sz.y = 50.0f;
-    ImVec2 canvas_p1 =
-        ImVec2(canvas_p0.x + canvas_sz.x, canvas_p0.y + canvas_sz.y);
+    ImVec2 canvas_p1 = ImVec2(canvas_p0.x + canvas_sz.x, canvas_p0.y + canvas_sz.y);
     ImDrawList *draw_list = ImGui::GetWindowDrawList();
     draw_list->AddRectFilled(canvas_p0, canvas_p1, IM_COL32(50, 50, 50, 255));
     draw_list->AddRect(canvas_p0, canvas_p1, IM_COL32(255, 255, 255, 255));
@@ -67,19 +61,14 @@ void drawGameState(StateRepr &simState)
     ImGui::End();
 }
 
-
-
-
-
 template <StateRepresentation StateRepr>
-void renderSimState(StateRepr &simState, ImVec2 const &canvas_p0,
-                    ImVec2 const &canvas_p1, ImDrawList *draw_list)
+void renderSimState(StateRepr &simState, ImVec2 const &canvas_p0, ImVec2 const &canvas_p1, ImDrawList *draw_list)
 {
     float xStepSize = (canvas_p1.x - canvas_p0.x) / simState.getWidth();
     float yStepSize = (canvas_p1.y - canvas_p0.y) / simState.getHeight();
-    simState.updateCanvasStepSize({xStepSize,yStepSize});
+    simState.updateCanvasStepSize({ xStepSize, yStepSize });
     simState.updateCanvasBegPos({ canvas_p0.x, canvas_p0.y });
-    simState.updateCanvasEndPos({canvas_p1.x,canvas_p1.y});
+    simState.updateCanvasEndPos({ canvas_p1.x, canvas_p1.y });
 
     float xCurr = canvas_p0.x;
     float yCurr = canvas_p0.y;
@@ -90,13 +79,12 @@ void renderSimState(StateRepr &simState, ImVec2 const &canvas_p0,
         for (size_t j = 0; j < simState.getHeight(); ++j)
         {
             ImVec4 currTile = stateRepr[i][j];
-            auto drawRect = [&](ImVec4 color){
-              draw_list->AddRectFilled({ xCurr+2, yCurr+2 },
-                                       { xCurr + xStepSize - 2, yCurr + yStepSize - 2},
-                                       IM_COL32(color.x,color.y,color.z,color.w));
+            auto drawRect = [&](ImVec4 color)
+            {
+                draw_list->AddRectFilled({ xCurr + 2, yCurr + 2 }, { xCurr + xStepSize - 2, yCurr + yStepSize - 2 },
+                                         IM_COL32(color.x, color.y, color.z, color.w));
             };
             drawRect(currTile);
-
 
             yCurr += yStepSize;
         }
@@ -104,6 +92,5 @@ void renderSimState(StateRepr &simState, ImVec2 const &canvas_p0,
         xCurr += xStepSize;
     }
 }
-
 
 #endif

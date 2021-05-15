@@ -37,7 +37,7 @@ struct CanvasPos
 
 inline bool operator==(Position lhs, Position rhs)
 {
-    return lhs.x==rhs.x and lhs.y==rhs.y;
+    return lhs.x == rhs.x and lhs.y == rhs.y;
 }
 
 inline std::ostream &operator<<(std::ostream &out, Position pos)
@@ -45,6 +45,5 @@ inline std::ostream &operator<<(std::ostream &out, Position pos)
     out << pos.x << " " << pos.y << std::endl;
     return out;
 }
-
 
 #endif

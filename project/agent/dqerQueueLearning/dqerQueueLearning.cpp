@@ -2,9 +2,8 @@
 #include <iostream>
 
 DQERQueueLearning::DQERQueueLearning(size_t _nrEpisodes, OpModellingType pOpModellingType, float _alpha, float _epsilon,
-                         float _gamma)
-    : Agent(_nrEpisodes, pOpModellingType, _gamma), alpha(_alpha), epsilon(_epsilon),
-      targetMLP(mlp)
+                                     float _gamma)
+    : Agent(_nrEpisodes, pOpModellingType, _gamma), alpha(_alpha), epsilon(_epsilon), targetMLP(mlp)
 {
 }
 void DQERQueueLearning::newEpisode()
@@ -15,10 +14,9 @@ bool DQERQueueLearning::performOneStep()
 {
     if (shouldGatherExperience)
     {
-        if(expCounter > sizeExperience)
+        if (expCounter > sizeExperience)
         {
             shouldGatherExperience = false;
-
         }
     }
     if (cCounter == cSwapPeriod)
@@ -26,9 +24,9 @@ bool DQERQueueLearning::performOneStep()
         targetMLP = mlp;
         cCounter = 0;
     }
-//    Eigen::VectorXf qValues = mlp.predict(lastState);
+    //    Eigen::VectorXf qValues = mlp.predict(lastState);
     Eigen::VectorXf qValues = MonteCarloAllActions();
-//    std::cout<<qValues.transpose()<<std::endl;
+    //    std::cout<<qValues.transpose()<<std::endl;
     size_t action = actionWithQ(qValues);
     auto [reward, canContinue] = maze->computeNextStateAndReward(static_cast<Actions>(action));
     Eigen::VectorXf newState = maze->getStateForAgent();
@@ -43,7 +41,7 @@ bool DQERQueueLearning::performOneStep()
     }
 
     handleExperience();
-    if(maze->getLastSwitchedLevel())
+    if (maze->getLastSwitchedLevel())
     {
         experiences.push_back({ action, reward, true, lastState, newState });
     }
