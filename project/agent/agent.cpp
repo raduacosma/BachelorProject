@@ -49,22 +49,22 @@ void Agent::run()
             handleOpponentAction();
             if (not canContinue)
             {
-                if (isNewLevel)
-                {
-                    nrEpisode = nrEpisodes - 1;
-                    break;
-                }
+//                if (isNewLevel)
+//                {
+//                    nrEpisode = nrEpisodes - 1;
+//                    break;
+//                }
                 break;
             }
             if (maze->getLastSwitchedLevel())
             {
                 opponentNotInit = true;
-                isNewLevel = !isNewLevel;
-                if (not isNewLevel)
-                {
-                    nrEpisode = nrEpisodes - 1;
-                    break;
-                }
+//                isNewLevel = !isNewLevel;
+//                if (not isNewLevel)
+//                {
+//                    nrEpisode = nrEpisodes - 1;
+//                    break;
+//                }
             }
         }
         std::cout << "totalReward: " << totalReward << std::endl;
