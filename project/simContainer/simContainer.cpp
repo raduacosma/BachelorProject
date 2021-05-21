@@ -53,6 +53,7 @@ std::tuple<float, bool> SimContainer::computeNextStateAndReward(Actions action)
 {
     auto [reward, continueStatus] = simStates[currSimState].computeNextStateAndReward(action);
     lastOpponentAction = simStates[currSimState].getLastOpponentAction();
+    // should these really be before the level is changed?
     lastOpponentState = simStates[currSimState].getStateForOpponent();
     lastSwitchedLevel = false;
     bool canContinue = true;

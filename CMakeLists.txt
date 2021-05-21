@@ -64,6 +64,10 @@ add_executable(BachelorProject
         project/agent/qerqueueLearning/qerQueueLearning.h
         project/agent/dqerQueueLearning/dqerQueueLearning.cpp
         project/agent/dqerQueueLearning/dqerQueueLearning.h
+        project/kolsmir/kolsmir.h
+        project/pettitt/pettitt.h
+        project/kolsmir/kolsmir.cpp
+        project/pettitt/pettitt.cpp
         project/simContainer/simContainer.cpp project/simContainer/simContainer.h project/runHeadless.cpp project/runHeadless.h project/agent/sarsa/sarsa.cpp project/agent/sarsa/sarsa.h project/agent/experience.h project/monteCarloSim/monteCarloSim.cpp project/monteCarloSim/monteCarloSim.h)
 target_link_libraries(BachelorProject GL ${GLFW_STATIC_LIBRARIES})
 

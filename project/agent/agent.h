@@ -23,7 +23,9 @@ enum class AgentType
 enum class OpModellingType
 {
     NEWEVERYTIME,
-    ONEFORALL
+    ONEFORALL,
+    PETTITT,
+    KOLSMIR
 };
 
 class Agent
@@ -48,7 +50,9 @@ class Agent
     std::vector<float> opponentCorrectPredictionPercentage;
     std::vector<float> thisEpisodeLoss;
     MLP mlp;
-    MLP opponentMlp;
+    std::vector<MLP> opList;
+    MLP *opponentMlp;
+
     bool isNewLevel = false;
 
     OpModellingType opModellingType;
@@ -85,6 +89,7 @@ class Agent
     void handleOpponentAction();
     float MonteCarloRollout(size_t action);
     Eigen::VectorXf MonteCarloAllActions();
+    void normalOpPredict();
 };
 
 #endif

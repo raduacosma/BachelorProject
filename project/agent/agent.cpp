@@ -8,7 +8,8 @@ using namespace std;
 Agent::Agent(size_t _nrEpisodes, OpModellingType pOpModellingType, float pGamma) // TODO: check how size is passed
     : nrEpisodes(_nrEpisodes), rewards(vector<float>(_nrEpisodes)), hasDied(vector<size_t>(_nrEpisodes)),
       mlp({ 52, 192, 4 }, 0.001, ActivationFunction::LINEAR),
-      opponentMlp({ 50, 100, 4 }, 0.001, ActivationFunction::SOFTMAX), opModellingType(pOpModellingType), gamma(pGamma)
+      opList{MLP({ 50, 100, 4 }, 0.001, ActivationFunction::SOFTMAX)},
+      opponentMlp(&opList[0]), opModellingType(pOpModellingType), gamma(pGamma)
 {
     gammaVals.push_back(1); // in order to save some i-1s in monte carlo
     float tmpGamma = gamma;
@@ -40,7 +41,7 @@ void Agent::run()
         size_t stepCount = 0;
         float totalReward = 0;
         opponentNotInit = true;
-        thisEpisodeLoss = std::vector<float>();
+//        thisEpisodeLoss = std::vector<float>();  // this is for the old loss at switch stuff
         while (true)
         {
             ++stepCount;
@@ -79,29 +80,49 @@ void Agent::handleOpponentAction()
 {
     if (opponentNotInit)
     {
+        // same as a bit below? weird actually since it returns after might work
+        // getStateForOpponent might be useless at this point
+        // actually this is probably also fine since this is after a level switch I guess,
+        // since opponentNotInit is set to true afterthe action is processed
+        lastOpponentState = maze->getStateForOpponent();
+        opponentNotInit = false;
         switch (opModellingType)
         {
             case OpModellingType::NEWEVERYTIME:
-                opponentMlp.randomizeWeights();
+                opponentMlp->randomizeWeights();
                 break;
             case OpModellingType::ONEFORALL:
                 break;
+            case OpModellingType::KOLSMIR:
+                break;
+            case OpModellingType::PETTITT:
+                break;
+
         }
-        lastOpponentState = maze->getStateForOpponent(); // same as a bit below? weird
-        opponentNotInit = false;
+
+
         return;
     }
-    // TODO: check that level switching works properly
+    switch (opModellingType)
+    {
+        case OpModellingType::NEWEVERYTIME:
+        case OpModellingType::ONEFORALL:
+            normalOpPredict();
+            break;
+    }
+}
+void Agent::normalOpPredict()
+{ // TODO: check that level switching works properly
     Eigen::VectorXf newOpponentState = maze->getStateForOpponent();
     size_t newOpponentAction = maze->getLastOpponentAction();
     Eigen::VectorXf opponentActionTarget = Eigen::VectorXf::Zero(4);
     opponentActionTarget(static_cast<size_t>(newOpponentAction)) = 1.0f;
     size_t opponentActionIdx;
-    opponentMlp.feedforward(lastOpponentState).maxCoeff(&opponentActionIdx);
+    opponentMlp->feedforward(lastOpponentState).maxCoeff(&opponentActionIdx);
     //    std::cout<<opponentActionIdx<<" "<<newOpponentAction<<std::endl;
     if (newOpponentAction == opponentActionIdx)
         ++currentEpisodeCorrectPredictions;
-    float currentLoss = opponentMlp.update(opponentActionTarget);
+    float currentLoss = opponentMlp->update(opponentActionTarget);
     // TODO: Be careful with end of episode and reset and such
     currentEpisodeLoss += currentLoss;
     //    thisEpisodeLoss.push_back(currentLoss); // TODO: only turn this on when needed
@@ -122,7 +143,7 @@ float Agent::MonteCarloRollout(size_t action)
         float rolloutReward = 0;
         size_t i = 1;
         MonteCarloSim copyMaze(maze->getCurrentLevel());
-        Eigen::VectorXf opProbs = opponentMlp.predict(copyMaze.getStateForOpponent());
+        Eigen::VectorXf opProbs = opponentMlp->predict(copyMaze.getStateForOpponent());
         std::discrete_distribution<> distr({ opProbs[0], opProbs[1], opProbs[2], opProbs[3] });
         size_t opAction = distr(rngEngine);
 
@@ -135,7 +156,7 @@ float Agent::MonteCarloRollout(size_t action)
             while (true)
             {
                 ++i;
-                Eigen::VectorXf innerOpProbs = opponentMlp.predict(copyMaze.getStateForOpponent());
+                Eigen::VectorXf innerOpProbs = opponentMlp->predict(copyMaze.getStateForOpponent());
                 std::discrete_distribution<> innerDistr(
                     { innerOpProbs[0], innerOpProbs[1], innerOpProbs[2], innerOpProbs[3] });
                 size_t innerOpAction = innerDistr(rngEngine);
