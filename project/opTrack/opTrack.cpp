@@ -77,7 +77,7 @@ void OpTrack::pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
         {
             MLP &currDoneOp = opCopies[opIdx];
             currOpListLossHistory.resize(0);
-            std::transform(currOpListStateHistory.begin(), currOpListStateHistory.end(),
+            std::transform(currOpListStateHistory.cbegin(), currOpListStateHistory.cend(),
                            std::back_inserter(currOpListLossHistory),
                            [&](OpExperience const &currExperience)
                            {
@@ -95,6 +95,7 @@ void OpTrack::pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
         // that checks whether we are using a previous MLP, but that check is probably useless if
         // we don't want to avoid the minimum if
         foundOpModel = true;
+        // opHistoryCounter is already done in init
         if (maxProbIdx != -1 and maxProb > pValueThreshold)
         {
             // this should correspond to removing the random MLP that was created
@@ -110,7 +111,7 @@ void OpTrack::pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
             }
         }
         // nothing left to do since the random MLP was already here and we don't need to remove it
-        opHistoryCounter = 0;
+
     }
     else if (foundOpModel and opListLossHistory[agent.currOp].size() < maxHistorySize)
         opListLossHistory[agent.currOp].push_back(loss); // if there are problems, check this loss thing
@@ -135,7 +136,7 @@ void OpTrack::kolsmirOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
         {
             MLP &currDoneOp = agent.opList[opIdx];
             currOpListLossHistory.resize(0);
-            std::transform(currOpListStateHistory.begin(), currOpListStateHistory.end(),
+            std::transform(currOpListStateHistory.cbegin(), currOpListStateHistory.cend(),
                            std::back_inserter(currOpListLossHistory),
                            [&](OpExperience const &currExperience)
                            {
@@ -173,14 +174,14 @@ void OpTrack::kolsmirOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
             }
             // and update the losses for the last examples
             opLossRef.resize(0);
-            std::transform(opStateRef.begin(), opStateRef.end(), std::back_inserter(opLossRef),
+            std::transform(opStateRef.cbegin(), opStateRef.cend(), std::back_inserter(opLossRef),
                            [&](OpExperience const &currExperience)
                            {
                                return currOpRef.predictWithLoss(currExperience.lastState, currExperience.newState);
                            });
         }
         // nothing left to do since the random MLP was already here and we don't need to remove it
-        opHistoryCounter = 0;
+
     }
     else if (foundOpModel and opListStateHistory[agent.currOp].size() < maxHistorySize)
         opListStateHistory[agent.currOp].push_back({ lastState, newState });
