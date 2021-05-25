@@ -10,5 +10,9 @@ struct Experience
     Eigen::VectorXf lastState;
     Eigen::VectorXf newState;
 };
-
+struct OpExperience
+{
+    Eigen::VectorXf lastState;
+    Eigen::VectorXf newState;
+};
 #endif

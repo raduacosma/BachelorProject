@@ -53,7 +53,7 @@ std::vector<float> const &MLP::getLossHistory() const
 {
     return lossHistory;
 }
-Eigen::VectorXf MLP::predict(const Eigen::VectorXf &input)
+Eigen::VectorXf MLP::predict(Eigen::VectorXf const &input)
 {
     Eigen::VectorXf activation = input;
     for (size_t idx = 0; idx != nrLayersBeforeActivation; ++idx)
@@ -76,6 +76,21 @@ Eigen::VectorXf MLP::predict(const Eigen::VectorXf &input)
         return exps / expsSum;
     }
     throw std::runtime_error("Reached end of predict without returning");
+}
+float MLP::predictWithLoss(Eigen::VectorXf const &input, Eigen::VectorXf const &output)
+{   // TODO: check this function with MLP subproject
+    Eigen::VectorXf prediction = predict(input);
+    float loss;
+    if (outputActivationFunction == ActivationFunction::SOFTMAX)
+    {
+        loss = -(output.array() * prediction.array().log()).sum();
+    }
+    else
+    {
+        loss = (prediction - output).array().square().mean();
+    }
+    return loss;
+
 }
 float MLP::sigmoid(float x)
 {
@@ -138,6 +153,7 @@ float MLP::update(Eigen::VectorXf const &output, MLPUpdateType updateType)
         delta = activations.back();
         delta(idx) -= 1.0f;
     }
+    // TODO: why is the loss after the delta? check in the future
     float loss;
     if (outputActivationFunction == ActivationFunction::SOFTMAX)
     {

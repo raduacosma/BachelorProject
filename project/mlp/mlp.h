@@ -55,5 +55,6 @@ class MLP
     void updateMiniBatchWeights();
     void initMiniBatchNablas();
     void randomizeWeights();
+    float predictWithLoss(Eigen::VectorXf const &input, Eigen::VectorXf const &output);
 };
 #endif

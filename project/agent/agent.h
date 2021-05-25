@@ -11,6 +11,10 @@
 #include "../simState/actions.h"
 #include <cmath>
 #include <vector>
+#include "experience.h"
+#include "../kolsmir/kolsmir.h"
+#include "../pettitt/pettitt.h"
+#include "../opTrack/opTrack.h"
 
 enum class AgentType
 {
@@ -30,8 +34,10 @@ enum class OpModellingType
 
 class Agent
 {
+    friend class OpTrack;
   protected:
-    static constexpr size_t NR_ACTIONS = 4; // Hardcoded number of actions
+    OpTrack opTrack;
+    size_t const NR_ACTIONS = 4; // Hardcoded number of actions
     size_t d_killedByAshTime = 500;
     float Q_0 = 0;
     float runReward;
@@ -49,9 +55,12 @@ class Agent
     std::vector<float> opponentPredictionLosses;
     std::vector<float> opponentCorrectPredictionPercentage;
     std::vector<float> thisEpisodeLoss;
+
+
     MLP mlp;
     std::vector<MLP> opList;
-    MLP *opponentMlp;
+    size_t currOp;
+
 
     bool isNewLevel = false;
 
@@ -60,6 +69,8 @@ class Agent
     size_t maxNrSteps = 2;
     size_t nrRollouts = 5;
     std::vector<float> gammaVals;
+
+    void opPredict(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf const &, Eigen::VectorXf const &, float));
 
   public:
     std::vector<float> const &getThisEpisodeLoss() const;
@@ -89,7 +100,7 @@ class Agent
     void handleOpponentAction();
     float MonteCarloRollout(size_t action);
     Eigen::VectorXf MonteCarloAllActions();
-    void normalOpPredict();
+
 };
 
 #endif
