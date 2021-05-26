@@ -2,6 +2,7 @@
 #include "../agent/agent.h"
 #include "../kolsmir/kolsmir.h"
 #include "../pettitt/pettitt.h"
+#include <iostream>
 
 void OpTrack::destroyRandomKolsmir(Agent &agent)
 {
@@ -192,7 +193,6 @@ void OpTrack::kolsmirOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
             destroyRandomKolsmir(agent); // TODO: check that the pop_backs of curr state history is ok
             agent.currOp = maxProbIdx;
             std::vector<OpExperience> &opStateRef = opListStateHistory[agent.currOp];
-            std::vector<double> &opLossRef = opListLossHistory[agent.currOp];
             MLP &currOpRef = agent.opList[agent.currOp];
             // now train the currOp on the examples since they belong to it and add them to the history if maxHistory
             // was not achieved
@@ -208,6 +208,7 @@ void OpTrack::kolsmirOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
         // nothing left to do since the random MLP was already here and we don't need to remove it
 
     }
+    // this should get triggered even if the above if is entered, same for pettitt
     if (foundOpModel and opListStateHistory[agent.currOp].size() < maxHistorySize)
         opListStateHistory[agent.currOp].push_back({ lastState, newState });
 }
