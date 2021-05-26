@@ -89,8 +89,9 @@ void OpTrack::pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
     {
         currOpListStateHistory.push_back({ lastState, newState });
         ++opHistoryCounter;
+        return;
     }
-    else if (not foundOpModel and opHistoryCounter >= minHistorySize) // TODO: check this condition
+    if (not foundOpModel and opHistoryCounter >= minHistorySize) // TODO: check this condition
     {
         // TODO: check that all the vectors and indices and sizes are what they should be
         double maxProb = -1;
@@ -137,9 +138,9 @@ void OpTrack::pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
         // nothing left to do since the random MLP was already here and we don't need to remove it
 
     }
-    else if (foundOpModel and opDequeLossHistory[agent.currOp].size() < maxHistorySize)
+    if (foundOpModel and opDequeLossHistory[agent.currOp].size() < maxHistorySize)
         opDequeLossHistory[agent.currOp].push_back(loss); // if there are problems, check this loss thing
-    else if (foundOpModel and opDequeLossHistory[agent.currOp].size()>=maxHistorySize)
+    else if (opDequeLossHistory[agent.currOp].size()>=maxHistorySize)
     {
         opDequeLossHistory[agent.currOp].pop_front();
         opDequeLossHistory[agent.currOp].push_back(loss); // if there are problems, check this loss thing
@@ -153,8 +154,9 @@ void OpTrack::kolsmirOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
     {
         currOpListStateHistory.push_back({ lastState, newState });
         ++opHistoryCounter;
+        return;
     }
-    else if (not foundOpModel and opHistoryCounter >= minHistorySize) // TODO: check this condition
+    if (not foundOpModel and opHistoryCounter >= minHistorySize) // TODO: check this condition
     {
         // FIXME: this current experience will not be recorded since the below if does not activate
         // TODO: check that all the vectors and indices and sizes are what they should be
@@ -206,7 +208,7 @@ void OpTrack::kolsmirOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
         // nothing left to do since the random MLP was already here and we don't need to remove it
 
     }
-    else if (foundOpModel and opListStateHistory[agent.currOp].size() < maxHistorySize)
+    if (foundOpModel and opListStateHistory[agent.currOp].size() < maxHistorySize)
         opListStateHistory[agent.currOp].push_back({ lastState, newState });
 }
 
