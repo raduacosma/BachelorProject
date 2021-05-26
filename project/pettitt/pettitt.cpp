@@ -2,7 +2,7 @@
 #include <iostream>
 #include <numeric>
 #include "../Eigen/Core"
-std::tuple<double, double, int> Pettitt::test2(std::vector<double> const &x, std::vector<double> const &x2)
+std::tuple<double, double, int> Pettitt::test2(std::deque<double> const &x, std::vector<double> const &x2)
 {
     size_t n = x.size()+x2.size();
     Eigen::ArrayXd k(n);
@@ -114,7 +114,7 @@ std::vector<double> Pettitt::ranks(std::vector<double> const &x)
     return rank;
 }
 
-std::vector<double> Pettitt::ranks2(std::vector<double> const &x, std::vector<double> const &x2)
+std::vector<double> Pettitt::ranks2(std::deque<double> const &x, std::vector<double> const &x2)
 {
     std::vector<std::tuple<double, size_t, double>> vec;
     vec.reserve(x.size()+x2.size());

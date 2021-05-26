@@ -5,12 +5,14 @@ class Agent;
 #include <vector>
 #include "../agent/experience.h"
 #include "../mlp/mlp.h"
+#include <deque>
 
 class OpTrack
 {
     double pValueThreshold = 0.05;
     std::vector<std::vector<OpExperience>> opListStateHistory;
     std::vector<std::vector<double>> opListLossHistory;
+    std::vector<std::deque<double>> opDequeLossHistory;
     std::vector<OpExperience> currOpListStateHistory;
     std::vector<double> currOpListLossHistory;
 
