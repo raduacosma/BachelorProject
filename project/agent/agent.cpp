@@ -135,7 +135,7 @@ void Agent::opPredict(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf co
     float currentLoss = opList[currOp].update(opponentActionTarget);
     // TODO: Be careful with end of episode and reset and such
     currentEpisodeLoss += currentLoss;
-    (opTrack.*tracking)(*this, lastOpponentState, newOpponentState, currentLoss);
+    (opTrack.*tracking)(*this, lastOpponentState, opponentActionTarget, currentLoss);
     //    thisEpisodeLoss.push_back(currentLoss); // TODO: only turn this on when needed
     lastOpponentState = newOpponentState;
 }
