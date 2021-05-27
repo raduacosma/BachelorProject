@@ -17,7 +17,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     //    std::cout.setstate(std::ios_base::failbit);
     std::string files = "longClock.txt,longCounter.txt";
     // could also use stack but meh, this way is more certain
-    std::unique_ptr<Agent> agent = std::make_unique<QERQueueLearning>(10000, OpModellingType::PETTITT);
+    std::unique_ptr<Agent> agent = std::make_unique<QERQueueLearning>(10000, OpModellingType::KOLSMIR);
     SimContainer simContainer{ files, agent.get() };
     agent->run();
     std::ofstream out{ "results/rewardsDQER.txt" };
@@ -30,8 +30,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     std::vector<float> const &opponentPredPerc = agent->getOpponentCorrectPredictionPercentage();
     copy(opponentPredPerc.begin(), opponentPredPerc.end(), std::ostream_iterator<float>(opponentPerc, "\n"));
 
-    std::ofstream correctOp{ "results/correctOpPercentage.txt" };
-    correctOp<<agent->getCorrectOpponentTypePredictionPercentage();
+    std::cout<<"opponent prediction percentage: "<<agent->getCorrectOpponentTypePredictionPercentage()<<std::endl;
 
 
     //    std::ofstream opponentLoss{"results/opponentFirstEpLoss.txt"};
