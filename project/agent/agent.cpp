@@ -50,22 +50,12 @@ void Agent::run()
             handleOpponentAction();
             if (not canContinue)
             {
-                //                if (isNewLevel)
-                //                {
-                //                    nrEpisode = nrEpisodes - 1;
-                //                    break;
-                //                }
+
                 break;
             }
             if (maze->getLastSwitchedLevel())
             {
                 opponentNotInit = true;
-                //                isNewLevel = !isNewLevel;
-                //                if (not isNewLevel)
-                //                {
-                //                    nrEpisode = nrEpisodes - 1;
-                //                    break;
-                //                }
             }
         }
         std::cout << "totalReward: " << totalReward << std::endl;
@@ -243,4 +233,8 @@ vector<float> const &Agent::getThisEpisodeLoss() const
 size_t Agent::actionWithQ(Eigen::VectorXf const &qVals)
 {
     throw std::runtime_error("In Agent's actionWithQ, should not be here");
+}
+float Agent::getCorrectOpponentTypePredictionPercentage() const
+{
+    return static_cast<float>(correctOpCurrentEpisode)/totalPredOpCurrentEpisode;
 }

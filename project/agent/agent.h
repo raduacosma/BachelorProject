@@ -56,7 +56,12 @@ class Agent
     std::vector<float> opponentCorrectPredictionPercentage;
     std::vector<float> thisEpisodeLoss;
 
+    size_t correctOpCurrentEpisode;
+    size_t totalPredOpCurrentEpisode;
 
+  public:
+    float getCorrectOpponentTypePredictionPercentage() const;
+  protected:
     MLP mlp;
     std::vector<MLP> opList;
     size_t currOp;

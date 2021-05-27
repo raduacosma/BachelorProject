@@ -20,15 +20,16 @@ void OpTrack::commonOpInit(Agent &agent)
     opHistoryCounter = 0;
     foundOpModel = false;
     currOpListLossHistory.resize(0);
-    // might need to pre-allocate these since otherwise there will be size problems
     currOpListStateHistory.resize(0);
     if (firstTime)
     {
         firstTime = false;
-        currOpListLossHistory.reserve(maxHistorySize);  // this is called after resize above, problem?
+        currOpListLossHistory.reserve(maxHistorySize); // this is called after resize above, problem?
         currOpListStateHistory.reserve(maxHistorySize);
         return;
     }
+    // this is just because the other baseline algorithms only use 1 MLP and therefore the initial opList
+    // gets initialised with one MLP which we need to take care of the first time
     // probably need an initializer list or something so it jives with the initial opponentMlp hyperparams
     agent.opList.push_back(MLP({ 50, 100, 4 }, 0.001, ActivationFunction::SOFTMAX));
     agent.currOp = agent.opList.size() - 1;
@@ -41,7 +42,7 @@ void OpTrack::kolsmirOpInit(Agent &agent)
     // this will probably always be the random one so I could just to pop_back()
     if (not firstTime)
     {
-        if(opListStateHistory[agent.currOp].size() < minHistorySize)
+        if (opListStateHistory[agent.currOp].size() < minHistorySize)
         {
             destroyRandomKolsmir(agent);
         }
@@ -59,7 +60,7 @@ void OpTrack::kolsmirOpInit(Agent &agent)
                            {
                                return currOpRef.predictWithLoss(currExperience.lastState, currExperience.newState);
                            });
-            std::sort(opLossRef.begin(),opLossRef.end());
+            std::sort(opLossRef.begin(), opLossRef.end());
         }
     }
 
@@ -78,9 +79,13 @@ void OpTrack::pettittOpInit(Agent &agent)
     {
         destroyRandomPettitt(agent);
     }
-    opCopies = agent.opList;
+    if(firstTime)
+        opCopies = std::vector<MLP>();
+    else
+        opCopies = agent.opList;
     opDequeLossHistory.emplace_back();
-//    opDequeLossHistory.back().reserve(maxHistorySize); // not possible with deque and also only done for performance reasons
+    //    opDequeLossHistory.back().reserve(maxHistorySize); // not possible with deque and also only done for
+    //    performance reasons
     commonOpInit(agent);
 }
 void OpTrack::pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, Eigen::VectorXf const &newState,
@@ -89,6 +94,10 @@ void OpTrack::pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
     if (not foundOpModel and opHistoryCounter < minHistorySize)
     {
         currOpListStateHistory.push_back({ lastState, newState });
+        // we need to place the current losses for the random opponent
+        // so do it here
+        // no checks needed since this will be exactly minHistorySize
+        opDequeLossHistory[agent.currOp].push_back(loss); // if there are problems, check this loss thing
         ++opHistoryCounter;
         return;
     }
@@ -98,26 +107,30 @@ void OpTrack::pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
         double maxProb = -1;
         int maxProbIdx = -1;
         std::vector<double> maxOpListLossHistory;
-        // -1 for below because we don't want the random one that will be put last
-        for (size_t opIdx = 0, opSz = opCopies.size() - 1; opIdx != opSz; ++opIdx)
+
+        if(!opCopies.empty())
         {
-            MLP &currDoneOp = opCopies[opIdx];
-            currOpListLossHistory.resize(0);
-            std::transform(currOpListStateHistory.cbegin(), currOpListStateHistory.cend(),
-                           std::back_inserter(currOpListLossHistory),
-                           [&](OpExperience const &currExperience)
-                           {
-                               return currDoneOp.train(currExperience.lastState, currExperience.newState);
-                           });
-            // TODO: wtf happens when  there is nothing in the loss history?
-            // though if there is nothing in history then it should not even be here since only the ones
-            // with minHistory should be in history
-            auto [prob, U, K] = Pettitt{}.test2(opDequeLossHistory[opIdx], currOpListLossHistory);
-            if (maxProb < prob)
+            // copy is done before random is added, for firstTime care is taken that the random is not added
+            for (size_t opIdx = 0, opSz = opCopies.size(); opIdx != opSz; ++opIdx)
             {
-                maxProb = prob;
-                maxProbIdx = opIdx;
-                maxOpListLossHistory = currOpListLossHistory;
+                MLP &currDoneOp = opCopies[opIdx];
+                currOpListLossHistory.resize(0);
+                std::transform(currOpListStateHistory.cbegin(), currOpListStateHistory.cend(),
+                               std::back_inserter(currOpListLossHistory),
+                               [&](OpExperience const &currExperience)
+                               {
+                                   return currDoneOp.train(currExperience.lastState, currExperience.newState);
+                               });
+                // TODO: wtf happens when  there is nothing in the loss history?
+                // though if there is nothing in history then it should not even be here since only the ones
+                // with minHistory should be in history
+                auto [prob, U, K] = Pettitt{}.test2(opDequeLossHistory[opIdx], currOpListLossHistory);
+                if (maxProb < prob)
+                {
+                    maxProb = prob;
+                    maxProbIdx = opIdx;
+                    maxOpListLossHistory = currOpListLossHistory;
+                }
             }
         }
         // a model will be found anyways, whether random or a previous one, this is not the thing
@@ -134,7 +147,7 @@ void OpTrack::pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
             // now train the currOp on the examples since they belong to it and add them to the history if maxHistory
             // was not achieved
             for (size_t idx = 0, sz = maxOpListLossHistory.size(); idx != sz; ++idx)
-            {  // there should be dequeues, not vectors
+            {
                 if (opLossRef.size() < maxHistorySize)
                     opLossRef.push_back(maxOpListLossHistory[idx]);
                 else
@@ -144,30 +157,38 @@ void OpTrack::pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
                 }
             }
         }
-        // nothing left to do since the random MLP was already here and we don't need to remove it
-
+//        std::cout<<"begin: "<<std::endl;
+//        std::cout<<"p value: "<<maxProb<<std::endl;
+//        std::cout<<agent.currOp<<" "<<agent.maze->getCurrSimState()<<std::endl;
+//        std::cout<<"end: "<<std::endl;
+        // nothing to do here since this is the random opponent and it should already have the state
+        // incremented above
+        updateCorrectPercentage(agent);
     }
     if (foundOpModel and opDequeLossHistory[agent.currOp].size() < maxHistorySize)
         opDequeLossHistory[agent.currOp].push_back(loss); // if there are problems, check this loss thing
-    else if (foundOpModel and opDequeLossHistory[agent.currOp].size()>=maxHistorySize)
+    else if (foundOpModel and opDequeLossHistory[agent.currOp].size() >= maxHistorySize)
     {
         opDequeLossHistory[agent.currOp].pop_front();
         opDequeLossHistory[agent.currOp].push_back(loss); // if there are problems, check this loss thing
     }
 }
-// TODO: check that the logic from begin and end is properly split between tracking and init for all such member functions
+// TODO: check that the logic from begin and end is properly split between tracking and init for all such member
+// functions
 void OpTrack::kolsmirOpTracking(Agent &agent, Eigen::VectorXf const &lastState, Eigen::VectorXf const &newState,
                                 float loss)
 {
     if (not foundOpModel and opHistoryCounter < minHistorySize)
     {
+        // for kolsmir, currOpListStateHistory can be the same as the state history for the random one, as that is what is
+        // done here. However, in order for it to be similar with pettitt, we leave it like this for now
         currOpListStateHistory.push_back({ lastState, newState });
+//        opListStateHistory[agent.currOp].push_back({ lastState, newState });
         ++opHistoryCounter;
         return;
     }
     if (not foundOpModel and opHistoryCounter >= minHistorySize) // TODO: check this condition
     {
-        // FIXME: this current experience will not be recorded since the below if does not activate
         // TODO: check that all the vectors and indices and sizes are what they should be
         double maxProb = -1;
         int maxProbIdx = -1; // -1 for below since we don't want the random one that will be put last
@@ -181,7 +202,7 @@ void OpTrack::kolsmirOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
                            {
                                return currDoneOp.predictWithLoss(currExperience.lastState, currExperience.newState);
                            });
-            std::sort(currOpListLossHistory.begin(),currOpListLossHistory.end());
+            std::sort(currOpListLossHistory.begin(), currOpListLossHistory.end());
             // both arrays need to be sorted, opListLossHistory[opIdx] should already be sorted from init
             auto [prob, rdmax] = KolSmir{}.test(opListLossHistory[opIdx].size(), opListLossHistory[opIdx].data(),
                                                 currOpListLossHistory.size(), currOpListLossHistory.data());
@@ -195,6 +216,7 @@ void OpTrack::kolsmirOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
         // that checks whether we are using a previous MLP, but that check is probably useless if
         // we don't want to avoid the minimum if
         foundOpModel = true;
+
         if (maxProbIdx != -1 and maxProb > pValueThreshold)
         {
             // this should correspond to removing the random MLP that was created
@@ -209,11 +231,12 @@ void OpTrack::kolsmirOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
                 OpExperience const &currExperience = currOpListStateHistory[idx];
                 currOpRef.train(currExperience.lastState, currExperience.newState);
                 if (opStateRef.size() < maxHistorySize)
-                    opStateRef.push_back({ currExperience.lastState, currExperience.newState });
+                    opStateRef.push_back(currExperience);
             }
-
         }
-        // nothing left to do since the random MLP was already here and we don't need to remove it
+        updateCorrectPercentage(agent);
+        // nothing to do here since this is the random opponent and it should already have the state
+        // incremented above
 
     }
     // this should get triggered even if the above if is entered, same for pettitt
@@ -224,4 +247,13 @@ void OpTrack::kolsmirOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
 void OpTrack::normalOpTracking(Agent &agent, Eigen::VectorXf const &lastState, Eigen::VectorXf const &newState,
                                float loss)
 {
+}
+
+void OpTrack::updateCorrectPercentage(Agent &agent)
+{
+    if(agent.currOp==agent.maze->getCurrSimState())
+    {
+        ++agent.correctOpCurrentEpisode;
+    }
+    ++agent.totalPredOpCurrentEpisode;
 }
