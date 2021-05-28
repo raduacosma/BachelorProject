@@ -9,7 +9,7 @@ class Agent;
 
 class OpTrack
 {
-    double pValueThreshold = 0.05;
+    double pValueThreshold = 0.01;
     std::vector<std::vector<OpExperience>> opListStateHistory;
     std::vector<std::vector<double>> opListLossHistory;
     std::vector<std::deque<double>> opDequeLossHistory;
@@ -20,8 +20,8 @@ class OpTrack
     bool firstTime = true;
     bool foundOpModel = false;
     size_t opHistoryCounter = 0;
-    size_t minHistorySize = 10;
-    size_t maxHistorySize = 10;
+    size_t minHistorySize = 15;
+    size_t maxHistorySize = 15;
 
   public:
     void normalOpTracking(Agent &agent, Eigen::VectorXf const &lastState, Eigen::VectorXf const &newState, float loss);
