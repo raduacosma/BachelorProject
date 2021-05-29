@@ -109,9 +109,9 @@ void OpTrack::pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
         int maxProbIdx = -1;
         std::vector<double> maxOpListLossHistory;
 
-//        double maxChangeAfterProb = -1;
-//        int maxChangeAfterProbIdx = -1;
-//        std::vector<double> maxChangeAfterOpListLossHistory;
+        double maxChangeAfterProb = -1;
+        int maxChangeAfterProbIdx = -1;
+        std::vector<double> maxChangeAfterOpListLossHistory;
         if(!opCopies.empty())
         {
             // copy is done before random is added, for firstTime care is taken that the random is not added
@@ -136,12 +136,13 @@ void OpTrack::pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
                     maxProbIdx = opIdx;
                     maxOpListLossHistory = currOpListLossHistory;
                 }
-//                if (K+1<opDequeLossHistory[opIdx].size() and maxChangeAfterProb<prob and prob < pValueThreshold)
-//                {
-//                    maxChangeAfterProb = prob;
-//                    maxChangeAfterProbIdx = opIdx;
-//                    maxChangeAfterOpListLossHistory = currOpListLossHistory;
-//                }
+                if (K+1<opDequeLossHistory[opIdx].size() and maxChangeAfterProb<prob and prob < pValueThreshold)
+                {
+//                    std::cout<<"yesssss"<<std::endl;
+                    maxChangeAfterProb = prob;
+                    maxChangeAfterProbIdx = opIdx;
+                    maxChangeAfterOpListLossHistory = currOpListLossHistory;
+                }
 //                std::cout<<"begin loss history"<<std::endl;
 //                for (auto const &item : opDequeLossHistory[opIdx])
 //                {
@@ -160,18 +161,18 @@ void OpTrack::pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
         // we don't want to avoid the minimum if
         foundOpModel = true;
         // opHistoryCounter is already done in init
-//        bool opModelChanged = false;
+        bool opModelChanged = false;
         if (maxProbIdx != -1 and maxProb > pValueThreshold)
-//        {
-//            agent.currOp = maxProbIdx;
-//            opModelChanged = true;
-//        }
-//        else if(maxChangeAfterProbIdx!=-1)
-//        {
-//            agent.currOp = maxChangeAfterProbIdx;
-//            opModelChanged = true;
-//        }
-//        if(opModelChanged)
+        {
+            opModelChanged = true;
+        }
+        else if(maxChangeAfterProbIdx!=-1)
+        {
+            maxProbIdx = maxChangeAfterProbIdx;
+            maxOpListLossHistory = maxChangeAfterOpListLossHistory;
+            opModelChanged = true;
+        }
+        if(opModelChanged)
         {
             // this should correspond to removing the random MLP that was created
             destroyRandomPettitt(agent); // TODO: check that the pop_backs of curr state history is ok
@@ -191,6 +192,8 @@ void OpTrack::pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
             }
             // replace the old MLP with the new copy that was trained on the current examples
             agent.opList[agent.currOp]=opCopies[maxProbIdx];
+            // update loss for the newly chosen agent
+            loss = agent.opList[agent.currOp].train(lastState,newState);
         }
 
 //        std::cout<<"begin: "<<std::endl;

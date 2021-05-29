@@ -20,8 +20,8 @@ class OpTrack
     bool firstTime = true;
     bool foundOpModel = false;
     size_t opHistoryCounter = 0;
-    size_t minHistorySize = 15;
-    size_t maxHistorySize = 15;
+    size_t minHistorySize = 10;
+    size_t maxHistorySize = 20;
 
   public:
     void normalOpTracking(Agent &agent, Eigen::VectorXf const &lastState, Eigen::VectorXf const &newState, float loss);
