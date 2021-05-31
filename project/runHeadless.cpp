@@ -18,6 +18,11 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     //    std::cout.setstate(std::ios_base::failbit);
     std::string files = "simpleOpponent.txt,opponentWithWalls.txt";
     size_t cMiniBatchSize = 16;
+    size_t numberOfEpisodes = 10000;   // ignore the parameter for now until proper framework is in place
+    float alpha = 0.001;
+    float epsilon = 0.1;
+    float gamma = 0.9;
+    OpModellingType opModellingType=OpModellingType::ONEFORALL;
     ExpReplayParams expReplayParams{ .cSwapPeriod = 1000, .miniBatchSize = cMiniBatchSize, .sizeExperience = 10000 };
     AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = 1, .nrRollouts = 5 };
     MLPParams agentMLP{ .sizes = { 52, 192, 4 },
@@ -38,7 +43,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     // could also use stack but meh, this way is more certain
     std::unique_ptr<Agent> agent =
         std::make_unique<QERQueueLearning>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams,
-                                           10000, OpModellingType::ONEFORALL);
+                                           numberOfEpisodes, OpModellingType::ONEFORALL,alpha,epsilon,gamma);
     SimContainer simContainer{ files, agent.get(), rewards, simStateParams };
     agent->run();
     std::ofstream out{ "results/rewardsDQER.txt" };

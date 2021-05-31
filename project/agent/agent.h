@@ -77,7 +77,7 @@ class Agent
   public:
     explicit Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
                    MLPParams opponentMLP, size_t _nrEpisodes,
-                   OpModellingType pOpModellingType = OpModellingType::ONEFORALL, float pGamma = 0.99);
+                   OpModellingType pOpModellingType, float pGamma);
     virtual ~Agent();
 
     void run();

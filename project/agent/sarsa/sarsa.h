@@ -15,9 +15,9 @@ class Sarsa : public Agent
 
   public:
     Sarsa(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
-          MLPParams opponentMLP, size_t _nrEpisodes = 10000,
-          OpModellingType pOpModellingType = OpModellingType::ONEFORALL, float _alpha = 0.001, float _epsilon = 0.1,
-          float _gamma = 0.9);
+          MLPParams opponentMLP, size_t _nrEpisodes,
+          OpModellingType pOpModellingType, float _alpha, float _epsilon,
+          float _gamma);
     ~Sarsa() override;
     bool performOneStep() override;
     size_t actionWithQ(Eigen::VectorXf const &qVals);

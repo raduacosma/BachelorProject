@@ -174,9 +174,13 @@ int main(int argc, char **argv)
     size_t simSpeed = 10;
     size_t speedCounter = 0;
 
-    // THESE ARE NOT THE RIGHT ONES, THESE ARE JUST SO THE GUI COMPILES UNTIL I REFACTOR THIS AGENT
+    // FIXME: THESE ARE NOT THE RIGHT ONES, THESE ARE JUST SO THE GUI COMPILES UNTIL I REFACTOR THIS AGENT
     // THE PURPOSE OF THE GUI NOW IS TO EVALUATE THE LEVELS NOT THE AGENT RIGHT NOW
     size_t cMiniBatchSize = 16;
+    size_t numberOfEpisodes = 10000;   // ignore the parameter for now until proper framework is in place
+    float alpha = 0.001;
+    float epsilon = 0.1;
+    float gamma = 0.9;
     ExpReplayParams expReplayParams{ .cSwapPeriod = 1000, .miniBatchSize = cMiniBatchSize, .sizeExperience = 10000 };
     AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = 1, .nrRollouts = 5 };
     MLPParams agentMLP{ .sizes = { 52, 192, 4 },
@@ -193,7 +197,7 @@ int main(int argc, char **argv)
     SimStateParams simStateParams{ .traceSize = 6, .visionGridSize = 2 };
     OpTrackParams kolsmirParams = { .pValueThreshold = 0.05, .minHistorySize = 10, .maxHistorySize = 10 };
     OpTrackParams pettittParams = { .pValueThreshold = 0.01, .minHistorySize = 10, .maxHistorySize = 20 };
-    std::unique_ptr<Agent> agent = std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP);
+    std::unique_ptr<Agent> agent = std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, numberOfEpisodes,OpModellingType::ONEFORALL,alpha,epsilon,gamma);
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -225,7 +229,7 @@ int main(int argc, char **argv)
             if (simContainer)
             {
                 simContainer = nullptr;
-                agent = std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP);
+                agent = std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, numberOfEpisodes,OpModellingType::ONEFORALL,alpha,epsilon,gamma);
             }
             drawStartMenu(uiStateTracker);
         }
