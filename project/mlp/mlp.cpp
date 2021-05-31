@@ -78,7 +78,7 @@ Eigen::VectorXf MLP::predict(Eigen::VectorXf const &input)
     throw std::runtime_error("Reached end of predict without returning");
 }
 float MLP::predictWithLoss(Eigen::VectorXf const &input, Eigen::VectorXf const &output)
-{   // TODO: check this function with MLP subproject
+{ // TODO: check this function with MLP subproject
     Eigen::VectorXf prediction = predict(input);
     float loss;
     if (outputActivationFunction == ActivationFunction::SOFTMAX)
@@ -90,7 +90,6 @@ float MLP::predictWithLoss(Eigen::VectorXf const &input, Eigen::VectorXf const &
         loss = (prediction - output).array().square().mean();
     }
     return loss;
-
 }
 float MLP::sigmoid(float x)
 {

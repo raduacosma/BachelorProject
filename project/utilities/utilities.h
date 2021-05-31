@@ -3,7 +3,7 @@
 
 #include <cstddef>
 #include <ostream>
-
+#include <vector>
 // TODO: when removing enum, make sure that agent and opponent view are there
 // and remove agent_trace
 enum class SimObject
@@ -21,6 +21,49 @@ enum class SimResult
     CONTINUE,
     REACHED_GOAL,
     KILLED_BY_OPPONENT
+};
+enum class ActivationFunction
+{
+    LINEAR,
+    SIGMOID,
+    SOFTMAX
+};
+struct ExpReplayParams
+{
+    size_t cSwapPeriod;
+    size_t miniBatchSize;
+    size_t sizeExperience;
+};
+
+struct AgentMonteCarloParams
+{
+    size_t maxNrSteps;
+    size_t nrRollouts;
+};
+struct MLPParams
+{
+    std::vector<size_t> sizes;
+    float learningRate;
+    ActivationFunction outputActivationFunc;
+    size_t miniBatchSize;
+};
+struct Rewards
+{
+    float normalReward;
+    float killedByOpponentReward;
+    float outOfBoundsReward;
+    float reachedGoalReward;
+};
+struct SimStateParams
+{
+    size_t traceSize;
+    size_t visionGridSize;
+};
+struct OpTrackParams
+{
+    double pValueThreshold;
+    size_t minHistorySize;
+    size_t maxHistorySize;
 };
 
 struct Position

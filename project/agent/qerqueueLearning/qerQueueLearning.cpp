@@ -1,9 +1,15 @@
 #include "qerQueueLearning.h"
 #include <iostream>
+#include <utility>
 
-QERQueueLearning::QERQueueLearning(size_t _nrEpisodes, OpModellingType pOpModellingType, float _alpha, float _epsilon,
+QERQueueLearning::QERQueueLearning(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams,
+                                   MLPParams agentMLP, MLPParams opponentMLP, ExpReplayParams expReplayParams,
+                                   size_t _nrEpisodes, OpModellingType pOpModellingType, float _alpha, float _epsilon,
                                    float _gamma)
-    : Agent(_nrEpisodes, pOpModellingType, _gamma), alpha(_alpha), epsilon(_epsilon), targetMLP(mlp)
+    : Agent(opTrackParams, agentMonteCarloParams, std::move(agentMLP), std::move(opponentMLP), _nrEpisodes,
+            pOpModellingType, _gamma),
+      alpha(_alpha), epsilon(_epsilon), targetMLP(mlp), cSwapPeriod(expReplayParams.cSwapPeriod),
+      miniBatchSize(expReplayParams.miniBatchSize), sizeExperience(expReplayParams.sizeExperience)
 {
 }
 void QERQueueLearning::newEpisode()

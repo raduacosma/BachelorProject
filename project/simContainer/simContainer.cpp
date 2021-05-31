@@ -4,14 +4,15 @@
 #include <sstream>
 #include <tuple>
 using namespace std;
-SimContainer::SimContainer(std::string const &filename, Agent *agentParam)
+SimContainer::SimContainer(std::string const &filename, Agent *agentParam, Rewards rewards,
+                           SimStateParams simStateParams)
     : agent(agentParam), currSimState(0), episodeCount(0), lastReward(0)
 {
     string file;
     istringstream in(filename);
     while (getline(in, file, ','))
     {
-        simStates.emplace_back(file);
+        simStates.emplace_back(file, rewards, simStateParams);
     }
     agent->setMaze(this);
 }

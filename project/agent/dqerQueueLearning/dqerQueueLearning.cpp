@@ -1,9 +1,15 @@
 #include "dqerQueueLearning.h"
 #include <iostream>
+#include <utility>
 
-DQERQueueLearning::DQERQueueLearning(size_t _nrEpisodes, OpModellingType pOpModellingType, float _alpha, float _epsilon,
+DQERQueueLearning::DQERQueueLearning(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams,
+                                     MLPParams agentMLP, MLPParams opponentMLP, ExpReplayParams expReplayParams,
+                                     size_t _nrEpisodes, OpModellingType pOpModellingType, float _alpha, float _epsilon,
                                      float _gamma)
-    : Agent(_nrEpisodes, pOpModellingType, _gamma), alpha(_alpha), epsilon(_epsilon), targetMLP(mlp)
+    : Agent(opTrackParams, agentMonteCarloParams, std::move(agentMLP), std::move(opponentMLP), _nrEpisodes,
+            pOpModellingType, _gamma),
+      alpha(_alpha), epsilon(_epsilon), targetMLP(mlp), cSwapPeriod(expReplayParams.cSwapPeriod),
+      miniBatchSize(expReplayParams.miniBatchSize), sizeExperience(expReplayParams.sizeExperience)
 {
 }
 void DQERQueueLearning::newEpisode()

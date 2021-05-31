@@ -2,14 +2,9 @@
 #define _INCLUDED_MLP
 
 #include "../../Eigen/Core"
+#include "../utilities/utilities.h"
 #include <cstddef>
 #include <vector>
-enum class ActivationFunction
-{
-    LINEAR,
-    SIGMOID,
-    SOFTMAX
-};
 
 enum class MLPUpdateType
 {
@@ -41,7 +36,7 @@ class MLP
 
   public:
     MLP(std::vector<size_t> _sizes, float _learningRate, ActivationFunction _outputActivationFunc,
-        size_t pMiniBatchSize = 16);
+        size_t pMiniBatchSize);
     float train(Eigen::VectorXf const &input, Eigen::VectorXf const &output,
                 MLPUpdateType updateType = MLPUpdateType::NORMAL);
     Eigen::VectorXf predict(Eigen::VectorXf const &input);

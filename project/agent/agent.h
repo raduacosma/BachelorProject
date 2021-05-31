@@ -5,16 +5,17 @@
 
 #include "../../../Eigen/Core"
 #include "../createRngObj/createRngObj.h"
+#include "../kolsmir/kolsmir.h"
 #include "../mlp/mlp.h"
 #include "../monteCarloSim/monteCarloSim.h"
+#include "../opTrack/opTrack.h"
+#include "../pettitt/pettitt.h"
 #include "../simContainer/simContainer.h"
 #include "../simState/actions.h"
+#include "../utilities/utilities.h"
+#include "experience.h"
 #include <cmath>
 #include <vector>
-#include "experience.h"
-#include "../kolsmir/kolsmir.h"
-#include "../pettitt/pettitt.h"
-#include "../opTrack/opTrack.h"
 
 enum class AgentType
 {
@@ -35,11 +36,10 @@ enum class OpModellingType
 class Agent
 {
     friend class OpTrack;
+
   protected:
     OpTrack opTrack;
     size_t const NR_ACTIONS = 4; // Hardcoded number of actions
-    size_t d_killedByAshTime = 500;
-    float Q_0 = 0;
     float runReward;
     size_t simTime = 0;
     SimContainer *maze; // The maze the agent is navigating
@@ -59,36 +59,25 @@ class Agent
     size_t correctOpCurrentEpisode;
     size_t totalPredOpCurrentEpisode;
 
-  public:
-    float getCorrectOpponentTypePredictionPercentage() const;
-  protected:
     MLP mlp;
     std::vector<MLP> opList;
     size_t currOp;
-
 
     bool isNewLevel = false;
 
     OpModellingType opModellingType;
     float gamma;
-    size_t maxNrSteps = 1;
-    size_t nrRollouts = 5;
+    size_t maxNrSteps;
+    size_t nrRollouts;
     std::vector<float> gammaVals;
+    MLPParams opMLPParams;
 
     void opPredict(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf const &, Eigen::VectorXf const &, float));
 
   public:
-    std::vector<float> const &getThisEpisodeLoss() const;
-
-  public:
-    std::vector<float> const &getOpponentCorrectPredictionPercentage() const;
-
-  public:
-    std::vector<float> const &getOpponentPredictionLosses() const;
-
-  public:
-    explicit Agent(size_t _nrEpisodes, OpModellingType pOpModellingType = OpModellingType::ONEFORALL,
-                   float pGamma = 0.99);
+    explicit Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
+                   MLPParams opponentMLP, size_t _nrEpisodes,
+                   OpModellingType pOpModellingType = OpModellingType::ONEFORALL, float pGamma = 0.99);
     virtual ~Agent();
 
     void run();
@@ -105,7 +94,10 @@ class Agent
     void handleOpponentAction();
     float MonteCarloRollout(size_t action);
     Eigen::VectorXf MonteCarloAllActions();
-
+    std::vector<float> const &getThisEpisodeLoss() const;
+    float getCorrectOpponentTypePredictionPercentage() const;
+    std::vector<float> const &getOpponentCorrectPredictionPercentage() const;
+    std::vector<float> const &getOpponentPredictionLosses() const;
 };
 
 #endif

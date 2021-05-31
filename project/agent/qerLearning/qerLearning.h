@@ -17,16 +17,19 @@ class QERLearning : public Agent
     size_t expResetPeriod = 100000;
     bool shouldGatherExperience = true;
     size_t cCounter = 0;
-    size_t cSwapPeriod = 1000;
-    size_t miniBatchSize = 16;
-    size_t sizeExperience = 10000;
+
     size_t lastAction;
     MLP targetMLP;
+    size_t cSwapPeriod;
+    size_t miniBatchSize;
+    size_t sizeExperience;
     std::vector<Experience> experiences;
 
   public:
-    QERLearning(size_t _nrEpisodes = 10000, OpModellingType pOpModellingType = OpModellingType::ONEFORALL,
-                float _alpha = 0.001, float _epsilon = 0.1, float _gamma = 0.9);
+    QERLearning(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
+                MLPParams opponentMLP, ExpReplayParams expReplayParams, size_t _nrEpisodes = 10000,
+                OpModellingType pOpModellingType = OpModellingType::ONEFORALL, float _alpha = 0.001,
+                float _epsilon = 0.1, float _gamma = 0.9);
     ~QERLearning() override;
     bool performOneStep() override;
     size_t actionWithQ(Eigen::VectorXf const &qVals);

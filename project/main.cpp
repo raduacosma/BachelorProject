@@ -173,7 +173,27 @@ int main(int argc, char **argv)
     std::unique_ptr<SimContainer> simContainer = nullptr;
     size_t simSpeed = 10;
     size_t speedCounter = 0;
-    std::unique_ptr<Agent> agent = std::make_unique<Sarsa>();
+
+    // THESE ARE NOT THE RIGHT ONES, THESE ARE JUST SO THE GUI COMPILES UNTIL I REFACTOR THIS AGENT
+    // THE PURPOSE OF THE GUI NOW IS TO EVALUATE THE LEVELS NOT THE AGENT RIGHT NOW
+    size_t cMiniBatchSize = 16;
+    ExpReplayParams expReplayParams{ .cSwapPeriod = 1000, .miniBatchSize = cMiniBatchSize, .sizeExperience = 10000 };
+    AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = 1, .nrRollouts = 5 };
+    MLPParams agentMLP{ .sizes = { 52, 192, 4 },
+                        .learningRate = 0.001,
+                        .outputActivationFunc = ActivationFunction::LINEAR,
+                        .miniBatchSize = cMiniBatchSize };
+    MLPParams opponentMLP{ .sizes = { 50, 100, 4 },
+                           .learningRate = 0.001,
+                           .outputActivationFunc = ActivationFunction::SOFTMAX,
+                           .miniBatchSize = cMiniBatchSize };
+    Rewards rewards = {
+        .normalReward = -0.1, .killedByOpponentReward = -100, .outOfBoundsReward = -0.1, .reachedGoalReward = 100
+    };
+    SimStateParams simStateParams{ .traceSize = 6, .visionGridSize = 2 };
+    OpTrackParams kolsmirParams = { .pValueThreshold = 0.05, .minHistorySize = 10, .maxHistorySize = 10 };
+    OpTrackParams pettittParams = { .pValueThreshold = 0.01, .minHistorySize = 10, .maxHistorySize = 20 };
+    std::unique_ptr<Agent> agent = std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP);
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -205,7 +225,7 @@ int main(int argc, char **argv)
             if (simContainer)
             {
                 simContainer = nullptr;
-                agent = std::make_unique<Sarsa>();
+                agent = std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP);
             }
             drawStartMenu(uiStateTracker);
         }
@@ -226,7 +246,8 @@ int main(int argc, char **argv)
 
             if (not simContainer)
             {
-                simContainer = std::make_unique<SimContainer>(uiStateTracker.nextFilename, agent.get());
+                simContainer =
+                    std::make_unique<SimContainer>(uiStateTracker.nextFilename, agent.get(), rewards, simStateParams);
                 agent->newEpisode();
             }
             if (speedCounter >= 60)

@@ -1,15 +1,20 @@
 #include "agent.h"
 #include "../simContainer/simContainer.h"
-#include "tuple"
 #include <iostream>
 #include <random>
+#include <tuple>
 // TODO: check out monte carlo estimates for target Q-values
 using namespace std;
-Agent::Agent(size_t _nrEpisodes, OpModellingType pOpModellingType, float pGamma) // TODO: check how size is passed
-    : nrEpisodes(_nrEpisodes), rewards(vector<float>(_nrEpisodes)), hasDied(vector<size_t>(_nrEpisodes)),
-      mlp({ 52, 192, 4 }, 0.001, ActivationFunction::LINEAR), opList{ MLP({ 50, 100, 4 }, 0.001,
-                                                                          ActivationFunction::SOFTMAX) },
-      currOp(0), opModellingType(pOpModellingType), gamma(pGamma)
+Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
+             MLPParams opponentMLP, size_t _nrEpisodes, OpModellingType pOpModellingType,
+             float pGamma) // TODO: check how size is passed
+    : opTrack(opTrackParams.pValueThreshold, opTrackParams.minHistorySize, opTrackParams.maxHistorySize),
+      nrEpisodes(_nrEpisodes), rewards(vector<float>(_nrEpisodes)), hasDied(vector<size_t>(_nrEpisodes)),
+      mlp(agentMLP.sizes, agentMLP.learningRate, agentMLP.outputActivationFunc, agentMLP.miniBatchSize),
+      opList{ MLP(opponentMLP.sizes, opponentMLP.learningRate, opponentMLP.outputActivationFunc,
+                  opponentMLP.miniBatchSize) },
+      currOp(0), opModellingType(pOpModellingType), gamma(pGamma), maxNrSteps(agentMonteCarloParams.maxNrSteps),
+      nrRollouts(agentMonteCarloParams.nrRollouts), opMLPParams(opponentMLP)
 {
     gammaVals.push_back(1); // in order to save some i-1s in monte carlo
     float tmpGamma = gamma;
@@ -108,9 +113,6 @@ void Agent::handleOpponentAction()
     }
 }
 
-
-
-
 void Agent::opPredict(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf const &, Eigen::VectorXf const &, float))
 { // TODO: check that level switching works properly
     Eigen::VectorXf newOpponentState = maze->getStateForOpponent();
@@ -178,7 +180,8 @@ float Agent::MonteCarloRollout(size_t action)
                 }
             }
         }
-        else if (canContinue == SimResult::CONTINUE and maxNrSteps == 0)  // 1 or 0 here? since maxNrSteps corresponds to the while
+        else if (canContinue == SimResult::CONTINUE and
+                 maxNrSteps == 0) // 1 or 0 here? since maxNrSteps corresponds to the while
         {
             rolloutReward += mlp.predict(copyMaze.getStateForAgent()).maxCoeff();
         }
@@ -236,5 +239,5 @@ size_t Agent::actionWithQ(Eigen::VectorXf const &qVals)
 }
 float Agent::getCorrectOpponentTypePredictionPercentage() const
 {
-    return static_cast<float>(correctOpCurrentEpisode)/totalPredOpCurrentEpisode;
+    return static_cast<float>(correctOpCurrentEpisode) / totalPredOpCurrentEpisode;
 }

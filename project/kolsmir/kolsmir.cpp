@@ -42,7 +42,7 @@ double KolSmir::probability(double z)
     return p;
 }
 
-std::tuple<double,double> KolSmir::test(int na, double const *a, int nb, double const *b)
+std::tuple<double, double> KolSmir::test(int na, double const *a, int nb, double const *b)
 {
     //  LM: Nov 2010: clean up and returns now a zero distance when vectors are the same
 
@@ -51,7 +51,7 @@ std::tuple<double,double> KolSmir::test(int na, double const *a, int nb, double 
     if (!a || !b || na <= 2 || nb <= 2)
     {
         std::cout << "Kolsmir test arrays too small" << '\n';
-        return std::make_tuple(prob,-1);
+        return std::make_tuple(prob, -1);
     }
     //     Constants needed
     double rna = na;
@@ -124,5 +124,5 @@ std::tuple<double,double> KolSmir::test(int na, double const *a, int nb, double 
         double z = rdmax * std::sqrt(rna * rnb / (rna + rnb));
         prob = probability(z);
     }
-    return std::make_tuple(prob,rdmax);
+    return std::make_tuple(prob, rdmax);
 }

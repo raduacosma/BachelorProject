@@ -2,10 +2,10 @@
 #define _INCLUDED_OPTRACK
 
 class Agent;
-#include <vector>
 #include "../agent/experience.h"
 #include "../mlp/mlp.h"
 #include <deque>
+#include <vector>
 
 class OpTrack
 {
@@ -24,6 +24,7 @@ class OpTrack
     size_t maxHistorySize = 20;
 
   public:
+    OpTrack(double pPValueThreshold, size_t pMinHistorySize, size_t pMaxHistorySize);
     void normalOpTracking(Agent &agent, Eigen::VectorXf const &lastState, Eigen::VectorXf const &newState, float loss);
     void kolsmirOpTracking(Agent &agent, Eigen::VectorXf const &lastState, Eigen::VectorXf const &newState, float loss);
     void pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, Eigen::VectorXf const &newState, float loss);

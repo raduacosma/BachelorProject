@@ -8,8 +8,11 @@
 
 using namespace std;
 
-SimState::SimState(std::string const &filename)
-    : d_outOfBoundsReward(-0.1), d_reachedGoalReward(100), d_killedByOpponentReward(-100), d_normalReward(-0.1)
+SimState::SimState(std::string const &filename, Rewards rewards, SimStateParams simStateParams)
+    : traceSize(simStateParams.traceSize), visionGridSize(simStateParams.visionGridSize),
+      visionGridSideSize(visionGridSize * 2 + 1), agentStateSize(visionGridSideSize * visionGridSideSize),
+      d_outOfBoundsReward(rewards.outOfBoundsReward), d_reachedGoalReward(rewards.reachedGoalReward),
+      d_killedByOpponentReward(rewards.killedByOpponentReward), d_normalReward(rewards.normalReward)
 {
     ifstream in{ filename };
     if (not in)
@@ -178,9 +181,9 @@ Eigen::VectorXf SimState::getStateForOpponent() const
 }
 void SimState::resetAgentPos()
 {
-    std::uniform_int_distribution<> distr{-2,2};
+    std::uniform_int_distribution<> distr{ -2, 2 };
     auto &rngEngine = globalRng.getRngEngine();
-    agentPos = {initialAgentPos.x + distr(rngEngine),initialAgentPos.y+distr(rngEngine)};
+    agentPos = { initialAgentPos.x + distr(rngEngine), initialAgentPos.y + distr(rngEngine) };
 }
 
 void SimState::resetForNextEpisode()

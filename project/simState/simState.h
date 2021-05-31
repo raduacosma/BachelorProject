@@ -15,19 +15,6 @@ class SimState
 {
     friend class MonteCarloSim;
 
-  public:
-    SimState() = default;
-    SimState(std::string const &filename);
-    void generateStateRepresentation();
-    std::vector<std::vector<ImVec4>> const &getFullMazeRepr();
-    void updateCanvasStepSize(ImVec2 stepSize);
-    void updateCanvasBegPos(ImVec2 pos);
-    void updateCanvasEndPos(ImVec2 pos);
-    size_t getWidth() const;
-    size_t getHeight() const;
-
-    Eigen::VectorXf getStateForOpponent() const;
-
   private:
     std::vector<std::vector<ImVec4>> stateRepresentation;
     ImVec2 canvasStepSize;
@@ -36,19 +23,15 @@ class SimState
 
     Position simSize;
 
-  public:
-    Position const &getSimSize() const;
-
-  private:
     Position agentPos;
     Position initialAgentPos;
     Position goalPos;
     size_t currOpPosIdx;
     Actions lastOpponentAction;
-    size_t traceSize = 6;
-    size_t visionGridSize = 2;     // TODO: change these in the constructor
-    size_t visionGridSideSize = 5; // visionGridSize*2+1
-    size_t agentStateSize = 25;    // visionGridSizeSize^2
+    size_t traceSize;
+    size_t visionGridSize;     // TODO: change these in the constructor
+    size_t visionGridSideSize; // visionGridSize*2+1
+    size_t agentStateSize;     // visionGridSizeSize^2
 
     std::vector<Position> opponentTrace;
     std::vector<Position> walls;
@@ -58,6 +41,18 @@ class SimState
     float d_reachedGoalReward;
     float d_killedByOpponentReward;
     float d_normalReward;
+
+  public:
+    SimState(std::string const &filename, Rewards rewards, SimStateParams simStateParams);
+    void generateStateRepresentation();
+    std::vector<std::vector<ImVec4>> const &getFullMazeRepr();
+    void updateCanvasStepSize(ImVec2 stepSize);
+    void updateCanvasBegPos(ImVec2 pos);
+    void updateCanvasEndPos(ImVec2 pos);
+    size_t getWidth() const;
+    size_t getHeight() const;
+    Position const &getSimSize() const;
+    Eigen::VectorXf getStateForOpponent() const;
 
   public:
     void resetForNextEpisode();
