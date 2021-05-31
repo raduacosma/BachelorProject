@@ -142,7 +142,7 @@ float Agent::MonteCarloRollout(size_t action)
     for (size_t mIdx = 0; mIdx != nrRollouts; ++mIdx)
     {
         float rolloutReward = 0;
-        size_t i = 1;
+        size_t i = 0;
         MonteCarloSim copyMaze(maze->getCurrentLevel());
         Eigen::VectorXf opProbs = opList[currOp].predict(copyMaze.getStateForOpponent());
         std::discrete_distribution<> distr({ opProbs[0], opProbs[1], opProbs[2], opProbs[3] });
@@ -151,8 +151,8 @@ float Agent::MonteCarloRollout(size_t action)
         // always call updateOpPos before computeNextState and getting the state
         auto [reward, canContinue] =
             copyMaze.computeNextStateAndReward(static_cast<Actions>(action), static_cast<Actions>(opAction));
-        rolloutReward += gamma * reward;
-        if (canContinue != SimResult::KILLED_BY_OPPONENT and canContinue != SimResult::REACHED_GOAL and maxNrSteps > 1)
+        rolloutReward += reward;
+        if (canContinue != SimResult::KILLED_BY_OPPONENT and canContinue != SimResult::REACHED_GOAL and maxNrSteps > 0)
         {
             while (true)
             {
@@ -178,9 +178,9 @@ float Agent::MonteCarloRollout(size_t action)
                 }
             }
         }
-        else if (canContinue == SimResult::CONTINUE and maxNrSteps == 1)
+        else if (canContinue == SimResult::CONTINUE and maxNrSteps == 0)  // 1 or 0 here? since maxNrSteps corresponds to the while
         {
-            rolloutReward += gamma * mlp.predict(copyMaze.getStateForAgent()).maxCoeff();
+            rolloutReward += mlp.predict(copyMaze.getStateForAgent()).maxCoeff();
         }
         totalReward += rolloutReward;
     }

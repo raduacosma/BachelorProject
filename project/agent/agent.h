@@ -71,7 +71,7 @@ class Agent
 
     OpModellingType opModellingType;
     float gamma;
-    size_t maxNrSteps = 2;
+    size_t maxNrSteps = 1;
     size_t nrRollouts = 5;
     std::vector<float> gammaVals;
 
