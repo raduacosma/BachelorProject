@@ -178,7 +178,9 @@ Eigen::VectorXf SimState::getStateForOpponent() const
 }
 void SimState::resetAgentPos()
 {
-    agentPos = initialAgentPos;
+    std::uniform_int_distribution<> distr{-2,2};
+    auto &rngEngine = globalRng.getRngEngine();
+    agentPos = {initialAgentPos.x + distr(rngEngine),initialAgentPos.y+distr(rngEngine)};
 }
 
 void SimState::resetForNextEpisode()
