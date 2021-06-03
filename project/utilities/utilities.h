@@ -58,6 +58,7 @@ struct SimStateParams
 {
     size_t traceSize;
     size_t visionGridSize;
+    float randomOpCoef;
 };
 struct OpTrackParams
 {

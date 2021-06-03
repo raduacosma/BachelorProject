@@ -10,7 +10,7 @@ using namespace std;
 
 SimState::SimState(std::string const &filename, Rewards rewards, SimStateParams simStateParams)
     : traceSize(simStateParams.traceSize), visionGridSize(simStateParams.visionGridSize),
-      visionGridSideSize(visionGridSize * 2 + 1), agentStateSize(visionGridSideSize * visionGridSideSize),
+      visionGridSideSize(visionGridSize * 2 + 1), agentStateSize(visionGridSideSize * visionGridSideSize),randomOpCoef(simStateParams.randomOpCoef),
       d_outOfBoundsReward(rewards.outOfBoundsReward), d_reachedGoalReward(rewards.reachedGoalReward),
       d_killedByOpponentReward(rewards.killedByOpponentReward), d_normalReward(rewards.normalReward)
 {
@@ -55,7 +55,23 @@ SimState::SimState(std::string const &filename, Rewards rewards, SimStateParams 
     resetForNextEpisode();
 
 }
-
+Position SimState::computeNewPos(Actions currAction, Position pos)
+{
+    // TODO: decide if x and y start from lower or higher should be fine now
+    switch (currAction)
+    {
+        case Actions::UP:
+            return { pos.x, pos.y - 1 };
+        case Actions::DOWN:
+            return { pos.x, pos.y + 1 };
+        case Actions::LEFT:
+            return { pos.x - 1, pos.y };
+        case Actions::RIGHT:
+            return { pos.x + 1, pos.y };
+    }
+    // should throw something but meh
+    return { pos.x, pos.y };
+}
 Position SimState::computeNewAgentPos(Actions agentAction)
 {
     // TODO: decide if x and y start from lower or higher
@@ -85,27 +101,87 @@ tuple<float, SimResult> SimState::computeNextStateAndReward(Actions action)
 void SimState::updateOpponentPos()
 {
     Position lastOpponentPos = currOpTrace.back();
-    ++currOpPosIdx;
-    if (currOpPosIdx == opponentTrace.size())
+    Position newOpponentPos;
+    if(randomFluctuations.empty())
     {
-        currOpPosIdx = 0;
-    }
-    if(currOpTrace.size()>traceSize)
-        currOpTrace.pop_front();
-    Position newOpponentPos = opponentTrace[currOpPosIdx];
-    currOpTrace.push_back(newOpponentPos);
-    int xDiff = static_cast<int>(newOpponentPos.x - lastOpponentPos.x);
-    int yDiff = static_cast<int>(newOpponentPos.y - lastOpponentPos.y);
-    if (xDiff < 0)
-        lastOpponentAction = Actions::LEFT;
-    else if (xDiff > 0)
-        lastOpponentAction = Actions::RIGHT;
-    else if (yDiff < 0)
-        lastOpponentAction = Actions::UP;
-    else if (yDiff > 0)
-        lastOpponentAction = Actions::DOWN;
-}
+        ++currOpPosIdx;
+        if (currOpPosIdx == opponentTrace.size())
+        {
+            currOpPosIdx = 0;
+        }
+        newOpponentPos = opponentTrace[currOpPosIdx];
 
+        if(globalRng.getUniReal01() < randomOpCoef)
+        {
+            createRandomFluctuations(newOpponentPos);
+        }
+    }
+    else
+    {
+        newOpponentPos=randomFluctuations.front();
+        randomFluctuations.pop_front();
+    }
+    if (currOpTrace.size() > traceSize)
+        currOpTrace.pop_front();
+    currOpTrace.push_back(newOpponentPos);
+    lastOpponentAction=computeDirection(newOpponentPos,lastOpponentPos);
+}
+Actions SimState::computeDirection(Position const &newPos,Position const &lastPos)
+{
+    int xDiff = static_cast<int>(newPos.x - lastPos.x);
+    int yDiff = static_cast<int>(newPos.y - lastPos.y);
+    if (xDiff < 0)
+        return Actions::LEFT;
+    else if (xDiff > 0)
+        return Actions::RIGHT;
+    else if (yDiff < 0)
+        return Actions::UP;
+    else if (yDiff > 0)
+        return Actions::DOWN;
+    // this should never be reached, should throw something but meh
+    return Actions::DOWN;
+}
+void SimState::createRandomFluctuations(Position const &newPos)
+{
+    size_t opIdxCopy = currOpPosIdx;
+    ++opIdxCopy;
+    if (opIdxCopy == opponentTrace.size())
+    {
+        opIdxCopy = 0;
+    }
+    auto updateFluctuationsWithDirections=[&](Actions first, Actions second) -> bool
+    {
+        Position afterFirst = computeNewPos(first,newPos);
+        Position afterSecond = computeNewPos(second, afterFirst);
+        if(checkPositionForOpponent(afterFirst) and checkPositionForOpponent(afterSecond))
+        {
+            randomFluctuations.push_back(afterFirst);
+            randomFluctuations.push_back(afterSecond);
+            return true;
+        }
+        return false;
+    };
+    Actions direction = computeDirection(opponentTrace[opIdxCopy],newPos);
+    switch (direction)
+    {
+        case Actions::LEFT:
+            if(not updateFluctuationsWithDirections(Actions::DOWN,Actions::LEFT))
+                updateFluctuationsWithDirections(Actions::UP,Actions::LEFT);
+            break;
+        case Actions::RIGHT:
+            if(not updateFluctuationsWithDirections(Actions::DOWN,Actions::RIGHT))
+                updateFluctuationsWithDirections(Actions::UP,Actions::RIGHT);
+            break;
+        case Actions::UP:
+            if(not updateFluctuationsWithDirections(Actions::LEFT,Actions::UP))
+                updateFluctuationsWithDirections(Actions::RIGHT,Actions::UP);
+            break;
+        case Actions::DOWN:
+            if(not updateFluctuationsWithDirections(Actions::LEFT,Actions::DOWN))
+                updateFluctuationsWithDirections(Actions::RIGHT,Actions::DOWN);
+            break;
+    }
+}
 float SimState::killedByOpponentReward()
 {
     return d_killedByOpponentReward;
@@ -165,7 +241,7 @@ Eigen::VectorXf SimState::getStateForOpponent() const
 }
 void SimState::resetAgentPos()
 {
-    std::uniform_int_distribution<> distr{ -2, 2 };
+    std::uniform_int_distribution<> distr{ -2, 2 };  // hardcoded but no need for tweaks
     auto &rngEngine = globalRng.getRngEngine();
     agentPos = { initialAgentPos.x + distr(rngEngine), initialAgentPos.y + distr(rngEngine) };
 }
@@ -177,6 +253,7 @@ void SimState::resetForNextEpisode()
     size_t opLength = traceSize + 1; // replace with trace size
     // be careful, we can't do the >-1 check due to size_t and this should
     // stop after 0 but if something is wrong good to check this
+    randomFluctuations.resize(0);
     currOpTrace.resize(0);
     for (size_t idx = currOpPosIdx + 1; idx-- > 0 and opLength;)
     {
@@ -191,7 +268,39 @@ void SimState::resetForNextEpisode()
     // reset the state but needs to feed back in the cycle I guess
     resetAgentPos();
 }
-
+bool SimState::checkPositionForOpponent(Position const &futurePos)
+{
+    //    float reward = abs(static_cast<int>(agentPos.x - goalPos.x))+abs(static_cast<int>(agentPos.y - goalPos.y));
+    // TODO: the check below 0 is useless since these are size_ts, but since it will overflow it's probably fine
+    // just keep it in mind
+    if (futurePos.x < 0 or futurePos.x >= simSize.x or futurePos.y < 0 or futurePos.y >= simSize.y)
+    {
+        return false;
+    }
+    if (futurePos == goalPos)
+    {
+        return false;
+    }
+    for (auto const &wall : walls)
+    {
+        if (futurePos == wall)
+        {
+            return false;
+        }
+    }
+    // TODO: if ever opponent paths overlap, this and other things like it will need to be modified
+    for (auto const &tracePos : opponentTrace)
+    {
+        if (futurePos == tracePos)
+            return false;
+    }
+    for (auto const &tracePos : currOpTrace)
+    {
+        if (futurePos == tracePos)
+            return false;
+    }
+    return true;
+}
 pair<float, SimResult> SimState::updateAgentPos(Actions action)
 {
     auto futurePos = computeNewAgentPos(action);
@@ -303,3 +412,4 @@ Position const &SimState::getSimSize() const
 {
     return simSize;
 }
+

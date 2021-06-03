@@ -37,6 +37,8 @@ class SimState
     std::vector<Position> opponentTrace;
     std::vector<Position> walls;
     std::deque<Position> currOpTrace;
+    std::deque<Position> randomFluctuations;
+    float randomOpCoef;
 
     // REWARDS TODO: decide on these
     float d_outOfBoundsReward;
@@ -69,6 +71,10 @@ class SimState
     Position computeNewAgentPos(Actions action);
     void resetAgentPos();
     void updateOpponentPos();
+    void createRandomFluctuations(Position const &newPos);
+    static Actions computeDirection(Position const &newPos,Position const &lastPos);
+    Position computeNewPos(Actions currAction, Position pos);
+    bool checkPositionForOpponent(Position const &testPos);
 };
 
 inline size_t SimState::getWidth() const
@@ -83,5 +89,6 @@ inline size_t SimState::getLastOpponentAction()
 {
     return static_cast<size_t>(lastOpponentAction);
 }
+
 
 #endif

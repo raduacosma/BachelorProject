@@ -36,14 +36,14 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     Rewards rewards = {
         .normalReward = -0.1, .killedByOpponentReward = -100, .outOfBoundsReward = -0.1, .reachedGoalReward = 100
     };
-    SimStateParams simStateParams{ .traceSize = 6, .visionGridSize = 2 };
+    SimStateParams simStateParams{ .traceSize = 6, .visionGridSize = 2, .randomOpCoef=0.5 };
     OpTrackParams kolsmirParams = { .pValueThreshold = 0.05, .minHistorySize = 10, .maxHistorySize = 10 };
     OpTrackParams pettittParams = { .pValueThreshold = 0.01, .minHistorySize = 10, .maxHistorySize = 20 };
 
     // could also use stack but meh, this way is more certain
     std::unique_ptr<Agent> agent =
         std::make_unique<QERQueueLearning>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams,
-                                           numberOfEpisodes, OpModellingType::ONEFORALL,alpha,epsilon,gamma);
+                                           numberOfEpisodes, OpModellingType::KOLSMIR,alpha,epsilon,gamma);
     SimContainer simContainer{ files, agent.get(), rewards, simStateParams };
     agent->run();
     std::ofstream out{ "results/rewardsDQER.txt" };
