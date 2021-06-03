@@ -4,6 +4,7 @@
 #include "../../Eigen/Core"
 #include "../utilities/utilities.h"
 #include "imgui.h"
+#include <deque>
 #include <string>
 #include <vector>
 
@@ -35,6 +36,7 @@ class SimState
 
     std::vector<Position> opponentTrace;
     std::vector<Position> walls;
+    std::deque<Position> currOpTrace;
 
     // REWARDS TODO: decide on these
     float d_outOfBoundsReward;

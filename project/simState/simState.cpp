@@ -53,6 +53,7 @@ SimState::SimState(std::string const &filename, Rewards rewards, SimStateParams 
 
     //    sendNrStatesToAgent();
     resetForNextEpisode();
+
 }
 
 Position SimState::computeNewAgentPos(Actions agentAction)
@@ -83,13 +84,16 @@ tuple<float, SimResult> SimState::computeNextStateAndReward(Actions action)
 }
 void SimState::updateOpponentPos()
 {
-    Position lastOpponentPos = opponentTrace[currOpPosIdx];
+    Position lastOpponentPos = currOpTrace.back();  // this is no longer the last pos
     ++currOpPosIdx;
     if (currOpPosIdx == opponentTrace.size())
     {
         currOpPosIdx = 0;
     }
+    if(currOpTrace.size()>traceSize)
+        currOpTrace.pop_front();
     Position newOpponentPos = opponentTrace[currOpPosIdx];
+    currOpTrace.push_back(newOpponentPos);
     int xDiff = static_cast<int>(newOpponentPos.x - lastOpponentPos.x);
     int yDiff = static_cast<int>(newOpponentPos.y - lastOpponentPos.y);
     if (xDiff < 0)
@@ -125,20 +129,10 @@ Eigen::VectorXf SimState::getStateForAgent() const
     {
         applyToArray(wall, 0);
     }
-    applyToArray(opponentTrace[currOpPosIdx], agentStateSize);
-    size_t opLength = traceSize; // replace with trace size
-    // be careful, we can't do the >-1 check due to size_t and this should
-    // stop after 0 but if something is wrong good to check this
 
-    for (size_t idx = currOpPosIdx; idx-- > 0 and opLength;)
+    for (auto const &opPos : currOpTrace)
     {
-        applyToArray(opponentTrace[idx], agentStateSize);
-        --opLength;
-    }
-    for (size_t idx = opponentTrace.size(); idx-- > 0 and opLength;)
-    {
-        applyToArray(opponentTrace[idx], agentStateSize);
-        --opLength;
+        applyToArray(opPos, agentStateSize);
     }
     //    applyToArray(goalPos,agentStateSize*2);
     agentGrid[offsetForGoal] = static_cast<int>(goalPos.x - agentPos.x) / 10.0f;
@@ -150,10 +144,11 @@ Eigen::VectorXf SimState::getStateForOpponent() const
     // also, everywhere the agent center is included for avoiding the performance cost
     // of the if and supposedly being better for 2D representations but debatable
     Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize * 2);
+    Position opPosNow = currOpTrace.back();
     auto applyToArray = [&](Position const &pos, size_t offset)
     {
-        long const rowIdx = pos.y - opponentTrace[currOpPosIdx].y + visionGridSize; // maybe cache these out?
-        long const colIdx = pos.x - opponentTrace[currOpPosIdx].x + visionGridSize;
+        long const rowIdx = pos.y - opPosNow.y + visionGridSize; // maybe cache these out?
+        long const colIdx = pos.x - opPosNow.x + visionGridSize;
         if (rowIdx >= 0 and colIdx >= 0 and rowIdx < static_cast<long>(visionGridSideSize) and
             colIdx < static_cast<long>(visionGridSideSize))
             agentGrid[rowIdx * visionGridSideSize + colIdx + offset] = 1.0f;
@@ -162,20 +157,9 @@ Eigen::VectorXf SimState::getStateForOpponent() const
     {
         applyToArray(wall, 0);
     }
-    applyToArray(opponentTrace[currOpPosIdx], agentStateSize); // this is different to the agent one, should check
-    size_t opLength = traceSize;                               // replace with trace size
-    // be careful, we can't do the >-1 check due to size_t and this should
-    // stop after 0 but if something is wrong good to check this
-
-    for (size_t idx = currOpPosIdx; idx-- > 0 and opLength;)
+    for (auto const &opPos : currOpTrace)
     {
-        applyToArray(opponentTrace[idx], agentStateSize);
-        --opLength;
-    }
-    for (size_t idx = opponentTrace.size(); idx-- > 0 and opLength;)
-    {
-        applyToArray(opponentTrace[idx], agentStateSize);
-        --opLength;
+        applyToArray(opPos, agentStateSize);
     }
     return agentGrid;
 }
@@ -190,6 +174,20 @@ void SimState::resetForNextEpisode()
 { // TODO: make cache this distr in globalrng
     std::uniform_int_distribution<> distr(0, opponentTrace.size() - 1);
     currOpPosIdx = distr(globalRng.getRngEngine());
+    size_t opLength = traceSize + 1; // replace with trace size
+    // be careful, we can't do the >-1 check due to size_t and this should
+    // stop after 0 but if something is wrong good to check this
+    currOpTrace.resize(0);
+    for (size_t idx = currOpPosIdx + 1; idx-- > 0 and opLength;)
+    {
+        currOpTrace.push_front(opponentTrace[idx]);
+        --opLength;
+    }
+    for (size_t idx = opponentTrace.size(); idx-- > 0 and opLength;)
+    {
+        currOpTrace.push_front(opponentTrace[idx]);
+        --opLength;
+    }
     // reset the state but needs to feed back in the cycle I guess
     resetAgentPos();
 }
@@ -214,24 +212,12 @@ pair<float, SimResult> SimState::updateAgentPos(Actions action)
             return make_pair(d_outOfBoundsReward, SimResult::CONTINUE);
         }
     }
-    size_t opLength = traceSize + 1; // replace with trace size
-    // be careful, we can't do the >-1 check due to size_t and this should
-    // stop after 0 but if something is wrong good to check this
-    for (size_t idx = currOpPosIdx + 1; idx-- > 0 and opLength;)
+    for (auto const &opPos : opponentTrace)
     {
-        if (futurePos == opponentTrace[idx])
+        if (futurePos == opPos)
         {
             return make_pair(d_killedByOpponentReward, SimResult::KILLED_BY_OPPONENT);
         }
-        --opLength;
-    }
-    for (size_t idx = opponentTrace.size(); idx-- > 0 and opLength;)
-    {
-        if (futurePos == opponentTrace[idx])
-        {
-            return make_pair(d_killedByOpponentReward, SimResult::KILLED_BY_OPPONENT);
-        }
-        --opLength;
     }
     // check walls and stuff
     agentPos = futurePos;
@@ -274,22 +260,14 @@ void SimState::generateStateRepresentation()
     {
         assignWithBoundCheck(wall, wallColor);
     }
-    //    assignWithBoundCheck(opponentPos,SimObject::OPPONENT);
-    assignWithBoundCheck(opponentTrace[currOpPosIdx], opponentColor);
-    size_t opLength = traceSize; // replace with trace size
-    // be careful, we can't do the >-1 check due to size_t and this should
-    // stop after 0 but if something is wrong good to check this
 
-    for (size_t idx = currOpPosIdx; idx-- > 0 and opLength;)
+    //    assignWithBoundCheck(opponentPos,SimObject::OPPONENT);
+
+    for (auto const &opPos : currOpTrace)
     {
-        assignWithBoundCheck(opponentTrace[idx], opponentTraceColor);
-        --opLength;
+        assignWithBoundCheck(opPos, opponentTraceColor);
     }
-    for (size_t idx = opponentTrace.size(); idx-- > 0 and opLength;)
-    {
-        assignWithBoundCheck(opponentTrace[idx], opponentTraceColor);
-        --opLength;
-    }
+    assignWithBoundCheck(currOpTrace.back(), opponentColor);
     auto applyViewColor = [&](Position pos, ImVec4 color)
     {
         for (size_t i = 0; i < simSize.x; ++i)
@@ -304,7 +282,7 @@ void SimState::generateStateRepresentation()
             }
     };
     applyViewColor(agentPos, agentViewColor);
-    applyViewColor(opponentTrace[currOpPosIdx], opponentViewColor);
+    applyViewColor(currOpTrace.back(), opponentViewColor);
 
     stateRepresentation = move(repr);
 }

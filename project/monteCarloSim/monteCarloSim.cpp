@@ -12,21 +12,8 @@ MonteCarloSim::MonteCarloSim(SimState const &simState)
       visionGridSize(simState.visionGridSize), visionGridSideSize(simState.visionGridSideSize),
       agentStateSize(simState.agentStateSize), walls(simState.walls), d_outOfBoundsReward(simState.d_outOfBoundsReward),
       d_reachedGoalReward(simState.d_reachedGoalReward), d_killedByOpponentReward(simState.d_killedByOpponentReward),
-      d_normalReward(simState.d_normalReward)
+      d_normalReward(simState.d_normalReward), opponentTrace(simState.currOpTrace)
 {
-    size_t opLength = traceSize + 1; // replace with trace size
-    // be careful, we can't do the >-1 check due to size_t and this should
-    // stop after 0 but if something is wrong good to check this
-    for (size_t idx = simState.currOpPosIdx + 1; idx-- > 0 and opLength;)
-    {
-        opponentTrace.push_front(simState.opponentTrace[idx]);
-        --opLength;
-    }
-    for (size_t idx = simState.opponentTrace.size(); idx-- > 0 and opLength;)
-    {
-        opponentTrace.push_front(simState.opponentTrace[idx]);
-        --opLength;
-    }
 }
 // constructor from MonteCarloSim
 Position MonteCarloSim::computeNewPos(Actions currAction, Position pos)
