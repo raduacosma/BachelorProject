@@ -84,7 +84,7 @@ tuple<float, SimResult> SimState::computeNextStateAndReward(Actions action)
 }
 void SimState::updateOpponentPos()
 {
-    Position lastOpponentPos = currOpTrace.back();  // this is no longer the last pos
+    Position lastOpponentPos = currOpTrace.back();
     ++currOpPosIdx;
     if (currOpPosIdx == opponentTrace.size())
     {
@@ -212,7 +212,7 @@ pair<float, SimResult> SimState::updateAgentPos(Actions action)
             return make_pair(d_outOfBoundsReward, SimResult::CONTINUE);
         }
     }
-    for (auto const &opPos : opponentTrace)
+    for (auto const &opPos : currOpTrace)
     {
         if (futurePos == opPos)
         {

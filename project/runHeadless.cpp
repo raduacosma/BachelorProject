@@ -43,7 +43,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     // could also use stack but meh, this way is more certain
     std::unique_ptr<Agent> agent =
         std::make_unique<QERQueueLearning>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams,
-                                           numberOfEpisodes, OpModellingType::KOLSMIR,alpha,epsilon,gamma);
+                                           numberOfEpisodes, OpModellingType::ONEFORALL,alpha,epsilon,gamma);
     SimContainer simContainer{ files, agent.get(), rewards, simStateParams };
     agent->run();
     std::ofstream out{ "results/rewardsDQER.txt" };
