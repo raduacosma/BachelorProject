@@ -119,13 +119,12 @@ void OpTrack::pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
         int maxProbIdx = -1;
         std::vector<double> maxOpListLossHistory;
 
-        double maxChangeAfterProb = -1;
-        int maxChangeAfterProbIdx = -1;
-        std::vector<double> maxChangeAfterOpListLossHistory;
+//        double maxChangeAfterProb = -1;
+//        int maxChangeAfterProbIdx = -1;
+//        std::vector<double> maxChangeAfterOpListLossHistory;
         if (!opCopies.empty())
         {
 //            std::cout<<"I AM IN"<<std::endl;
-            assert(opCopies.size()==agent.opList.size()-1);
             // copy is done before random is added, for firstTime care is taken that the random is not added
             for (size_t opIdx = 0, opSz = opCopies.size(); opIdx != opSz; ++opIdx)
             {
@@ -138,7 +137,10 @@ void OpTrack::pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
                 // TODO: wtf happens when  there is nothing in the loss history?
                 // though if there is nothing in history then it should not even be here since only the ones
                 // with minHistory should be in history
-                auto [prob, U, K] = Pettitt{}.test2(opDequeLossHistory[opIdx], currOpListLossHistory);
+//                auto [prob, U, K] = Pettitt{}.test2(opDequeLossHistory[opIdx], currOpListLossHistory);
+//                std::cout<<"deque: "<<opDequeLossHistory[opIdx].size()<<std::endl;
+//                std::cout<<"currOpListLoss: "<<currOpListLossHistory.size()<<std::endl;
+                auto [prob, U, K] = Pettitt{}.testGivenK(opDequeLossHistory[opIdx], currOpListLossHistory,opDequeLossHistory[opIdx].size()-1);
 //                                std::cout<<"pettitt: "<<prob<<" "<<U<<" "<<K<<std::endl;
                 if (maxProb < prob)
                 {
@@ -146,13 +148,13 @@ void OpTrack::pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
                     maxProbIdx = opIdx;
                     maxOpListLossHistory = currOpListLossHistory;
                 }
-                if (K + 1 < opDequeLossHistory[opIdx].size() and maxChangeAfterProb < prob and prob < pValueThreshold)
-                {
-                    //                    std::cout<<"yesssss"<<std::endl;
-                    maxChangeAfterProb = prob;
-                    maxChangeAfterProbIdx = opIdx;
-                    maxChangeAfterOpListLossHistory = currOpListLossHistory;
-                }
+//                if (K + 1 < opDequeLossHistory[opIdx].size() and maxChangeAfterProb < prob and prob < pValueThreshold)
+//                {
+//                    //                    std::cout<<"yesssss"<<std::endl;
+//                    maxChangeAfterProb = prob;
+//                    maxChangeAfterProbIdx = opIdx;
+//                    maxChangeAfterOpListLossHistory = currOpListLossHistory;
+//                }
 //                                std::cout<<"begin loss history"<<std::endl;
 //                                for (auto const &item : opDequeLossHistory[opIdx])
 //                                {
@@ -171,18 +173,18 @@ void OpTrack::pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
         // we don't want to avoid the minimum if
         foundOpModel = true;
         // opHistoryCounter is already done in init
-        bool opModelChanged = false;
+//        bool opModelChanged = false;
         if (maxProbIdx != -1 and maxProb > pValueThreshold)
-        {
-            opModelChanged = true;
-        }
-        else if (maxChangeAfterProbIdx != -1)
-        {
-            maxProbIdx = maxChangeAfterProbIdx;
-            maxOpListLossHistory = maxChangeAfterOpListLossHistory;
-            opModelChanged = true;
-        }
-        if (opModelChanged)
+//        {
+//            opModelChanged = true;
+//        }
+//        else if (maxChangeAfterProbIdx != -1)
+//        {
+//            maxProbIdx = maxChangeAfterProbIdx;
+//            maxOpListLossHistory = maxChangeAfterOpListLossHistory;
+//            opModelChanged = true;
+//        }
+//        if (opModelChanged)
         {
             // this should correspond to removing the random MLP that was created
             destroyRandomPettitt(agent); // TODO: check that the pop_backs of curr state history is ok

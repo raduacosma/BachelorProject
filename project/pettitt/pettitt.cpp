@@ -24,13 +24,13 @@ std::tuple<double, double, int> Pettitt::testGivenK(std::deque<double> const &x,
     };
     Eigen::ArrayXd Uk = k.unaryExpr(func);
     // K will take into account 0 numbering, so this will be 9 with the one in R is 10
-    std::cout<<"begin: "<<std::endl;
-    std::cout<<"UK: "<<Uk.transpose()<<std::endl;
+//    std::cout<<"begin: "<<std::endl;
+//    std::cout<<"UK: "<<Uk.transpose()<<std::endl;
     double U = std::abs(Uk[K]);
     double pval = std::min(1.0, 2 * std::exp((-6 * U * U) / (n * n * (n + 1))));
-    std::cout<<"pettitt: "<<pval<<std::endl;
-    std::cout<<"K: "<<K<<std::endl;
-    std::cout<<"end: "<<std::endl;
+//    std::cout<<"pettitt: "<<pval<<std::endl;
+//    std::cout<<"K: "<<K<<std::endl;
+//    std::cout<<"end: "<<std::endl;
     return std::make_tuple(pval, U, K);
 }
 std::tuple<double, double, int> Pettitt::test2(std::deque<double> const &x, std::vector<double> const &x2)

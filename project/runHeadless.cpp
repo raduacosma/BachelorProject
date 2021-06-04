@@ -38,7 +38,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     };
     SimStateParams simStateParams = { .traceSize = 6, .visionGridSize = 2, .randomOpCoef=-1 };
     OpTrackParams kolsmirParams = { .pValueThreshold = 0.05, .minHistorySize = 10, .maxHistorySize = 10 };
-    OpTrackParams pettittParams = { .pValueThreshold = 0.05, .minHistorySize = 10, .maxHistorySize = 10 };
+    OpTrackParams pettittParams = { .pValueThreshold = 0.01, .minHistorySize = 10, .maxHistorySize = 20 };
 
     // could also use stack but meh, this way is more certain
     std::unique_ptr<Agent> agent =
