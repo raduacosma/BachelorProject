@@ -64,6 +64,7 @@ void Agent::run()
             }
         }
         std::cout << "totalReward: " << totalReward << std::endl;
+        std::cout<< opList.size()<<std::endl;
         opponentPredictionLosses.push_back(currentEpisodeLoss / stepCount);
         opponentCorrectPredictionPercentage.push_back(static_cast<float>(currentEpisodeCorrectPredictions) / stepCount);
         runReward += totalReward;
