@@ -324,6 +324,7 @@ void OpTrack::kolsmirOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
                 if (opStateRef.size() < maxHistorySize)
                     opStateRef.push_back(currExperience);
             }
+            currOpRef.train(lastState,newState);
         }
         updateCorrectPercentage(agent);
         // nothing to do here since this is the random opponent and it should already have the state
@@ -396,6 +397,7 @@ void OpTrack::noTrainPettittOpTracking(Agent &agent, Eigen::VectorXf const &last
                     opStateRef.push_back(currExperience);
                 }
             }
+            currOpRef.train(lastState,newState);
         }
         updateCorrectPercentage(agent);
         // nothing to do here since this is the random opponent and it should already have the state
