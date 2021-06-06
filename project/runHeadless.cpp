@@ -16,7 +16,7 @@
 void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
 {
     //    std::cout.setstate(std::ios_base::failbit);
-    std::string files = "longClock.txt,longCounter.txt";
+    std::string files = "longClock.txt,longCounter.txt,complex.txt";
     size_t cMiniBatchSize = 16;
     size_t numberOfEpisodes = 10000;   // ignore the parameter for now until proper framework is in place
     float alpha = 0.001;
@@ -42,8 +42,8 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
 
     // could also use stack but meh, this way is more certain
     std::unique_ptr<Agent> agent =
-        std::make_unique<QERQueueLearning>(pettittParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams,
-                                           numberOfEpisodes, OpModellingType::PETTITT,alpha,epsilon,gamma);
+        std::make_unique<QERQueueLearning>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams,
+                                           numberOfEpisodes, OpModellingType::KOLSMIR,alpha,epsilon,gamma);
     SimContainer simContainer{ files, agent.get(), rewards, simStateParams };
     agent->run();
     std::ofstream out{ "results/rewardsDQER.txt" };
