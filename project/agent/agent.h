@@ -30,7 +30,8 @@ enum class OpModellingType
     NEWEVERYTIME,
     ONEFORALL,
     PETTITT,
-    KOLSMIR
+    KOLSMIR,
+    NOTRAINPETTITT
 };
 
 class Agent

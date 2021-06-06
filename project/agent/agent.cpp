@@ -95,6 +95,9 @@ void Agent::handleOpponentAction()
             case OpModellingType::PETTITT:
                 opTrack.pettittOpInit(*this);
                 break;
+            case OpModellingType::NOTRAINPETTITT:
+                opTrack.noTrainPettittOpInit(*this);
+                break;
         }
 
         return;
@@ -110,6 +113,9 @@ void Agent::handleOpponentAction()
             break;
         case OpModellingType::PETTITT:
             opPredict(&OpTrack::pettittOpTracking);
+            break;
+        case OpModellingType::NOTRAINPETTITT:
+            opPredict(&OpTrack::noTrainPettittOpTracking);
             break;
     }
 }

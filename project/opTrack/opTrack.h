@@ -11,6 +11,7 @@ class OpTrack
 {
     double pValueThreshold = 0.01;
     std::vector<std::vector<OpExperience>> opListStateHistory;
+    std::vector<std::deque<OpExperience>> opDequeStateHistory;
     std::vector<std::vector<double>> opListLossHistory;
     std::vector<std::deque<double>> opDequeLossHistory;
     std::vector<OpExperience> currOpListStateHistory;
@@ -28,11 +29,14 @@ class OpTrack
     void normalOpTracking(Agent &agent, Eigen::VectorXf const &lastState, Eigen::VectorXf const &newState, float loss);
     void kolsmirOpTracking(Agent &agent, Eigen::VectorXf const &lastState, Eigen::VectorXf const &newState, float loss);
     void pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, Eigen::VectorXf const &newState, float loss);
+    void noTrainPettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, Eigen::VectorXf const &newState, float loss);
     void kolsmirOpInit(Agent &agent);
+    void noTrainPettittOpInit(Agent &agent);
     void pettittOpInit(Agent &agent);
     void commonOpInit(Agent &agent);
 
     void destroyRandomPettitt(Agent &agent);
+    void destroyRandomNoTrainPettitt(Agent &agent);
     void destroyRandomKolsmir(Agent &agent);
     void updateCorrectPercentage(Agent &agent);
 };

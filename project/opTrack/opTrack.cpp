@@ -20,6 +20,12 @@ void OpTrack::destroyRandomPettitt(Agent &agent)
     agent.opList.pop_back();
     opDequeLossHistory.pop_back();
 }
+void OpTrack::destroyRandomNoTrainPettitt(Agent &agent)
+{
+    agent.opList.pop_back();
+    opListLossHistory.pop_back();
+    opDequeStateHistory.pop_back();
+}
 void OpTrack::commonOpInit(Agent &agent)
 {
     opHistoryCounter = 0;
@@ -40,7 +46,41 @@ void OpTrack::commonOpInit(Agent &agent)
                               agent.opMLPParams.outputActivationFunc, agent.opMLPParams.miniBatchSize);
     agent.currOp = agent.opList.size() - 1;
 }
+void OpTrack::noTrainPettittOpInit(Agent &agent)
+{
 
+    // need to account for the first time this is run with a random opponent
+    // this will probably always be the random one so I could just to pop_back()
+    if (not firstTime)
+    {
+        if (opDequeStateHistory[agent.currOp].size() < minHistorySize or not foundOpModel)
+        {
+            destroyRandomNoTrainPettitt(agent);
+        }
+        else
+        {
+            // the current opponent will be switched now, so it has fully learned,
+            // therefore recompute the losses with the new opponent in mind
+
+            std::deque<OpExperience> &opStateRef = opDequeStateHistory[agent.currOp];
+            std::vector<double> &opLossRef = opListLossHistory[agent.currOp];
+            MLP &currOpRef = agent.opList[agent.currOp];
+            opLossRef.resize(0);
+            std::transform(opStateRef.cbegin(), opStateRef.cend(), std::back_inserter(opLossRef),
+                           [&](OpExperience const &currExperience)
+                           {
+                             return currOpRef.predictWithLoss(currExperience.lastState, currExperience.newState);
+                           });
+            std::sort(opLossRef.begin(), opLossRef.end());
+        }
+    }
+
+    opDequeStateHistory.emplace_back();
+//    opDequeStateHistory.back().reserve(maxHistorySize);
+    opListLossHistory.emplace_back();
+    opListLossHistory.back().reserve(maxHistorySize);
+    commonOpInit(agent);
+}
 void OpTrack::kolsmirOpInit(Agent &agent)
 {
 
@@ -293,7 +333,83 @@ void OpTrack::kolsmirOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
     if (foundOpModel and opListStateHistory[agent.currOp].size() < maxHistorySize)
         opListStateHistory[agent.currOp].push_back({ lastState, newState });
 }
+void OpTrack::noTrainPettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, Eigen::VectorXf const &newState,
+                                float loss)
+{
+    if (not foundOpModel and opHistoryCounter < minHistorySize)
+    {
+        // for kolsmir, currOpListStateHistory can be the same as the state history for the random one, as that is what
+        // is done here. However, in order for it to be similar with pettitt, we leave it like this for now
+        currOpListStateHistory.push_back({ lastState, newState });
+        //        opListStateHistory[agent.currOp].push_back({ lastState, newState });
+        ++opHistoryCounter;
+        return;
+    }
+    if (not foundOpModel and opHistoryCounter >= minHistorySize) // TODO: check this condition
+    {
+        // TODO: check that all the vectors and indices and sizes are what they should be
+        double maxProb = -1;
+        int maxProbIdx = -1; // -1 for below since we don't want the random one that will be put last
+        for (size_t opIdx = 0, opSz = agent.opList.size() - 1; opIdx != opSz; ++opIdx)
+        {
+            MLP &currDoneOp = agent.opList[opIdx];
+            currOpListLossHistory.resize(0);
+            std::transform(currOpListStateHistory.cbegin(), currOpListStateHistory.cend(),
+                           std::back_inserter(currOpListLossHistory),
+                           [&](OpExperience const &currExperience)
+                           {
+                             return currDoneOp.predictWithLoss(currExperience.lastState, currExperience.newState);
+                           });
+            std::sort(currOpListLossHistory.begin(), currOpListLossHistory.end());
+            // both arrays need to be sorted, opListLossHistory[opIdx] should already be sorted from init
+            auto [prob, U, K] = Pettitt{}.testGivenK(opListLossHistory[opIdx],
+                                                currOpListLossHistory,opListLossHistory[opIdx].size()-1);
+            if (maxProb < prob)
+            {
+                maxProb = prob;
+                maxProbIdx = opIdx;
+            }
+        }
+        // a model will be found anyways, whether random or a previous one, this is not the thing
+        // that checks whether we are using a previous MLP, but that check is probably useless if
+        // we don't want to avoid the minimum if
+        foundOpModel = true;
 
+        if (maxProbIdx != -1 and maxProb > pValueThreshold)
+        {
+            // this should correspond to removing the random MLP that was created
+            destroyRandomNoTrainPettitt(agent); // TODO: check that the pop_backs of curr state history is ok
+            agent.currOp = maxProbIdx;
+            std::deque<OpExperience> &opStateRef = opDequeStateHistory[agent.currOp];
+            MLP &currOpRef = agent.opList[agent.currOp];
+            // now train the currOp on the examples since they belong to it and add them to the history if maxHistory
+            // was not achieved
+            for (size_t idx = 0, sz = currOpListStateHistory.size(); idx != sz; ++idx)
+            {
+                OpExperience const &currExperience = currOpListStateHistory[idx];
+                currOpRef.train(currExperience.lastState, currExperience.newState);
+                if (opStateRef.size() < maxHistorySize)
+                    opStateRef.push_back(currExperience);
+                else
+                {
+                    opStateRef.pop_front();
+                    opStateRef.push_back(currExperience);
+                }
+            }
+        }
+        updateCorrectPercentage(agent);
+        // nothing to do here since this is the random opponent and it should already have the state
+        // incremented above
+    }
+    // this should get triggered even if the above if is entered, same for pettitt
+    if (foundOpModel and opDequeStateHistory[agent.currOp].size() < maxHistorySize)
+        opDequeStateHistory[agent.currOp].push_back({ lastState, newState });
+    else if (foundOpModel and opDequeStateHistory[agent.currOp].size() >= maxHistorySize)
+    {
+        opDequeStateHistory[agent.currOp].pop_front();
+        opDequeStateHistory[agent.currOp].push_back({ lastState, newState });
+    }
+}
 void OpTrack::normalOpTracking(Agent &agent, Eigen::VectorXf const &lastState, Eigen::VectorXf const &newState,
                                float loss)
 {
