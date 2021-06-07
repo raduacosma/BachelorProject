@@ -4,6 +4,8 @@
 #include "../../Eigen/Core"
 #include "../utilities/utilities.h"
 #include <cstddef>
+#include "../createRngObj/createRngObj.h"
+#include "../randObj/randobj.h"
 #include <vector>
 
 enum class MLPUpdateType

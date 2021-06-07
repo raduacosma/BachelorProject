@@ -12,12 +12,14 @@ class RandObj
 
   private:
     std::uniform_real_distribution<float> uniReal01;
+    std::uniform_real_distribution<float> uniReal44;
     std::uniform_int_distribution<int> expReplayIdx;
 
   public:
     RandObj();
     explicit RandObj(unsigned int seed);
     float getUniReal01();
+    float getUniReal44();
     int getExpReplayIdx();
 };
 #endif
