@@ -106,7 +106,7 @@ Eigen::VectorXf MonteCarloSim::getStateForOpponent() const
     // also, everywhere the agent center is included for avoiding the performance cost
     // of the if and supposedly being better for 2D representations but debatable
     Position currPos = opponentTrace.back();
-    Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize * 2);
+    Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize * 3);
     auto applyToArray = [&](Position const &pos, size_t offset)
     {
         long const rowIdx = pos.y - currPos.y + visionGridSize;
@@ -124,6 +124,7 @@ Eigen::VectorXf MonteCarloSim::getStateForOpponent() const
     {
         applyToArray(opPos, agentStateSize);
     }
+    applyToArray(goalPos,agentStateSize*2);
     return agentGrid;
 }
 

@@ -219,7 +219,7 @@ Eigen::VectorXf SimState::getStateForOpponent() const
 { // should the goal really be a vision grid?
     // also, everywhere the agent center is included for avoiding the performance cost
     // of the if and supposedly being better for 2D representations but debatable
-    Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize * 2);
+    Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize * 3);
     Position opPosNow = currOpTrace.back();
     auto applyToArray = [&](Position const &pos, size_t offset)
     {
@@ -237,6 +237,7 @@ Eigen::VectorXf SimState::getStateForOpponent() const
     {
         applyToArray(opPos, agentStateSize);
     }
+    applyToArray(goalPos,agentStateSize*2);
     return agentGrid;
 }
 void SimState::resetAgentPos()

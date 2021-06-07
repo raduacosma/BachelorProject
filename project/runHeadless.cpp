@@ -29,7 +29,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
                         .learningRate = 0.001,
                         .outputActivationFunc = ActivationFunction::LINEAR,
                         .miniBatchSize = cMiniBatchSize };
-    MLPParams opponentMLP{ .sizes = { 50, 100, 4 },
+    MLPParams opponentMLP{ .sizes = { 75, 200, 4 },
                            .learningRate = 0.001,
                            .outputActivationFunc = ActivationFunction::SOFTMAX,
                            .miniBatchSize = cMiniBatchSize };
@@ -42,8 +42,8 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
 
     // could also use stack but meh, this way is more certain
     std::unique_ptr<Agent> agent =
-        std::make_unique<QERQueueLearning>(pettittParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams,
-                                           numberOfEpisodes, OpModellingType::NOTRAINPETTITT,alpha,epsilon,gamma);
+        std::make_unique<QERQueueLearning>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams,
+                                           numberOfEpisodes, OpModellingType::KOLSMIR,alpha,epsilon,gamma);
     SimContainer simContainer{ files, agent.get(), rewards, simStateParams };
     agent->run();
     std::ofstream out{ "results/rewardsDQER.txt" };
