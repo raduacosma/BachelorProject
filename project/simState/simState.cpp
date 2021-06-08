@@ -211,8 +211,8 @@ Eigen::VectorXf SimState::getStateForAgent() const
         applyToArray(opPos, agentStateSize);
     }
     //    applyToArray(goalPos,agentStateSize*2);
-    agentGrid[offsetForGoal] = static_cast<int>(goalPos.x - agentPos.x) / 20.0f;
-    agentGrid[offsetForGoal + 1] = static_cast<int>(goalPos.y - agentPos.y) / 20.0f;
+    agentGrid[offsetForGoal] = static_cast<int>(goalPos.x - agentPos.x) / 10.0f;
+    agentGrid[offsetForGoal + 1] = static_cast<int>(goalPos.y - agentPos.y) / 10.0f;
     return agentGrid;
 }
 Eigen::VectorXf SimState::getStateForOpponent() const

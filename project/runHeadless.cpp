@@ -18,15 +18,15 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     //    std::cout.setstate(std::ios_base::failbit);
     std::string files = "longClock.txt,longCounter.txt,complex.txt";
     size_t cMiniBatchSize = 16;
-    size_t numberOfEpisodes = 10000;   // ignore the parameter for now until proper framework is in place
+    size_t numberOfEpisodes = 10000;   // ignore the function parameter for now until proper framework is in place
     float alpha = 0.001;
     float epsilon = 0.1;
     float gamma = 0.9;
     OpModellingType opModellingType=OpModellingType::ONEFORALL;
     ExpReplayParams expReplayParams{ .cSwapPeriod = 1000, .miniBatchSize = cMiniBatchSize, .sizeExperience = 10000 };
-    AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = 3, .nrRollouts = 5 };
+    AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = 1, .nrRollouts = 5 };
     MLPParams agentMLP{ .sizes = { 52, 200, 4 },
-                        .learningRate = 0.01,
+                        .learningRate = 0.001,
                         .outputActivationFunc = ActivationFunction::LINEAR,
                         .miniBatchSize = cMiniBatchSize };
     MLPParams opponentMLP{ .sizes = { 75, 200, 4 },
@@ -34,7 +34,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
                            .outputActivationFunc = ActivationFunction::SOFTMAX,
                            .miniBatchSize = cMiniBatchSize };
     Rewards rewards = {
-        .normalReward = -0.01, .killedByOpponentReward = -10.0f, .outOfBoundsReward = -0.01, .reachedGoalReward = 1.0f
+        .normalReward = -0.1f, .killedByOpponentReward = -100.0f, .outOfBoundsReward = -0.1f, .reachedGoalReward = 100.0f
     };
     SimStateParams simStateParams = { .traceSize = 6, .visionGridSize = 2, .randomOpCoef=-1 };
     OpTrackParams kolsmirParams = { .pValueThreshold = 0.05, .minHistorySize = 10, .maxHistorySize = 10 };
