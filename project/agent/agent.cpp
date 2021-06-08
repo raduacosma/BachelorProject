@@ -40,9 +40,12 @@ void Agent::run()
 
     // tracking stuff? avg rewards etc etc etc
     runReward = 0;
+    float initialEpsilon = epsilon;
+    float lastEpsilon = 0;
     float killedByOpponentReward = maze->getCurrentLevel().killedByOpponentReward();
     for (size_t nrEpisode = 0; nrEpisode != nrEpisodes; ++nrEpisode)
     {
+        std::cout<<epsilon<<std::endl;
         // d_oldstate was modified from Maze so it's fine, anything else?
         newEpisode();
         currentEpisodeLoss = 0;
@@ -75,6 +78,8 @@ void Agent::run()
         opponentCorrectPredictionPercentage.push_back(static_cast<float>(currentEpisodeCorrectPredictions) / stepCount);
         runReward += totalReward;
         rewards[nrEpisode] = totalReward;
+        if(epsilon > lastEpsilon)
+            epsilon -= (initialEpsilon-lastEpsilon) / nrEpisodesToEpsilonZero;
     }
     // any cleanup?
 }
