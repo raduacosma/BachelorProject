@@ -7,17 +7,14 @@
 #include "../agent.h"
 class Sarsa : public Agent
 {
-
-    float alpha;
-    float epsilon;
     size_t lastAction;
     Eigen::VectorXf lastQValues;
 
   public:
     Sarsa(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
           MLPParams opponentMLP, size_t _nrEpisodes,
-          OpModellingType pOpModellingType, float _alpha, float _epsilon,
-          float _gamma);
+          OpModellingType pOpModellingType, float pAlpha, float pEpsilon,
+          float pGamma);
     ~Sarsa() override;
     bool performOneStep() override;
     size_t actionWithQ(Eigen::VectorXf const &qVals);

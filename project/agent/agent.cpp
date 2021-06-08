@@ -7,13 +7,13 @@
 using namespace std;
 Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
              MLPParams opponentMLP, size_t _nrEpisodes, OpModellingType pOpModellingType,
-             float pGamma) // TODO: check how size is passed
+             float pAlpha, float pEpsilon, float pGamma) // TODO: check how size is passed
     : opTrack(opTrackParams.pValueThreshold, opTrackParams.minHistorySize, opTrackParams.maxHistorySize),
       nrEpisodes(_nrEpisodes), rewards(vector<float>(_nrEpisodes)), hasDied(vector<size_t>(_nrEpisodes)),
       mlp(agentMLP.sizes, agentMLP.learningRate, agentMLP.outputActivationFunc, agentMLP.miniBatchSize),
       opList{ MLP(opponentMLP.sizes, opponentMLP.learningRate, opponentMLP.outputActivationFunc,
                   opponentMLP.miniBatchSize) },
-      currOp(0), opModellingType(pOpModellingType), gamma(pGamma), maxNrSteps(agentMonteCarloParams.maxNrSteps),
+      currOp(0), opModellingType(pOpModellingType), alpha(pAlpha), epsilon(pEpsilon),gamma(pGamma), maxNrSteps(agentMonteCarloParams.maxNrSteps),
       nrRollouts(agentMonteCarloParams.nrRollouts), opMLPParams(opponentMLP)
 {
     gammaVals.push_back(1); // in order to save some i-1s in monte carlo

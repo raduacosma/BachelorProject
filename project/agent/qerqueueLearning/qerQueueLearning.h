@@ -12,8 +12,6 @@
 class QERQueueLearning : public Agent
 {
 
-    float alpha;
-    float epsilon;
     size_t expCounter = 0;
     bool shouldGatherExperience = true;
     size_t cCounter = 0;
@@ -28,8 +26,8 @@ class QERQueueLearning : public Agent
   public:
     QERQueueLearning(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
                      MLPParams opponentMLP, ExpReplayParams expReplayParams, size_t _nrEpisodes,
-                     OpModellingType pOpModellingType, float _alpha,
-                     float _epsilon, float _gamma);
+                     OpModellingType pOpModellingType, float pAlpha,
+                     float pEpsilon, float pGamma);
     ~QERQueueLearning() override;
     bool performOneStep() override;
     size_t actionWithQ(Eigen::VectorXf const &qVals) override;

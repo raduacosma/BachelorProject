@@ -24,9 +24,9 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     float gamma = 0.9;
     OpModellingType opModellingType=OpModellingType::ONEFORALL;
     ExpReplayParams expReplayParams{ .cSwapPeriod = 1000, .miniBatchSize = cMiniBatchSize, .sizeExperience = 10000 };
-    AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = 1, .nrRollouts = 5 };
+    AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = 3, .nrRollouts = 5 };
     MLPParams agentMLP{ .sizes = { 52, 200, 4 },
-                        .learningRate = 0.001,
+                        .learningRate = 0.01,
                         .outputActivationFunc = ActivationFunction::LINEAR,
                         .miniBatchSize = cMiniBatchSize };
     MLPParams opponentMLP{ .sizes = { 75, 200, 4 },
@@ -34,7 +34,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
                            .outputActivationFunc = ActivationFunction::SOFTMAX,
                            .miniBatchSize = cMiniBatchSize };
     Rewards rewards = {
-        .normalReward = -0.01, .killedByOpponentReward = -10, .outOfBoundsReward = -0.01, .reachedGoalReward = 10
+        .normalReward = -0.01, .killedByOpponentReward = -10.0f, .outOfBoundsReward = -0.01, .reachedGoalReward = 1.0f
     };
     SimStateParams simStateParams = { .traceSize = 6, .visionGridSize = 2, .randomOpCoef=-1 };
     OpTrackParams kolsmirParams = { .pValueThreshold = 0.05, .minHistorySize = 10, .maxHistorySize = 10 };
@@ -46,7 +46,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
                                            numberOfEpisodes, OpModellingType::ONEFORALL,alpha,epsilon,gamma);
     SimContainer simContainer{ files, agent.get(), rewards, simStateParams };
     agent->run();
-    std::ofstream out{ "results/rewards04DOUBLE.txt" };
+    std::ofstream out{ "results/rewards04MORE.txt" };
     std::vector<float> const &agentRewards = agent->getRewards();
     copy(agentRewards.begin(), agentRewards.end(), std::ostream_iterator<float>(out, "\n"));
     std::ofstream opponent{ "results/opponentPredictionLossesTwoDOUBLE.txt" };

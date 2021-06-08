@@ -1,9 +1,9 @@
 #include "randobj.h"
 // TODO: make the limits for distrs configurable
-RandObj::RandObj() : rngEngine(std::random_device{}()), uniReal01(0.0, 1.0), uniReal44(-0.01f,0.01f),expReplayIdx(0, 9999)
+RandObj::RandObj() : rngEngine(std::random_device{}()), uniReal01(0.0, 1.0), uniReal44(-0.01,0.01),expReplayIdx(0, 9999)
 {
 }
-RandObj::RandObj(unsigned int seed) : rngEngine(seed), uniReal01(0.0, 1.0),uniReal44(-0.01f,0.01f), expReplayIdx(0, 9999)
+RandObj::RandObj(unsigned int seed) : rngEngine(seed), uniReal01(0.0, 1.0),uniReal44(-0.01,0.01), expReplayIdx(0, 9999)
 {
 }
 float RandObj::getUniReal01()

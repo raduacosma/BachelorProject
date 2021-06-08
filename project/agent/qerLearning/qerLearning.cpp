@@ -4,11 +4,11 @@
 
 QERLearning::QERLearning(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
                          MLPParams opponentMLP, ExpReplayParams expReplayParams, size_t _nrEpisodes,
-                         OpModellingType pOpModellingType, float _alpha, float _epsilon,
-                         float _gamma) // TODO: check how size is passed
+                         OpModellingType pOpModellingType, float pAlpha, float pEpsilon,
+                         float pGamma) // TODO: check how size is passed
     : Agent(opTrackParams, agentMonteCarloParams, std::move(agentMLP), std::move(opponentMLP), _nrEpisodes,
-            pOpModellingType, _gamma),
-      alpha(_alpha), epsilon(_epsilon), targetMLP(mlp), cSwapPeriod(expReplayParams.cSwapPeriod),
+            pOpModellingType, pAlpha,pEpsilon,pGamma),
+      targetMLP(mlp), cSwapPeriod(expReplayParams.cSwapPeriod),
       miniBatchSize(expReplayParams.miniBatchSize), sizeExperience(expReplayParams.sizeExperience)
 {
     experiences.reserve(sizeExperience);

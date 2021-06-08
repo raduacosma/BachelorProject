@@ -4,11 +4,11 @@
 
 QERQueueLearning::QERQueueLearning(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams,
                                    MLPParams agentMLP, MLPParams opponentMLP, ExpReplayParams expReplayParams,
-                                   size_t _nrEpisodes, OpModellingType pOpModellingType, float _alpha, float _epsilon,
-                                   float _gamma)
+                                   size_t _nrEpisodes, OpModellingType pOpModellingType, float pAlpha, float pEpsilon,
+                                   float pGamma)
     : Agent(opTrackParams, agentMonteCarloParams, std::move(agentMLP), std::move(opponentMLP), _nrEpisodes,
-            pOpModellingType, _gamma),
-      alpha(_alpha), epsilon(_epsilon), targetMLP(mlp), cSwapPeriod(expReplayParams.cSwapPeriod),
+            pOpModellingType, pAlpha,pEpsilon,pGamma),
+      targetMLP(mlp), cSwapPeriod(expReplayParams.cSwapPeriod),
       miniBatchSize(expReplayParams.miniBatchSize), sizeExperience(expReplayParams.sizeExperience)
 {
 }
@@ -31,7 +31,7 @@ bool QERQueueLearning::performOneStep()
         cCounter = 0;
     }
     // TODO: make monte carlo vs normal configurable
-    //    Eigen::VectorXf qValues = mlp.predict(lastState);
+//        Eigen::VectorXf qValues = mlp.predict(lastState);
     Eigen::VectorXf qValues = MonteCarloAllActions();
 //        std::cout<<qValues.transpose()<<std::endl;
     size_t action = actionWithQ(qValues);

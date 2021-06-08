@@ -9,9 +9,6 @@
 
 class QERLearning : public Agent
 {
-
-    float alpha;
-    float epsilon;
     size_t C;
     size_t expCounter = 0;
     size_t expResetPeriod = 100000;
@@ -28,8 +25,8 @@ class QERLearning : public Agent
   public:
     QERLearning(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
                 MLPParams opponentMLP, ExpReplayParams expReplayParams, size_t _nrEpisodes,
-                OpModellingType pOpModellingType, float _alpha,
-                float _epsilon, float _gamma);
+                OpModellingType pOpModellingType, float pAlpha,
+                float pEpsilon, float pGamma);
     ~QERLearning() override;
     bool performOneStep() override;
     size_t actionWithQ(Eigen::VectorXf const &qVals);

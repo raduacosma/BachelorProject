@@ -39,6 +39,7 @@ class Agent
     friend class OpTrack;
 
   protected:
+
     OpTrack opTrack;
     size_t const NR_ACTIONS = 4; // Hardcoded number of actions
     float runReward;
@@ -67,6 +68,8 @@ class Agent
     bool isNewLevel = false;
 
     OpModellingType opModellingType;
+    float alpha;
+    float epsilon;
     float gamma;
     size_t maxNrSteps;
     size_t nrRollouts;
@@ -78,7 +81,7 @@ class Agent
   public:
     explicit Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
                    MLPParams opponentMLP, size_t _nrEpisodes,
-                   OpModellingType pOpModellingType, float pGamma);
+                   OpModellingType pOpModellingType, float pAlpha, float pEpsilon, float pGamma);
     virtual ~Agent();
 
     void run();
