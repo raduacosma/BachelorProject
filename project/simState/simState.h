@@ -89,6 +89,26 @@ inline size_t SimState::getLastOpponentAction()
 {
     return static_cast<size_t>(lastOpponentAction);
 }
+inline float SimState::killedByOpponentReward()
+{
+    return d_killedByOpponentReward;
+}
 
+inline void SimState::updateCanvasBegPos(ImVec2 pos)
+{
+    canvasBegPos = pos;
+}
+inline void SimState::updateCanvasEndPos(ImVec2 pos)
+{
+    canvasEndPos = pos;
+}
+inline void SimState::updateCanvasStepSize(ImVec2 stepSize)
+{
+    canvasStepSize = stepSize;
+}
+inline Position const &SimState::getSimSize() const
+{
+    return simSize;
+}
 
 #endif

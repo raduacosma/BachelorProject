@@ -57,7 +57,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     copy(opponentPredPerc.begin(), opponentPredPerc.end(), std::ostream_iterator<float>(opponentPerc, "\n"));
 
     std::cout << "opponent prediction percentage: " << agent->getCorrectOpponentTypePredictionPercentage() << std::endl;
-
+    std::cout << "nr of times killed by opponent: "<< agent->getOpDeathPercentage()<<std::endl;
     //    std::ofstream opponentLoss{"results/opponentFirstEpLoss.txt"};
     //    std::vector<float> const &opponentThisLoss = agent->getThisEpisodeLoss();
     //    copy(opponentThisLoss.begin(), opponentThisLoss.end(),

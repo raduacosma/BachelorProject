@@ -38,6 +38,6 @@ class OpTrack
     void destroyRandomPettitt(Agent &agent);
     void destroyRandomNoTrainPettitt(Agent &agent);
     void destroyRandomKolsmir(Agent &agent);
-    void updateCorrectPercentage(Agent &agent);
+    static void updateCorrectPercentage(Agent &agent);
 };
 #endif

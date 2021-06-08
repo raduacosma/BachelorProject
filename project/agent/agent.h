@@ -58,8 +58,8 @@ class Agent
     std::vector<float> opponentCorrectPredictionPercentage;
     std::vector<float> thisEpisodeLoss;
 
-    size_t correctOpCurrentEpisode;
-    size_t totalPredOpCurrentEpisode;
+    size_t correctOpCurrentEpisode = 0;
+    size_t totalPredOpCurrentEpisode = 0;
 
     MLP mlp;
     std::vector<MLP> opList;
@@ -75,6 +75,7 @@ class Agent
     size_t nrRollouts;
     std::vector<float> gammaVals;
     MLPParams opMLPParams;
+    std::vector<size_t> opDeathsPerEp;
 
     void opPredict(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf const &, Eigen::VectorXf const &, float));
 
@@ -102,6 +103,40 @@ class Agent
     float getCorrectOpponentTypePredictionPercentage() const;
     std::vector<float> const &getOpponentCorrectPredictionPercentage() const;
     std::vector<float> const &getOpponentPredictionLosses() const;
+    float getOpDeathPercentage() const;
 };
+inline float Agent::getCorrectOpponentTypePredictionPercentage() const
+{
+    return static_cast<float>(correctOpCurrentEpisode) / totalPredOpCurrentEpisode;
+}
+inline std::vector<float> const &Agent::getThisEpisodeLoss() const
+{
+    return thisEpisodeLoss;
+}
+inline std::vector<float> const &Agent::getOpponentCorrectPredictionPercentage() const
+{
+    return opponentCorrectPredictionPercentage;
+}
+inline std::vector<float> const &Agent::getOpponentPredictionLosses() const
+{
+    return opponentPredictionLosses;
+}
+inline float Agent::getRunReward()
+{
+    return runReward;
+}
+inline std::vector<size_t> &Agent::getHasDied()
+{
+    return hasDied;
+}
+inline std::vector<float> &Agent::getRewards()
+{
+    return rewards;
+}
+inline void Agent::setMaze(SimContainer *simCont)
+{
+    maze = simCont;
+}
+
 
 #endif

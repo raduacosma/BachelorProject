@@ -182,10 +182,7 @@ void SimState::createRandomFluctuations(Position const &newPos)
             break;
     }
 }
-float SimState::killedByOpponentReward()
-{
-    return d_killedByOpponentReward;
-}
+
 Eigen::VectorXf SimState::getStateForAgent() const
 { // should the goal really be a vision grid?
     // also, everywhere the agent center is included for avoiding the performance cost
@@ -397,20 +394,5 @@ void SimState::generateStateRepresentation()
     stateRepresentation = move(repr);
 }
 
-void SimState::updateCanvasBegPos(ImVec2 pos)
-{
-    canvasBegPos = pos;
-}
-void SimState::updateCanvasEndPos(ImVec2 pos)
-{
-    canvasEndPos = pos;
-}
-void SimState::updateCanvasStepSize(ImVec2 stepSize)
-{
-    canvasStepSize = stepSize;
-}
-Position const &SimState::getSimSize() const
-{
-    return simSize;
-}
+
 

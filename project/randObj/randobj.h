@@ -22,4 +22,20 @@ class RandObj
     float getUniReal44();
     int getExpReplayIdx();
 };
+inline float RandObj::getUniReal01()
+{
+    return uniReal01(rngEngine);
+}
+inline int RandObj::getExpReplayIdx()
+{
+    return expReplayIdx(rngEngine);
+}
+inline std::mt19937 &RandObj::getRngEngine()
+{
+    return rngEngine;
+}
+inline float RandObj::getUniReal44()
+{
+    return uniReal44(rngEngine);
+}
 #endif

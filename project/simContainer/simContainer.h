@@ -42,4 +42,38 @@ class SimContainer
     Eigen::VectorXf getStateForOpponent() const;
 };
 
+inline Eigen::VectorXf SimContainer::getStateForOpponent() const
+{
+    return lastOpponentState;
+}
+inline size_t SimContainer::getLastOpponentAction() const
+{
+    return lastOpponentAction;
+}
+
+inline void SimContainer::goToBeginning()
+{
+    currSimState = 0;
+    //    simStates[currSimState].resetForNextEpisode();
+}
+inline Eigen::VectorXf SimContainer::getStateForAgent() const
+{ // TODO: check that this does not get messed up by level switching
+    return simStates[currSimState].getStateForAgent();
+}
+inline size_t SimContainer::getCurrSimState() const
+{
+    return currSimState;
+}
+inline size_t SimContainer::getEpisodeCount() const
+{
+    return episodeCount;
+}
+inline float SimContainer::getLastReward() const
+{
+    return lastReward;
+}
+inline bool SimContainer::getLastSwitchedLevel() const
+{
+    return lastSwitchedLevel;
+}
 #endif

@@ -14,7 +14,7 @@ Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloP
       opList{ MLP(opponentMLP.sizes, opponentMLP.learningRate, opponentMLP.outputActivationFunc,
                   opponentMLP.miniBatchSize) },
       currOp(0), opModellingType(pOpModellingType), alpha(pAlpha), epsilon(pEpsilon),gamma(pGamma), maxNrSteps(agentMonteCarloParams.maxNrSteps),
-      nrRollouts(agentMonteCarloParams.nrRollouts), opMLPParams(opponentMLP)
+      nrRollouts(agentMonteCarloParams.nrRollouts), opMLPParams(opponentMLP),opDeathsPerEp(nrEpisodes,0)
 {
     gammaVals.push_back(1); // in order to save some i-1s in monte carlo
     float tmpGamma = gamma;
@@ -23,6 +23,7 @@ Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloP
         gammaVals.push_back(tmpGamma);
         tmpGamma *= gamma;
     }
+
 }
 bool Agent::performOneStep()
 {
@@ -36,7 +37,7 @@ void Agent::run()
 
     // tracking stuff? avg rewards etc etc etc
     runReward = 0;
-
+    float killedByOpponentReward = maze->getCurrentLevel().killedByOpponentReward();
     for (size_t nrEpisode = 0; nrEpisode != nrEpisodes; ++nrEpisode)
     {
         // d_oldstate was modified from Maze so it's fine, anything else?
@@ -51,11 +52,13 @@ void Agent::run()
         {
             ++stepCount;
             bool canContinue = performOneStep();
-            totalReward += maze->getLastReward();
+            float receivedReward = maze->getLastReward();
+            totalReward += receivedReward;
             handleOpponentAction();
             if (not canContinue)
             {
-
+                if(receivedReward == killedByOpponentReward)
+                    opDeathsPerEp[nrEpisode] = 1;
                 break;
             }
             if (maze->getLastSwitchedLevel())
@@ -139,10 +142,7 @@ void Agent::opPredict(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf co
     lastOpponentState = newOpponentState;
 }
 
-void Agent::setMaze(SimContainer *simCont)
-{
-    maze = simCont;
-}
+
 // if I pass an agentState here it should already be the current state in maze that I will get anyways
 float Agent::MonteCarloRollout(size_t action)
 {
@@ -210,41 +210,21 @@ void Agent::newEpisode()
     // Some algorithms require this. Empty for the others.
 }
 
-vector<float> &Agent::getRewards()
-{
-    return rewards;
-}
-
-vector<size_t> &Agent::getHasDied()
-{
-    return hasDied;
-}
-
-float Agent::getRunReward()
-{
-    return runReward;
-}
-
 Agent::~Agent()
 {
-}
-vector<float> const &Agent::getOpponentPredictionLosses() const
-{
-    return opponentPredictionLosses;
-}
-vector<float> const &Agent::getOpponentCorrectPredictionPercentage() const
-{
-    return opponentCorrectPredictionPercentage;
-}
-vector<float> const &Agent::getThisEpisodeLoss() const
-{
-    return thisEpisodeLoss;
 }
 size_t Agent::actionWithQ(Eigen::VectorXf const &qVals)
 {
     throw std::runtime_error("In Agent's actionWithQ, should not be here");
 }
-float Agent::getCorrectOpponentTypePredictionPercentage() const
+
+
+
+float Agent::getOpDeathPercentage() const
 {
-    return static_cast<float>(correctOpCurrentEpisode) / totalPredOpCurrentEpisode;
+    size_t count = 0;
+    for(auto const &item:opDeathsPerEp)
+        if(item == 1)
+            ++count;
+    return static_cast<float>(count)/nrEpisodes;
 }
