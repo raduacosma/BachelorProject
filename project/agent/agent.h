@@ -53,7 +53,6 @@ class Agent
     float currentEpisodeLoss;
     size_t currentEpisodeCorrectPredictions;
     std::vector<float> rewards;
-    std::vector<size_t> hasDied;
     std::vector<float> opponentPredictionLosses;
     std::vector<float> opponentCorrectPredictionPercentage;
     std::vector<float> thisEpisodeLoss;
@@ -88,7 +87,6 @@ class Agent
     void run();
 
     std::vector<float> &getRewards();
-    std::vector<size_t> &getHasDied();
     void setMaze(SimContainer *maze);
     float getRunReward();
 
@@ -124,10 +122,6 @@ inline std::vector<float> const &Agent::getOpponentPredictionLosses() const
 inline float Agent::getRunReward()
 {
     return runReward;
-}
-inline std::vector<size_t> &Agent::getHasDied()
-{
-    return hasDied;
 }
 inline std::vector<float> &Agent::getRewards()
 {

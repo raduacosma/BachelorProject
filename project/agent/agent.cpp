@@ -9,7 +9,7 @@ Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloP
              MLPParams opponentMLP, size_t _nrEpisodes, OpModellingType pOpModellingType,
              float pAlpha, float pEpsilon, float pGamma) // TODO: check how size is passed
     : opTrack(opTrackParams.pValueThreshold, opTrackParams.minHistorySize, opTrackParams.maxHistorySize),
-      nrEpisodes(_nrEpisodes), rewards(vector<float>(_nrEpisodes)), hasDied(vector<size_t>(_nrEpisodes)),
+      nrEpisodes(_nrEpisodes), rewards(vector<float>(_nrEpisodes)),
       mlp(agentMLP.sizes, agentMLP.learningRate, agentMLP.outputActivationFunc, agentMLP.miniBatchSize),
       opList{ MLP(opponentMLP.sizes, opponentMLP.learningRate, opponentMLP.outputActivationFunc,
                   opponentMLP.miniBatchSize) },
@@ -23,7 +23,10 @@ Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloP
         gammaVals.push_back(tmpGamma);
         tmpGamma *= gamma;
     }
-
+    rewards.reserve(nrEpisodes);
+    opponentPredictionLosses.reserve(nrEpisodes);
+    opponentCorrectPredictionPercentage.reserve(nrEpisodes);
+    thisEpisodeLoss.reserve(nrEpisodes);
 }
 bool Agent::performOneStep()
 {
