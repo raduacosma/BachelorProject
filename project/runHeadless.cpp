@@ -24,7 +24,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     float gamma = 0.9;
     OpModellingType opModellingType=OpModellingType::ONEFORALL;
     ExpReplayParams expReplayParams{ .cSwapPeriod = 1000, .miniBatchSize = cMiniBatchSize, .sizeExperience = 10000 };
-    AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = 1, .nrRollouts = 5 };
+    AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = 1, .nrRollouts = 1 };
     MLPParams agentMLP{ .sizes = { 52, 200, 4 },
                         .learningRate = 0.001,
                         .outputActivationFunc = ActivationFunction::LINEAR,

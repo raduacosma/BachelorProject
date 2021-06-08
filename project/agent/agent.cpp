@@ -157,8 +157,16 @@ float Agent::MonteCarloRollout(size_t action)
         size_t i = 0;
         MonteCarloSim copyMaze(maze->getCurrentLevel());
         Eigen::VectorXf opProbs = opList[currOp].predict(copyMaze.getStateForOpponent());
-        std::discrete_distribution<> distr({ opProbs[0], opProbs[1], opProbs[2], opProbs[3] });
-        size_t opAction = distr(rngEngine);
+        size_t opAction;
+        if(nrRollouts == 1)
+        {
+            opProbs.maxCoeff(&opAction);
+        }
+        else
+        {
+            std::discrete_distribution<> distr({ opProbs[0], opProbs[1], opProbs[2], opProbs[3] });
+            opAction = distr(rngEngine);
+        }
 
         // always call updateOpPos before computeNextState and getting the state
         auto [reward, canContinue] =
@@ -169,10 +177,19 @@ float Agent::MonteCarloRollout(size_t action)
             while (true)
             {
                 ++i;
+
                 Eigen::VectorXf innerOpProbs = opList[currOp].predict(copyMaze.getStateForOpponent());
-                std::discrete_distribution<> innerDistr(
-                    { innerOpProbs[0], innerOpProbs[1], innerOpProbs[2], innerOpProbs[3] });
-                size_t innerOpAction = innerDistr(rngEngine);
+                size_t innerOpAction;
+                if(nrRollouts == 1)
+                {
+                    innerOpProbs.maxCoeff(&innerOpAction);
+                }
+                else
+                {
+                    std::discrete_distribution<> innerDistr(
+                        { innerOpProbs[0], innerOpProbs[1], innerOpProbs[2], innerOpProbs[3] });
+                    innerOpAction = innerDistr(rngEngine);
+                }
                 size_t agentAction;
                 mlp.predict(copyMaze.getStateForAgent())
                     .maxCoeff(&agentAction); // this and last if should have the same agent state one call to the other
