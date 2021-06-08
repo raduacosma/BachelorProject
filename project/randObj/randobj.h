@@ -12,14 +12,15 @@ class RandObj
 
   private:
     std::uniform_real_distribution<float> uniReal01;
-    std::uniform_real_distribution<float> uniReal44;
+    std::uniform_real_distribution<float> randomInitMLP;
     std::uniform_int_distribution<int> expReplayIdx;
 
   public:
-    RandObj();
-    explicit RandObj(unsigned int seed);
+    RandObj() = default;
+    RandObj(float minMLP, float maxMLP, int expReplaySize);
+    explicit RandObj(unsigned int seed,float minMLP, float maxMLP, int expReplaySize);
     float getUniReal01();
-    float getUniReal44();
+    float getRandomInitMLP();
     int getExpReplayIdx();
 };
 inline float RandObj::getUniReal01()
@@ -34,8 +35,8 @@ inline std::mt19937 &RandObj::getRngEngine()
 {
     return rngEngine;
 }
-inline float RandObj::getUniReal44()
+inline float RandObj::getRandomInitMLP()
 {
-    return uniReal44(rngEngine);
+    return randomInitMLP(rngEngine);
 }
 #endif

@@ -6,10 +6,10 @@
 // TODO: check out monte carlo estimates for target Q-values
 using namespace std;
 Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
-             MLPParams opponentMLP, size_t _nrEpisodes, OpModellingType pOpModellingType,
+             MLPParams opponentMLP, size_t _nrEpisodes, size_t pNrEpisodesToEpsilonZero,OpModellingType pOpModellingType,
              float pAlpha, float pEpsilon, float pGamma) // TODO: check how size is passed
     : opTrack(opTrackParams.pValueThreshold, opTrackParams.minHistorySize, opTrackParams.maxHistorySize),
-      nrEpisodes(_nrEpisodes), rewards(vector<float>(_nrEpisodes)),
+      nrEpisodes(_nrEpisodes),nrEpisodesToEpsilonZero(pNrEpisodesToEpsilonZero), rewards(vector<float>(_nrEpisodes)),
       mlp(agentMLP.sizes, agentMLP.learningRate, agentMLP.outputActivationFunc, agentMLP.miniBatchSize),
       opList{ MLP(opponentMLP.sizes, opponentMLP.learningRate, opponentMLP.outputActivationFunc,
                   opponentMLP.miniBatchSize) },

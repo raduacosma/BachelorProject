@@ -18,13 +18,13 @@ MLP::MLP(std::vector<size_t> _sizes, float _learningRate, ActivationFunction _ou
     }
     for (size_t idx = 1; idx != nrLayers; ++idx)
     {
-        biases.push_back(Eigen::VectorXf::NullaryExpr(sizes[idx],[&](){return globalRng.getUniReal44();}));
+        biases.push_back(Eigen::VectorXf::NullaryExpr(sizes[idx],[&](){return globalRng.getRandomInitMLP();}));
         nablaBiases.emplace_back(sizes[idx]);
         nablaBiasesMiniBatch.emplace_back(sizes[idx]);
     }
     for (size_t x = 0, y = 1; x != nrWeightLayers and y != nrLayers; ++x, ++y)
     {
-        weights.push_back(Eigen::MatrixXf::NullaryExpr(sizes[y], sizes[x],[&](){return globalRng.getUniReal44();}));
+        weights.push_back(Eigen::MatrixXf::NullaryExpr(sizes[y], sizes[x],[&](){return globalRng.getRandomInitMLP();}));
         nablaWeights.emplace_back(sizes[y], sizes[x]);
         nablaWeightsMiniBatch.emplace_back(sizes[y], sizes[x]);
     }
@@ -34,11 +34,11 @@ void MLP::randomizeWeights()
 {
     for (size_t idx = 1; idx != nrLayers; ++idx)
     {
-        biases[idx - 1] = Eigen::VectorXf::NullaryExpr(sizes[idx],[&](){return globalRng.getUniReal44();});
+        biases[idx - 1] = Eigen::VectorXf::NullaryExpr(sizes[idx],[&](){return globalRng.getRandomInitMLP();});
     }
     for (size_t x = 0, y = 1; x != nrWeightLayers and y != nrLayers; ++x, ++y)
     {
-        weights[x] = Eigen::MatrixXf::NullaryExpr(sizes[y], sizes[x],[&](){return globalRng.getUniReal44();});
+        weights[x] = Eigen::MatrixXf::NullaryExpr(sizes[y], sizes[x],[&](){return globalRng.getRandomInitMLP();});
     }
 }
 void MLP::printWeights()

@@ -12,7 +12,7 @@ class Sarsa : public Agent
 
   public:
     Sarsa(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
-          MLPParams opponentMLP, size_t _nrEpisodes,
+          MLPParams opponentMLP, size_t _nrEpisodes,size_t pNrEpisodesToEpsilonZero,
           OpModellingType pOpModellingType, float pAlpha, float pEpsilon,
           float pGamma);
     ~Sarsa() override;

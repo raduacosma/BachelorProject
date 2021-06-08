@@ -50,6 +50,7 @@ class Agent
     Eigen::VectorXf lastOpponentState;
     size_t lastAction;
     size_t nrEpisodes;
+    size_t nrEpisodesToEpsilonZero;
     float currentEpisodeLoss;
     size_t currentEpisodeCorrectPredictions;
     std::vector<float> rewards;
@@ -80,7 +81,7 @@ class Agent
 
   public:
     explicit Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
-                   MLPParams opponentMLP, size_t _nrEpisodes,
+                   MLPParams opponentMLP, size_t _nrEpisodes,size_t pNrEpisodesToEpsilonZero,
                    OpModellingType pOpModellingType, float pAlpha, float pEpsilon, float pGamma);
     virtual ~Agent();
 

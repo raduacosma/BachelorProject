@@ -12,19 +12,25 @@
 #include <iostream>
 #include <iterator>
 #include <memory>
+#include "createRngObj/createRngObj.h"
 
+RandObj globalRng;
 void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
 {
+
     //    std::cout.setstate(std::ios_base::failbit);
     std::string files = "longClock.txt,longCounter.txt,complex.txt";
     size_t cMiniBatchSize = 16;
     size_t numberOfEpisodes = 10000;   // ignore the function parameter for now until proper framework is in place
+    size_t nrEpisodesToEpsilonZero = numberOfEpisodes/4*3;
+    size_t sizeExperience = 10000;
     float alpha = 0.001;
     float epsilon = 0.1;
     float gamma = 0.9;
+    globalRng = RandObj(275165314,-1.0f,1.0f,sizeExperience);
     OpModellingType opModellingType=OpModellingType::ONEFORALL;
-    ExpReplayParams expReplayParams{ .cSwapPeriod = 1000, .miniBatchSize = cMiniBatchSize, .sizeExperience = 10000 };
-    AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = 1, .nrRollouts = 1 };
+    ExpReplayParams expReplayParams{ .cSwapPeriod = 1000, .miniBatchSize = cMiniBatchSize, .sizeExperience = sizeExperience };
+    AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = 1, .nrRollouts = 5 };
     MLPParams agentMLP{ .sizes = { 52, 200, 4 },
                         .learningRate = 0.001,
                         .outputActivationFunc = ActivationFunction::LINEAR,
@@ -43,10 +49,10 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     // could also use stack but meh, this way is more certain
     std::unique_ptr<Agent> agent =
         std::make_unique<QERQueueLearning>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams,
-                                           numberOfEpisodes, OpModellingType::ONEFORALL,alpha,epsilon,gamma);
+                                           numberOfEpisodes,nrEpisodesToEpsilonZero, OpModellingType::ONEFORALL,alpha,epsilon,gamma);
     SimContainer simContainer{ files, agent.get(), rewards, simStateParams };
     agent->run();
-    std::ofstream out{ "results/rewards04MORE.txt" };
+    std::ofstream out{ "results/rewards04LESS.txt" };
     std::vector<float> const &agentRewards = agent->getRewards();
     copy(agentRewards.begin(), agentRewards.end(), std::ostream_iterator<float>(out, "\n"));
     std::ofstream opponent{ "results/opponentPredictionLossesTwoDOUBLE.txt" };

@@ -24,7 +24,7 @@ class DQERQueueLearning : public Agent
 
   public:
     DQERQueueLearning(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
-                      MLPParams opponentMLP, ExpReplayParams expReplayParams, size_t _nrEpisodes,
+                      MLPParams opponentMLP, ExpReplayParams expReplayParams, size_t _nrEpisodes, size_t pNrEpisodesToEpsilonZero,
                       OpModellingType pOpModellingType, float pAlpha,
                       float pEpsilon, float pGamma);
     ~DQERQueueLearning() override;
