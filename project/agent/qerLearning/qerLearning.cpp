@@ -98,21 +98,6 @@ void QERLearning::updateWithExperienceReplay()
     }
     mlp.updateMiniBatchWeights();
 }
-size_t QERLearning::actionWithQ(Eigen::VectorXf const &qVals)
-{
-    bool explore = globalRng.getUniReal01() < epsilon;
-    size_t choice;
-    if (explore)
-    {
-        choice = globalRng.getUniReal01() * NR_ACTIONS;
-    }
-    else
-    {
-        qVals.maxCoeff(&choice);
-    }
-
-    return choice;
-}
 
 QERLearning::~QERLearning()
 {

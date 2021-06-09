@@ -17,7 +17,6 @@ class QLearning : public Agent
               float pGamma);
     ~QLearning() override;
     bool performOneStep() override;
-    size_t actionWithQ(Eigen::VectorXf const &qVals);
     void newEpisode() override;
 
   private:

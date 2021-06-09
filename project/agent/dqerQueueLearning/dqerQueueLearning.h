@@ -29,7 +29,6 @@ class DQERQueueLearning : public Agent
                       float pEpsilon, float pGamma);
     ~DQERQueueLearning() override;
     bool performOneStep() override;
-    size_t actionWithQ(Eigen::VectorXf const &qVals) override;
     void newEpisode() override;
 
   private:

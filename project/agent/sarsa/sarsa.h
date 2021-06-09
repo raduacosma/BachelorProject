@@ -17,7 +17,6 @@ class Sarsa : public Agent
           float pGamma);
     ~Sarsa() override;
     bool performOneStep() override;
-    size_t actionWithQ(Eigen::VectorXf const &qVals);
     void newEpisode() override;
 
   private:

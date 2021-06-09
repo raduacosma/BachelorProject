@@ -45,21 +45,6 @@ bool QLearning::performOneStep()
     lastState = newState;
     return true;
 }
-size_t QLearning::actionWithQ(Eigen::VectorXf const &qVals)
-{
-    bool explore = globalRng.getUniReal01() < epsilon;
-    size_t choice;
-    if (explore)
-    {
-        choice = globalRng.getUniReal01() * NR_ACTIONS;
-    }
-    else
-    {
-        qVals.maxCoeff(&choice);
-    }
-
-    return choice;
-}
 
 QLearning::~QLearning()
 {

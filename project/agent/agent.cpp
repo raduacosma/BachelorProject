@@ -221,6 +221,29 @@ float Agent::MonteCarloRollout(size_t action)
     }
     return totalReward / nrRollouts;
 }
+
+size_t Agent::actionWithQ(Eigen::VectorXf const &qVals) const
+{
+    bool explore = globalRng.getUniReal01() < epsilon;
+    size_t choice;
+    if (explore)
+    {
+        choice = globalRng.getUniReal01() * NR_ACTIONS;
+    }
+    else
+    {
+        float maxVal = qVals.maxCoeff();
+        std::vector<size_t> maxIdxs;
+        maxIdxs.reserve(4);
+        for(size_t idx = 0; idx != NR_ACTIONS; ++idx)
+            if(qVals[idx] == maxVal)
+                maxIdxs.push_back(idx);
+        choice = maxIdxs[globalRng.getUniReal01() * maxIdxs.size()];
+//        qVals.maxCoeff(&choice);
+    }
+
+    return choice;
+}
 Eigen::VectorXf Agent::MonteCarloAllActions()
 {
     Eigen::VectorXf estimatedQValues(4);
@@ -237,10 +260,6 @@ void Agent::newEpisode()
 
 Agent::~Agent()
 {
-}
-size_t Agent::actionWithQ(Eigen::VectorXf const &qVals)
-{
-    throw std::runtime_error("In Agent's actionWithQ, should not be here");
 }
 
 

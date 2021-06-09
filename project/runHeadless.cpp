@@ -25,7 +25,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     size_t nrEpisodesToEpsilonZero = numberOfEpisodes/4*3;
     size_t sizeExperience = 10000;
     float alpha = 0.001;
-    float epsilon = 0.1;
+    float epsilon = 0.5;
     float gamma = 0.9;
     globalRng = RandObj(275165314,-1.0f,1.0f,sizeExperience);
     OpModellingType opModellingType=OpModellingType::ONEFORALL;

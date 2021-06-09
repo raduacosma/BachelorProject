@@ -93,7 +93,7 @@ class Agent
 
     virtual bool performOneStep();
     virtual void newEpisode();
-    virtual size_t actionWithQ(Eigen::VectorXf const &qVals);
+    size_t actionWithQ(Eigen::VectorXf const &qVals) const;
 
     void handleOpponentAction();
     float MonteCarloRollout(size_t action);

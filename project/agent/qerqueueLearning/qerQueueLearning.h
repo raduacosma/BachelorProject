@@ -30,7 +30,6 @@ class QERQueueLearning : public Agent
                      float pEpsilon, float pGamma);
     ~QERQueueLearning() override;
     bool performOneStep() override;
-    size_t actionWithQ(Eigen::VectorXf const &qVals) override;
     void newEpisode() override;
 
   private:
