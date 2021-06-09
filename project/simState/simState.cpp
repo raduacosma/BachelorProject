@@ -10,9 +10,10 @@ using namespace std;
 
 SimState::SimState(std::string const &filename, Rewards rewards, SimStateParams simStateParams)
     : traceSize(simStateParams.traceSize), visionGridSize(simStateParams.visionGridSize),
-      visionGridSideSize(visionGridSize * 2 + 1), agentStateSize(visionGridSideSize * visionGridSideSize),randomOpCoef(simStateParams.randomOpCoef),
-      d_outOfBoundsReward(rewards.outOfBoundsReward), d_reachedGoalReward(rewards.reachedGoalReward),
-      d_killedByOpponentReward(rewards.killedByOpponentReward), d_normalReward(rewards.normalReward)
+      visionGridSideSize(visionGridSize * 2 + 1), agentStateSize(visionGridSideSize * visionGridSideSize),
+      randomOpCoef(simStateParams.randomOpCoef), d_outOfBoundsReward(rewards.outOfBoundsReward),
+      d_reachedGoalReward(rewards.reachedGoalReward), d_killedByOpponentReward(rewards.killedByOpponentReward),
+      d_normalReward(rewards.normalReward)
 {
     ifstream in{ filename };
     if (not in)
@@ -53,7 +54,6 @@ SimState::SimState(std::string const &filename, Rewards rewards, SimStateParams 
 
     //    sendNrStatesToAgent();
     resetForNextEpisode();
-
 }
 Position SimState::computeNewPos(Actions currAction, Position pos)
 {
@@ -102,7 +102,7 @@ void SimState::updateOpponentPos()
 {
     Position lastOpponentPos = currOpTrace.back();
     Position newOpponentPos;
-    if(randomFluctuations.empty())
+    if (randomFluctuations.empty())
     {
         ++currOpPosIdx;
         if (currOpPosIdx == opponentTrace.size())
@@ -111,22 +111,22 @@ void SimState::updateOpponentPos()
         }
         newOpponentPos = opponentTrace[currOpPosIdx];
 
-        if(globalRng.getUniReal01() < randomOpCoef)
+        if (globalRng.getUniReal01() < randomOpCoef)
         {
             createRandomFluctuations(newOpponentPos);
         }
     }
     else
     {
-        newOpponentPos=randomFluctuations.front();
+        newOpponentPos = randomFluctuations.front();
         randomFluctuations.pop_front();
     }
     if (currOpTrace.size() > traceSize)
         currOpTrace.pop_front();
     currOpTrace.push_back(newOpponentPos);
-    lastOpponentAction=computeDirection(newOpponentPos,lastOpponentPos);
+    lastOpponentAction = computeDirection(newOpponentPos, lastOpponentPos);
 }
-Actions SimState::computeDirection(Position const &newPos,Position const &lastPos)
+Actions SimState::computeDirection(Position const &newPos, Position const &lastPos)
 {
     int xDiff = static_cast<int>(newPos.x - lastPos.x);
     int yDiff = static_cast<int>(newPos.y - lastPos.y);
@@ -149,11 +149,11 @@ void SimState::createRandomFluctuations(Position const &newPos)
     {
         opIdxCopy = 0;
     }
-    auto updateFluctuationsWithDirections=[&](Actions first, Actions second) -> bool
+    auto updateFluctuationsWithDirections = [&](Actions first, Actions second) -> bool
     {
-        Position afterFirst = computeNewPos(first,newPos);
+        Position afterFirst = computeNewPos(first, newPos);
         Position afterSecond = computeNewPos(second, afterFirst);
-        if(checkPositionForOpponent(afterFirst) and checkPositionForOpponent(afterSecond))
+        if (checkPositionForOpponent(afterFirst) and checkPositionForOpponent(afterSecond))
         {
             randomFluctuations.push_back(afterFirst);
             randomFluctuations.push_back(afterSecond);
@@ -161,24 +161,24 @@ void SimState::createRandomFluctuations(Position const &newPos)
         }
         return false;
     };
-    Actions direction = computeDirection(opponentTrace[opIdxCopy],newPos);
+    Actions direction = computeDirection(opponentTrace[opIdxCopy], newPos);
     switch (direction)
     {
         case Actions::LEFT:
-            if(not updateFluctuationsWithDirections(Actions::DOWN,Actions::LEFT))
-                updateFluctuationsWithDirections(Actions::UP,Actions::LEFT);
+            if (not updateFluctuationsWithDirections(Actions::DOWN, Actions::LEFT))
+                updateFluctuationsWithDirections(Actions::UP, Actions::LEFT);
             break;
         case Actions::RIGHT:
-            if(not updateFluctuationsWithDirections(Actions::DOWN,Actions::RIGHT))
-                updateFluctuationsWithDirections(Actions::UP,Actions::RIGHT);
+            if (not updateFluctuationsWithDirections(Actions::DOWN, Actions::RIGHT))
+                updateFluctuationsWithDirections(Actions::UP, Actions::RIGHT);
             break;
         case Actions::UP:
-            if(not updateFluctuationsWithDirections(Actions::LEFT,Actions::UP))
-                updateFluctuationsWithDirections(Actions::RIGHT,Actions::UP);
+            if (not updateFluctuationsWithDirections(Actions::LEFT, Actions::UP))
+                updateFluctuationsWithDirections(Actions::RIGHT, Actions::UP);
             break;
         case Actions::DOWN:
-            if(not updateFluctuationsWithDirections(Actions::LEFT,Actions::DOWN))
-                updateFluctuationsWithDirections(Actions::RIGHT,Actions::DOWN);
+            if (not updateFluctuationsWithDirections(Actions::LEFT, Actions::DOWN))
+                updateFluctuationsWithDirections(Actions::RIGHT, Actions::DOWN);
             break;
     }
 }
@@ -208,8 +208,8 @@ Eigen::VectorXf SimState::getStateForAgent() const
         applyToArray(opPos, agentStateSize);
     }
     //    applyToArray(goalPos,agentStateSize*2);
-    agentGrid[offsetForGoal] = static_cast<int>(goalPos.x - agentPos.x) / 10.0f;
-    agentGrid[offsetForGoal + 1] = static_cast<int>(goalPos.y - agentPos.y) / 10.0f;
+    agentGrid[offsetForGoal] = static_cast<int>(goalPos.x - agentPos.x) / 20.0f;
+    agentGrid[offsetForGoal + 1] = static_cast<int>(goalPos.y - agentPos.y) / 20.0f;
     return agentGrid;
 }
 Eigen::VectorXf SimState::getStateForOpponent() const
@@ -220,7 +220,7 @@ Eigen::VectorXf SimState::getStateForOpponent() const
     Position opPosNow = currOpTrace.back();
     auto applyToArray = [&](Position const &pos, size_t offset)
     {
-        long const rowIdx = pos.y - opPosNow.y + visionGridSize; // maybe cache these out?
+        long const rowIdx = pos.y - opPosNow.y + visionGridSize;
         long const colIdx = pos.x - opPosNow.x + visionGridSize;
         if (rowIdx >= 0 and colIdx >= 0 and rowIdx < static_cast<long>(visionGridSideSize) and
             colIdx < static_cast<long>(visionGridSideSize))
@@ -234,12 +234,12 @@ Eigen::VectorXf SimState::getStateForOpponent() const
     {
         applyToArray(opPos, agentStateSize);
     }
-    applyToArray(goalPos,agentStateSize*2);
+    applyToArray(goalPos, agentStateSize * 2);
     return agentGrid;
 }
 void SimState::resetAgentPos()
 {
-    std::uniform_int_distribution<> distr{ -2, 2 };  // hardcoded but no need for tweaks
+    std::uniform_int_distribution<> distr{ -2, 2 }; // hardcoded but no need for tweaks
     auto &rngEngine = globalRng.getRngEngine();
     agentPos = { initialAgentPos.x + distr(rngEngine), initialAgentPos.y + distr(rngEngine) };
 }
@@ -393,6 +393,3 @@ void SimState::generateStateRepresentation()
 
     stateRepresentation = move(repr);
 }
-
-
-

@@ -72,7 +72,7 @@ class SimState
     void resetAgentPos();
     void updateOpponentPos();
     void createRandomFluctuations(Position const &newPos);
-    static Actions computeDirection(Position const &newPos,Position const &lastPos);
+    static Actions computeDirection(Position const &newPos, Position const &lastPos);
     Position computeNewPos(Actions currAction, Position pos);
     bool checkPositionForOpponent(Position const &testPos);
 };

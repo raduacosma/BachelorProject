@@ -18,7 +18,7 @@ class RandObj
   public:
     RandObj() = default;
     RandObj(float minMLP, float maxMLP, int expReplaySize);
-    explicit RandObj(unsigned int seed,float minMLP, float maxMLP, int expReplaySize);
+    explicit RandObj(unsigned int seed, float minMLP, float maxMLP, int expReplaySize);
     float getUniReal01();
     float getRandomInitMLP();
     int getExpReplayIdx();

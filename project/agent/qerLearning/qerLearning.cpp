@@ -3,13 +3,14 @@
 #include <utility>
 
 QERLearning::QERLearning(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
-                         MLPParams opponentMLP, ExpReplayParams expReplayParams, size_t _nrEpisodes,size_t pNrEpisodesToEpsilonZero,
-                         OpModellingType pOpModellingType, float pAlpha, float pEpsilon,
+                         MLPParams opponentMLP, ExpReplayParams expReplayParams, size_t _nrEpisodes,
+                         size_t pNrEpisodesToEpsilonZero, OpModellingType pOpModellingType, float pAlpha,
+                         float pEpsilon,
                          float pGamma) // TODO: check how size is passed
-    : Agent(opTrackParams, agentMonteCarloParams, std::move(agentMLP), std::move(opponentMLP), _nrEpisodes,pNrEpisodesToEpsilonZero,
-            pOpModellingType, pAlpha,pEpsilon,pGamma),
-      targetMLP(mlp), cSwapPeriod(expReplayParams.cSwapPeriod),
-      miniBatchSize(expReplayParams.miniBatchSize), sizeExperience(expReplayParams.sizeExperience)
+    : Agent(opTrackParams, agentMonteCarloParams, std::move(agentMLP), std::move(opponentMLP), _nrEpisodes,
+            pNrEpisodesToEpsilonZero, pOpModellingType, pAlpha, pEpsilon, pGamma),
+      targetMLP(mlp), cSwapPeriod(expReplayParams.cSwapPeriod), miniBatchSize(expReplayParams.miniBatchSize),
+      sizeExperience(expReplayParams.sizeExperience)
 {
     experiences.reserve(sizeExperience);
     for (size_t idx = 0; idx != sizeExperience; ++idx)

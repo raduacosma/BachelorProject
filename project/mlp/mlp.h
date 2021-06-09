@@ -2,10 +2,10 @@
 #define _INCLUDED_MLP
 
 #include "../../Eigen/Core"
-#include "../utilities/utilities.h"
-#include <cstddef>
 #include "../createRngObj/createRngObj.h"
 #include "../randObj/randobj.h"
+#include "../utilities/utilities.h"
+#include <cstddef>
 #include <vector>
 
 enum class MLPUpdateType

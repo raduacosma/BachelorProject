@@ -177,8 +177,8 @@ int main(int argc, char **argv)
     // FIXME: THESE ARE NOT THE RIGHT ONES, THESE ARE JUST SO THE GUI COMPILES UNTIL I REFACTOR THIS AGENT
     // THE PURPOSE OF THE GUI NOW IS TO EVALUATE THE LEVELS NOT THE AGENT RIGHT NOW
     size_t cMiniBatchSize = 16;
-    size_t numberOfEpisodes = 10000;   // ignore the parameter for now until proper framework is in place
-    size_t nrEpisodesToEpsilonZero = numberOfEpisodes/4*3;
+    size_t numberOfEpisodes = 10000; // ignore the parameter for now until proper framework is in place
+    size_t nrEpisodesToEpsilonZero = numberOfEpisodes / 4 * 3;
     float alpha = 0.001;
     float epsilon = 0.1;
     float gamma = 0.9;
@@ -195,10 +195,12 @@ int main(int argc, char **argv)
     Rewards rewards = {
         .normalReward = -0.1, .killedByOpponentReward = -100, .outOfBoundsReward = -0.1, .reachedGoalReward = 100
     };
-    SimStateParams simStateParams{ .traceSize = 6, .visionGridSize = 2,.randomOpCoef=-1 };
+    SimStateParams simStateParams{ .traceSize = 6, .visionGridSize = 2, .randomOpCoef = -1 };
     OpTrackParams kolsmirParams = { .pValueThreshold = 0.05, .minHistorySize = 10, .maxHistorySize = 10 };
     OpTrackParams pettittParams = { .pValueThreshold = 0.01, .minHistorySize = 10, .maxHistorySize = 20 };
-    std::unique_ptr<Agent> agent = std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, numberOfEpisodes,nrEpisodesToEpsilonZero,OpModellingType::ONEFORALL,alpha,epsilon,gamma);
+    std::unique_ptr<Agent> agent =
+        std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, numberOfEpisodes,
+                                nrEpisodesToEpsilonZero, OpModellingType::ONEFORALL, alpha, epsilon, gamma);
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -230,7 +232,9 @@ int main(int argc, char **argv)
             if (simContainer)
             {
                 simContainer = nullptr;
-                agent = std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, numberOfEpisodes,nrEpisodesToEpsilonZero,OpModellingType::ONEFORALL,alpha,epsilon,gamma);
+                agent = std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP,
+                                                numberOfEpisodes, nrEpisodesToEpsilonZero, OpModellingType::ONEFORALL,
+                                                alpha, epsilon, gamma);
             }
             drawStartMenu(uiStateTracker);
         }

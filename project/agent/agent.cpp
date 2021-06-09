@@ -6,15 +6,17 @@
 // TODO: check out monte carlo estimates for target Q-values
 using namespace std;
 Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
-             MLPParams opponentMLP, size_t _nrEpisodes, size_t pNrEpisodesToEpsilonZero,OpModellingType pOpModellingType,
-             float pAlpha, float pEpsilon, float pGamma) // TODO: check how size is passed
+             MLPParams opponentMLP, size_t _nrEpisodes, size_t pNrEpisodesToEpsilonZero,
+             OpModellingType pOpModellingType, float pAlpha, float pEpsilon,
+             float pGamma) // TODO: check how size is passed
     : opTrack(opTrackParams.pValueThreshold, opTrackParams.minHistorySize, opTrackParams.maxHistorySize),
-      nrEpisodes(_nrEpisodes),nrEpisodesToEpsilonZero(pNrEpisodesToEpsilonZero), rewards(vector<float>(_nrEpisodes)),
+      nrEpisodes(_nrEpisodes), nrEpisodesToEpsilonZero(pNrEpisodesToEpsilonZero), rewards(vector<float>(_nrEpisodes)),
       mlp(agentMLP.sizes, agentMLP.learningRate, agentMLP.outputActivationFunc, agentMLP.miniBatchSize),
       opList{ MLP(opponentMLP.sizes, opponentMLP.learningRate, opponentMLP.outputActivationFunc,
                   opponentMLP.miniBatchSize) },
-      currOp(0), opModellingType(pOpModellingType), alpha(pAlpha), epsilon(pEpsilon),gamma(pGamma), maxNrSteps(agentMonteCarloParams.maxNrSteps),
-      nrRollouts(agentMonteCarloParams.nrRollouts), opMLPParams(opponentMLP),opDeathsPerEp(nrEpisodes,0)
+      currOp(0), opModellingType(pOpModellingType), alpha(pAlpha), epsilon(pEpsilon), gamma(pGamma),
+      maxNrSteps(agentMonteCarloParams.maxNrSteps), nrRollouts(agentMonteCarloParams.nrRollouts),
+      opMLPParams(opponentMLP), opDeathsPerEp(nrEpisodes, 0)
 {
     gammaVals.push_back(1); // in order to save some i-1s in monte carlo
     float tmpGamma = gamma;
@@ -45,7 +47,7 @@ void Agent::run()
     float killedByOpponentReward = maze->getCurrentLevel().killedByOpponentReward();
     for (size_t nrEpisode = 0; nrEpisode != nrEpisodes; ++nrEpisode)
     {
-        std::cout<<epsilon<<std::endl;
+        std::cout << epsilon << std::endl;
         // d_oldstate was modified from Maze so it's fine, anything else?
         newEpisode();
         currentEpisodeLoss = 0;
@@ -63,7 +65,7 @@ void Agent::run()
             handleOpponentAction();
             if (not canContinue)
             {
-                if(receivedReward == killedByOpponentReward)
+                if (receivedReward == killedByOpponentReward)
                     opDeathsPerEp[nrEpisode] = 1;
                 break;
             }
@@ -73,13 +75,13 @@ void Agent::run()
             }
         }
         std::cout << "totalReward: " << totalReward << std::endl;
-        std::cout<< opList.size()<<std::endl;
+        std::cout << opList.size() << std::endl;
         opponentPredictionLosses.push_back(currentEpisodeLoss / stepCount);
         opponentCorrectPredictionPercentage.push_back(static_cast<float>(currentEpisodeCorrectPredictions) / stepCount);
         runReward += totalReward;
         rewards[nrEpisode] = totalReward;
-        if(epsilon > lastEpsilon)
-            epsilon -= (initialEpsilon-lastEpsilon) / nrEpisodesToEpsilonZero;
+        if (epsilon > lastEpsilon)
+            epsilon -= (initialEpsilon - lastEpsilon) / nrEpisodesToEpsilonZero;
     }
     // any cleanup?
 }
@@ -150,7 +152,6 @@ void Agent::opPredict(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf co
     lastOpponentState = newOpponentState;
 }
 
-
 // if I pass an agentState here it should already be the current state in maze that I will get anyways
 float Agent::MonteCarloRollout(size_t action)
 {
@@ -163,7 +164,7 @@ float Agent::MonteCarloRollout(size_t action)
         MonteCarloSim copyMaze(maze->getCurrentLevel());
         Eigen::VectorXf opProbs = opList[currOp].predict(copyMaze.getStateForOpponent());
         size_t opAction;
-        if(nrRollouts == 1)
+        if (nrRollouts == 1)
         {
             opProbs.maxCoeff(&opAction);
         }
@@ -185,7 +186,7 @@ float Agent::MonteCarloRollout(size_t action)
 
                 Eigen::VectorXf innerOpProbs = opList[currOp].predict(copyMaze.getStateForOpponent());
                 size_t innerOpAction;
-                if(nrRollouts == 1)
+                if (nrRollouts == 1)
                 {
                     innerOpProbs.maxCoeff(&innerOpAction);
                 }
@@ -235,11 +236,11 @@ size_t Agent::actionWithQ(Eigen::VectorXf const &qVals) const
         float maxVal = qVals.maxCoeff();
         std::vector<size_t> maxIdxs;
         maxIdxs.reserve(4);
-        for(size_t idx = 0; idx != NR_ACTIONS; ++idx)
-            if(qVals[idx] == maxVal)
+        for (size_t idx = 0; idx != NR_ACTIONS; ++idx)
+            if (qVals[idx] == maxVal)
                 maxIdxs.push_back(idx);
         choice = maxIdxs[globalRng.getUniReal01() * maxIdxs.size()];
-//        qVals.maxCoeff(&choice);
+        //        qVals.maxCoeff(&choice);
     }
 
     return choice;
@@ -262,13 +263,11 @@ Agent::~Agent()
 {
 }
 
-
-
 float Agent::getOpDeathPercentage() const
 {
     size_t count = 0;
-    for(auto const &item:opDeathsPerEp)
-        if(item == 1)
+    for (auto const &item : opDeathsPerEp)
+        if (item == 1)
             ++count;
-    return static_cast<float>(count)/nrEpisodes;
+    return static_cast<float>(count) / nrEpisodes;
 }

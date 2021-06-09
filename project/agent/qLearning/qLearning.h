@@ -12,9 +12,8 @@ class QLearning : public Agent
 
   public:
     QLearning(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
-              MLPParams opponentMLP, size_t _nrEpisodes,size_t pNrEpisodesToEpsilonZero,
-              OpModellingType pOpModellingType, float pAlpha, float pEpsilon,
-              float pGamma);
+              MLPParams opponentMLP, size_t _nrEpisodes, size_t pNrEpisodesToEpsilonZero,
+              OpModellingType pOpModellingType, float pAlpha, float pEpsilon, float pGamma);
     ~QLearning() override;
     bool performOneStep() override;
     void newEpisode() override;

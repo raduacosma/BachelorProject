@@ -39,7 +39,6 @@ class Agent
     friend class OpTrack;
 
   protected:
-
     OpTrack opTrack;
     size_t const NR_ACTIONS = 4; // Hardcoded number of actions
     float runReward;
@@ -81,7 +80,7 @@ class Agent
 
   public:
     explicit Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
-                   MLPParams opponentMLP, size_t _nrEpisodes,size_t pNrEpisodesToEpsilonZero,
+                   MLPParams opponentMLP, size_t _nrEpisodes, size_t pNrEpisodesToEpsilonZero,
                    OpModellingType pOpModellingType, float pAlpha, float pEpsilon, float pGamma);
     virtual ~Agent();
 
@@ -132,6 +131,5 @@ inline void Agent::setMaze(SimContainer *simCont)
 {
     maze = simCont;
 }
-
 
 #endif

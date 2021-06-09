@@ -29,7 +29,8 @@ class OpTrack
     void normalOpTracking(Agent &agent, Eigen::VectorXf const &lastState, Eigen::VectorXf const &newState, float loss);
     void kolsmirOpTracking(Agent &agent, Eigen::VectorXf const &lastState, Eigen::VectorXf const &newState, float loss);
     void pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, Eigen::VectorXf const &newState, float loss);
-    void noTrainPettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, Eigen::VectorXf const &newState, float loss);
+    void noTrainPettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, Eigen::VectorXf const &newState,
+                                  float loss);
     void kolsmirOpInit(Agent &agent);
     void noTrainPettittOpInit(Agent &agent);
     void pettittOpInit(Agent &agent);

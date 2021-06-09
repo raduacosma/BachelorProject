@@ -34,7 +34,6 @@ bool SimContainer::nextLevel()
     return true;
 }
 
-
 std::tuple<float, bool> SimContainer::computeNextStateAndReward(Actions action)
 {
     auto [reward, continueStatus] = simStates[currSimState].computeNextStateAndReward(action);
@@ -77,4 +76,3 @@ std::tuple<float, bool> SimContainer::computeNextStateAndReward(Actions action)
     lastReward = reward;
     return make_tuple(reward, canContinue);
 }
-

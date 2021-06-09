@@ -4,12 +4,12 @@
 
 QERQueueLearning::QERQueueLearning(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams,
                                    MLPParams agentMLP, MLPParams opponentMLP, ExpReplayParams expReplayParams,
-                                   size_t _nrEpisodes, size_t pNrEpisodesToEpsilonZero,OpModellingType pOpModellingType, float pAlpha, float pEpsilon,
-                                   float pGamma)
-    : Agent(opTrackParams, agentMonteCarloParams, std::move(agentMLP), std::move(opponentMLP), _nrEpisodes,pNrEpisodesToEpsilonZero,
-            pOpModellingType, pAlpha,pEpsilon,pGamma),
-      targetMLP(mlp), cSwapPeriod(expReplayParams.cSwapPeriod),
-      miniBatchSize(expReplayParams.miniBatchSize), sizeExperience(expReplayParams.sizeExperience)
+                                   size_t _nrEpisodes, size_t pNrEpisodesToEpsilonZero,
+                                   OpModellingType pOpModellingType, float pAlpha, float pEpsilon, float pGamma)
+    : Agent(opTrackParams, agentMonteCarloParams, std::move(agentMLP), std::move(opponentMLP), _nrEpisodes,
+            pNrEpisodesToEpsilonZero, pOpModellingType, pAlpha, pEpsilon, pGamma),
+      targetMLP(mlp), cSwapPeriod(expReplayParams.cSwapPeriod), miniBatchSize(expReplayParams.miniBatchSize),
+      sizeExperience(expReplayParams.sizeExperience)
 {
 }
 void QERQueueLearning::newEpisode()
@@ -31,9 +31,9 @@ bool QERQueueLearning::performOneStep()
         cCounter = 0;
     }
     // TODO: make monte carlo vs normal configurable
-//        Eigen::VectorXf qValues = mlp.predict(lastState);
+    //        Eigen::VectorXf qValues = mlp.predict(lastState);
     Eigen::VectorXf qValues = MonteCarloAllActions();
-//        std::cout<<qValues.transpose()<<std::endl;
+    //        std::cout<<qValues.transpose()<<std::endl;
     size_t action = actionWithQ(qValues);
     auto [reward, canContinue] = maze->computeNextStateAndReward(static_cast<Actions>(action));
     Eigen::VectorXf newState = maze->getStateForAgent();
@@ -97,8 +97,6 @@ void QERQueueLearning::updateWithExperienceReplay()
     mlp.updateMiniBatchWeights();
 }
 
-
 QERQueueLearning::~QERQueueLearning()
 {
 }
-
