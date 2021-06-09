@@ -42,7 +42,7 @@ void OpTrack::commonOpInit(Agent &agent)
     // this is just because the other baseline algorithms only use 1 MLP and therefore the initial opList
     // gets initialised with one MLP which we need to take care of the first time
     // probably need an initializer list or something so it jives with the initial opponentMlp hyperparams
-    agent.opList.emplace_back(agent.opMLPParams.sizes, agent.opMLPParams.learningRate,
+    agent.opList.emplace_back(agent.opMLPParams.sizes, agent.opMLPParams.learningRate, agent.opMLPParams.regParam,
                               agent.opMLPParams.outputActivationFunc, agent.opMLPParams.miniBatchSize);
     agent.currOp = agent.opList.size() - 1;
 }

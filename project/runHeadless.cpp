@@ -35,10 +35,12 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = 1, .nrRollouts = 5 };
     MLPParams agentMLP{ .sizes = { 52, 200, 4 },
                         .learningRate = 0.001,
+                        .regParam = 0.01,
                         .outputActivationFunc = ActivationFunction::LINEAR,
                         .miniBatchSize = cMiniBatchSize };
     MLPParams opponentMLP{ .sizes = { 75, 200, 4 },
                            .learningRate = 0.001,
+                           .regParam  = -1,
                            .outputActivationFunc = ActivationFunction::SOFTMAX,
                            .miniBatchSize = cMiniBatchSize };
     Rewards rewards = { .normalReward = -0.1f,
@@ -53,13 +55,13 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     std::unique_ptr<Agent> agent = std::make_unique<QERQueueLearning>(
         kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams, numberOfEpisodes,
         nrEpisodesToEpsilonZero, OpModellingType::ONEFORALL, alpha, epsilon, gamma);
-    //    std::unique_ptr<Agent> agent =
-    //        std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP,
-    //                                           numberOfEpisodes,nrEpisodesToEpsilonZero,
-    //                                           OpModellingType::ONEFORALL,alpha,epsilon,gamma);
+//        std::unique_ptr<Agent> agent =
+//            std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP,
+//                                               numberOfEpisodes,nrEpisodesToEpsilonZero,
+//                                               OpModellingType::ONEFORALL,alpha,0.3,gamma);
     SimContainer simContainer{ files, agent.get(), rewards, simStateParams };
     agent->run();
-    std::ofstream out{ "results/rewards04LESS.txt" };
+    std::ofstream out{ "results/rewards04AFTER.txt" };
     std::vector<float> const &agentRewards = agent->getRewards();
     copy(agentRewards.begin(), agentRewards.end(), std::ostream_iterator<float>(out, "\n"));
     std::ofstream opponent{ "results/opponentPredictionLossesTwoDOUBLE.txt" };

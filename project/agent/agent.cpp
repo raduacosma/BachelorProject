@@ -11,8 +11,8 @@ Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloP
              float pGamma) // TODO: check how size is passed
     : opTrack(opTrackParams.pValueThreshold, opTrackParams.minHistorySize, opTrackParams.maxHistorySize),
       nrEpisodes(_nrEpisodes), nrEpisodesToEpsilonZero(pNrEpisodesToEpsilonZero), rewards(vector<float>(_nrEpisodes)),
-      mlp(agentMLP.sizes, agentMLP.learningRate, agentMLP.outputActivationFunc, agentMLP.miniBatchSize),
-      opList{ MLP(opponentMLP.sizes, opponentMLP.learningRate, opponentMLP.outputActivationFunc,
+      mlp(agentMLP.sizes, agentMLP.learningRate, agentMLP.regParam, agentMLP.outputActivationFunc, agentMLP.miniBatchSize),
+      opList{ MLP(opponentMLP.sizes, opponentMLP.learningRate, opponentMLP.regParam, opponentMLP.outputActivationFunc,
                   opponentMLP.miniBatchSize) },
       currOp(0), opModellingType(pOpModellingType), alpha(pAlpha), epsilon(pEpsilon), gamma(pGamma),
       maxNrSteps(agentMonteCarloParams.maxNrSteps), nrRollouts(agentMonteCarloParams.nrRollouts),

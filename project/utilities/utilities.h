@@ -44,6 +44,7 @@ struct MLPParams
 {
     std::vector<size_t> sizes;
     float learningRate;
+    float regParam;
     ActivationFunction outputActivationFunc;
     size_t miniBatchSize;
 };

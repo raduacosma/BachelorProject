@@ -2,10 +2,10 @@
 #include <algorithm>
 #include <iostream>
 
-MLP::MLP(std::vector<size_t> _sizes, float _learningRate, ActivationFunction _outputActivationFunction,
+MLP::MLP(std::vector<size_t> _sizes, float _learningRate, float pRegParam, ActivationFunction _outputActivationFunction,
          size_t pMiniBatchSize)
     : sizes(std::move(_sizes)), nrLayers(sizes.size()), nrWeightLayers(nrLayers - 1),
-      nrLayersBeforeActivation(nrLayers - 2), miniBatchSize(pMiniBatchSize), learningRate(_learningRate),
+      nrLayersBeforeActivation(nrLayers - 2), miniBatchSize(pMiniBatchSize), learningRate(_learningRate),regParam(pRegParam),
       outputActivationFunction(_outputActivationFunction)
 {
     for (size_t idx = 0; idx != nrLayers; ++idx)
@@ -91,7 +91,7 @@ Eigen::VectorXf MLP::predict(Eigen::VectorXf const &input)
         float expsSum = exps.sum();
         return exps / expsSum;
     }
-    throw std::runtime_error("Reached end of predict without returning");
+//    throw std::runtime_error("Reached end of predict without returning");
 }
 float MLP::predictWithLoss(Eigen::VectorXf const &input, Eigen::VectorXf const &output)
 { // TODO: check this function with MLP subproject
@@ -148,7 +148,7 @@ Eigen::VectorXf MLP::feedforward(Eigen::VectorXf const &input)
         activationRef = exps / expsSum;
         return activationRef;
     }
-    throw std::runtime_error("Reached end of feedforward without returning");
+//    throw std::runtime_error("Reached end of feedforward without returning");
 }
 float MLP::update(Eigen::VectorXf const &output, MLPUpdateType updateType)
 {
@@ -197,7 +197,12 @@ float MLP::update(Eigen::VectorXf const &output, MLPUpdateType updateType)
         nablaWeights[idx] = currNablaBiases * activations[idx].transpose();
     }
     if (updateType == MLPUpdateType::NORMAL)
-        updateWeights();
+    {
+        if (regParam > 0)
+            updateWeightsWithReg();
+        else
+            updateWeights();
+    }
     else
         updateMiniBatchNablas();
     return loss;
@@ -223,6 +228,11 @@ void MLP::updateMiniBatchNablas()
 }
 void MLP::updateMiniBatchWeights()
 {
+    if(regParam>0)
+    {
+        updateMiniBatchWeightsWithReg();
+        return;
+    }
     float const updateCoeff = learningRate / miniBatchSize;
     for (size_t idx = 0; idx != nrWeightLayers; ++idx)
     {
@@ -234,6 +244,25 @@ void MLP::updateWeights()
 {
     for (size_t idx = 0; idx != nrWeightLayers; ++idx)
     {
+        weights[idx] -= learningRate * nablaWeights[idx];
+        biases[idx] -= learningRate * nablaBiases[idx];
+    }
+}
+void MLP::updateMiniBatchWeightsWithReg()
+{
+    float const updateCoeff = learningRate / miniBatchSize;
+    for (size_t idx = 0; idx != nrWeightLayers; ++idx)
+    {
+        weights[idx]*=1.0f-updateCoeff*regParam;
+        weights[idx] -= updateCoeff * nablaWeightsMiniBatch[idx];
+        biases[idx] -= updateCoeff * nablaBiasesMiniBatch[idx];
+    }
+}
+void MLP::updateWeightsWithReg()
+{
+    for (size_t idx = 0; idx != nrWeightLayers; ++idx)
+    {
+        weights[idx]*=1.0f-learningRate*regParam;
         weights[idx] -= learningRate * nablaWeights[idx];
         biases[idx] -= learningRate * nablaBiases[idx];
     }
