@@ -97,8 +97,8 @@ Eigen::VectorXf MonteCarloSim::getStateForAgent() const
         applyToArray(opPos, agentStateSize);
     }
 //        applyToArray(goalPos,agentStateSize*2);
-    int xDiff = static_cast<int>(goalPos.x-agentPos.x);
-    int yDiff = static_cast<int>(goalPos.y-agentPos.y);
+    float xDiff = static_cast<int>(goalPos.x-agentPos.x)/5.0f;
+    float yDiff = static_cast<int>(goalPos.y-agentPos.y)/5.0f;
     if(xDiff < 0)
     {
         agentGrid[offsetForGoal] = -xDiff;

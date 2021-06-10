@@ -208,8 +208,8 @@ Eigen::VectorXf SimState::getStateForAgent() const
         applyToArray(opPos, agentStateSize);
     }
 //        applyToArray(goalPos,agentStateSize*2);
-    int xDiff = static_cast<int>(goalPos.x-agentPos.x);
-    int yDiff = static_cast<int>(goalPos.y-agentPos.y);
+    float xDiff = static_cast<int>(goalPos.x-agentPos.x)/5.0f;
+    float yDiff = static_cast<int>(goalPos.y-agentPos.y)/5.0f;
     if(xDiff < 0)
     {
         agentGrid[offsetForGoal] = -xDiff;
@@ -230,6 +230,7 @@ Eigen::VectorXf SimState::getStateForAgent() const
         agentGrid[offsetForGoal+2] = 0;
         agentGrid[offsetForGoal+3] = yDiff;
     }
+//    std::cout<<agentGrid[offsetForGoal]<<" "<<agentGrid[offsetForGoal+1]<<" "<<agentGrid[offsetForGoal+2]<<" "<<agentGrid[offsetForGoal+3]<<std::endl;
 //    agentGrid[offsetForGoal] = static_cast<int>(goalPos.x - agentPos.x) / 20.0f;
 //    agentGrid[offsetForGoal + 1] = static_cast<int>(goalPos.y - agentPos.y) / 20.0f;
     return agentGrid;
