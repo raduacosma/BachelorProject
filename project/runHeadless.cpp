@@ -33,7 +33,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
                                      .miniBatchSize = cMiniBatchSize,
                                      .sizeExperience = sizeExperience };
     AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = 1, .nrRollouts = 5 };
-    MLPParams agentMLP{ .sizes = { 52, 200,50, 4 },
+    MLPParams agentMLP{ .sizes = { 54, 200,50, 4 },
                         .learningRate = 0.001,
                         .regParam = 0.01,
                         .outputActivationFunc = ActivationFunction::LINEAR,
