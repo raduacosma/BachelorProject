@@ -23,7 +23,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     size_t cMiniBatchSize = 16;
     size_t numberOfEpisodes = 10000; // ignore the function parameter for now until proper framework is in place
     size_t nrEpisodesToEpsilonZero = numberOfEpisodes / 4 * 3;
-    size_t sizeExperience = 10000;
+    size_t sizeExperience = 100000;
     float alpha = 0.001;
     float epsilon = 0.5;
     float gamma = 0.9;
@@ -33,7 +33,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
                                      .miniBatchSize = cMiniBatchSize,
                                      .sizeExperience = sizeExperience };
     AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = 1, .nrRollouts = 5 };
-    MLPParams agentMLP{ .sizes = { 52, 200, 4 },
+    MLPParams agentMLP{ .sizes = { 52, 200,50, 4 },
                         .learningRate = 0.001,
                         .regParam = 0.01,
                         .outputActivationFunc = ActivationFunction::LINEAR,
@@ -43,10 +43,10 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
                            .regParam  = -1,
                            .outputActivationFunc = ActivationFunction::SOFTMAX,
                            .miniBatchSize = cMiniBatchSize };
-    Rewards rewards = { .normalReward = -0.1f,
-                        .killedByOpponentReward = -100.0f,
-                        .outOfBoundsReward = -0.1f,
-                        .reachedGoalReward = 100.0f };
+    Rewards rewards = { .normalReward = -0.01f,
+                        .killedByOpponentReward = -1.0f,
+                        .outOfBoundsReward = -0.01f,
+                        .reachedGoalReward = 1.0f };
     SimStateParams simStateParams = { .traceSize = 6, .visionGridSize = 2, .randomOpCoef = -1 };
     OpTrackParams kolsmirParams = { .pValueThreshold = 0.05, .minHistorySize = 10, .maxHistorySize = 10 };
     OpTrackParams pettittParams = { .pValueThreshold = 0.01, .minHistorySize = 10, .maxHistorySize = 20 };
@@ -54,7 +54,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     // could also use stack but meh, this way is more certain
     std::unique_ptr<Agent> agent = std::make_unique<QERQueueLearning>(
         kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams, numberOfEpisodes,
-        nrEpisodesToEpsilonZero, OpModellingType::ONEFORALL, alpha, epsilon, gamma);
+        nrEpisodesToEpsilonZero, OpModellingType::ONEFORALL, alpha, 0.5, gamma);
 //        std::unique_ptr<Agent> agent =
 //            std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP,
 //                                               numberOfEpisodes,nrEpisodesToEpsilonZero,
