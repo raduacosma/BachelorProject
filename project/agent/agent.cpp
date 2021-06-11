@@ -80,12 +80,12 @@ void Agent::run()
         std::cout << "totalReward: " << totalReward << std::endl;
         std::cout << opList.size() << std::endl;
         learningLosses.push_back(currentEpisodeAgentLoss / stepCount);
-        if(nrEpisode%1000==0)
-        {
-            std::ofstream trainLoss{"results/trainLoss2.txt"};
-            copy(learningLosses.begin(), learningLosses.end(),
-                 std::ostream_iterator<float>(trainLoss, "\n"));
-        }
+//        if(nrEpisode%1000==0)
+//        {
+//            std::ofstream trainLoss{"results/trainLoss2.txt"};
+//            copy(learningLosses.begin(), learningLosses.end(),
+//                 std::ostream_iterator<float>(trainLoss, "\n"));
+//        }
 
         opponentPredictionLosses.push_back(currentEpisodeOpLoss / stepCount);
         opponentCorrectPredictionPercentage.push_back(static_cast<float>(currentEpisodeCorrectPredictions) / stepCount);

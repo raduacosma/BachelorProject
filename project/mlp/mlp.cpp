@@ -39,7 +39,8 @@ MLP::MLP(std::vector<size_t> _sizes, float _learningRate, float pRegParam, Activ
                                                            }));
         else
         {
-            std::normal_distribution<float> norm{ 0, 1.0f / static_cast<float>(sizes[x]) };
+            std::normal_distribution<float> norm{ 0, std::sqrt(2.0f / (sizes[x]+sizes[y])) };
+//            std::normal_distribution<float> norm{ 0, 1.0f / static_cast<float>(sizes[x]) };
             weights.push_back(Eigen::MatrixXf::NullaryExpr(sizes[y], sizes[x],
                                                            [&]()
                                                            {
@@ -74,7 +75,8 @@ void MLP::randomizeWeights()
                                                       });
         else
         {
-            std::normal_distribution<float> norm{ 0, 1.0f / static_cast<float>(sizes[x]) };
+            //            std::normal_distribution<float> norm{ 0, 1.0f / static_cast<float>(sizes[x]) };
+            std::normal_distribution<float> norm{ 0, std::sqrt(2.0f / (sizes[x]+sizes[y])) };
             weights[x] = Eigen::MatrixXf::NullaryExpr(sizes[y], sizes[x],
                                                       [&]()
                                                       {

@@ -33,17 +33,18 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
                                      .miniBatchSize = cMiniBatchSize,
                                      .sizeExperience = sizeExperience };
     AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = 1, .nrRollouts = 5 };
-    MLPParams agentMLP{ .sizes = { 54, 200,50, 4 },
+    MLPParams agentMLP{ .sizes = { 54, 200, 4 },
                         .learningRate = 0.001,
-                        .regParam = 0.01,
+                        .regParam = 1,
                         .outputActivationFunc = ActivationFunction::LINEAR,
                         .miniBatchSize = cMiniBatchSize,
-    .randInit = true};
+                        .randInit = false};
     MLPParams opponentMLP{ .sizes = { 75, 200, 4 },
-                           .learningRate = 0.01,
+                           .learningRate = 0.001,
                            .regParam  = -1,
                            .outputActivationFunc = ActivationFunction::SOFTMAX,
-                           .miniBatchSize = cMiniBatchSize,.randInit = true };
+                           .miniBatchSize = cMiniBatchSize,
+                           .randInit = false };
     Rewards rewards = { .normalReward = -0.01f,
                         .killedByOpponentReward = -1.0f,
                         .outOfBoundsReward = -0.01f,
