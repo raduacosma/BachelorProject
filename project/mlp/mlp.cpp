@@ -3,10 +3,10 @@
 #include <iostream>
 
 MLP::MLP(std::vector<size_t> _sizes, float _learningRate, float pRegParam, ActivationFunction _outputActivationFunction,
-         size_t pMiniBatchSize)
+         size_t pMiniBatchSize, bool pRandInit)
     : sizes(std::move(_sizes)), nrLayers(sizes.size()), nrWeightLayers(nrLayers - 1),
       nrLayersBeforeActivation(nrLayers - 2), miniBatchSize(pMiniBatchSize), learningRate(_learningRate),regParam(pRegParam),
-      outputActivationFunction(_outputActivationFunction)
+      outputActivationFunction(_outputActivationFunction), randInit(pRandInit)
 {
     for (size_t idx = 0; idx != nrLayers; ++idx)
     {
@@ -18,21 +18,34 @@ MLP::MLP(std::vector<size_t> _sizes, float _learningRate, float pRegParam, Activ
     }
     for (size_t idx = 1; idx != nrLayers; ++idx)
     {
-        biases.push_back(Eigen::VectorXf::NullaryExpr(sizes[idx],
-                                                      [&]()
-                                                      {
-                                                          return globalRng.getRandomInitMLP();
-                                                      }));
+        if(randInit)
+            biases.push_back(Eigen::VectorXf::NullaryExpr(sizes[idx],
+                                                          [&]()
+                                                          {
+                                                              return globalRng.getRandomInitMLP();
+                                                          }));
+        else
+            biases.push_back(Eigen::VectorXf::Zero(sizes[idx]));
         nablaBiases.emplace_back(sizes[idx]);
         nablaBiasesMiniBatch.emplace_back(sizes[idx]);
     }
     for (size_t x = 0, y = 1; x != nrWeightLayers and y != nrLayers; ++x, ++y)
     {
-        weights.push_back(Eigen::MatrixXf::NullaryExpr(sizes[y], sizes[x],
-                                                       [&]()
-                                                       {
-                                                           return globalRng.getRandomInitMLP();
-                                                       }));
+        if(randInit)
+            weights.push_back(Eigen::MatrixXf::NullaryExpr(sizes[y], sizes[x],
+                                                           [&]()
+                                                           {
+                                                               return globalRng.getRandomInitMLP();
+                                                           }));
+        else
+        {
+            std::normal_distribution<float> norm{ 0, 1.0f / static_cast<float>(sizes[x]) };
+            weights.push_back(Eigen::MatrixXf::NullaryExpr(sizes[y], sizes[x],
+                                                           [&]()
+                                                           {
+                                                               return norm(globalRng.getRngEngine());
+                                                           }));
+        }
         nablaWeights.emplace_back(sizes[y], sizes[x]);
         nablaWeightsMiniBatch.emplace_back(sizes[y], sizes[x]);
     }
@@ -42,19 +55,32 @@ void MLP::randomizeWeights()
 {
     for (size_t idx = 1; idx != nrLayers; ++idx)
     {
-        biases[idx - 1] = Eigen::VectorXf::NullaryExpr(sizes[idx],
-                                                       [&]()
-                                                       {
-                                                           return globalRng.getRandomInitMLP();
-                                                       });
+        if(randInit)
+            biases[idx - 1] = Eigen::VectorXf::NullaryExpr(sizes[idx],
+                                                           [&]()
+                                                           {
+                                                               return globalRng.getRandomInitMLP();
+                                                           });
+        else
+            biases[idx-1] = Eigen::VectorXf::Zero(sizes[idx]);
     }
     for (size_t x = 0, y = 1; x != nrWeightLayers and y != nrLayers; ++x, ++y)
     {
-        weights[x] = Eigen::MatrixXf::NullaryExpr(sizes[y], sizes[x],
-                                                  [&]()
-                                                  {
-                                                      return globalRng.getRandomInitMLP();
-                                                  });
+        if(randInit)
+            weights[x] = Eigen::MatrixXf::NullaryExpr(sizes[y], sizes[x],
+                                                      [&]()
+                                                      {
+                                                          return globalRng.getRandomInitMLP();
+                                                      });
+        else
+        {
+            std::normal_distribution<float> norm{ 0, 1.0f / static_cast<float>(sizes[x]) };
+            weights[x] = Eigen::MatrixXf::NullaryExpr(sizes[y], sizes[x],
+                                                      [&]()
+                                                      {
+                                                          return norm(globalRng.getRngEngine());
+                                                      });
+        }
     }
 }
 void MLP::printWeights()

@@ -43,7 +43,7 @@ void OpTrack::commonOpInit(Agent &agent)
     // gets initialised with one MLP which we need to take care of the first time
     // probably need an initializer list or something so it jives with the initial opponentMlp hyperparams
     agent.opList.emplace_back(agent.opMLPParams.sizes, agent.opMLPParams.learningRate, agent.opMLPParams.regParam,
-                              agent.opMLPParams.outputActivationFunc, agent.opMLPParams.miniBatchSize);
+                              agent.opMLPParams.outputActivationFunc, agent.opMLPParams.miniBatchSize, agent.opMLPParams.randInit);
     agent.currOp = agent.opList.size() - 1;
 }
 void OpTrack::noTrainPettittOpInit(Agent &agent)

@@ -37,12 +37,13 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
                         .learningRate = 0.001,
                         .regParam = 0.01,
                         .outputActivationFunc = ActivationFunction::LINEAR,
-                        .miniBatchSize = cMiniBatchSize };
+                        .miniBatchSize = cMiniBatchSize,
+    .randInit = true};
     MLPParams opponentMLP{ .sizes = { 75, 200, 4 },
-                           .learningRate = 0.001,
+                           .learningRate = 0.01,
                            .regParam  = -1,
                            .outputActivationFunc = ActivationFunction::SOFTMAX,
-                           .miniBatchSize = cMiniBatchSize };
+                           .miniBatchSize = cMiniBatchSize,.randInit = true };
     Rewards rewards = { .normalReward = -0.01f,
                         .killedByOpponentReward = -1.0f,
                         .outOfBoundsReward = -0.01f,

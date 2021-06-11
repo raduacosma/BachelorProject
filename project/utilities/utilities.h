@@ -47,6 +47,7 @@ struct MLPParams
     float regParam;
     ActivationFunction outputActivationFunc;
     size_t miniBatchSize;
+    bool randInit;
 };
 struct Rewards
 {

@@ -22,6 +22,7 @@ class MLP
     size_t miniBatchSize;
     float learningRate;
     float regParam;
+
     ActivationFunction outputActivationFunction;
     std::vector<Eigen::MatrixXf> weights;
     std::vector<Eigen::VectorXf> biases;
@@ -35,11 +36,12 @@ class MLP
 
     std::vector<Eigen::VectorXf> activations;
     std::vector<Eigen::VectorXf> zs;
+    bool randInit;
     void updateMiniBatchNablas();
 
   public:
     MLP(std::vector<size_t> _sizes, float _learningRate, float pRegParam, ActivationFunction _outputActivationFunc,
-        size_t pMiniBatchSize);
+        size_t pMiniBatchSize, bool pRandInit);
     float train(Eigen::VectorXf const &input, Eigen::VectorXf const &output,
                 MLPUpdateType updateType = MLPUpdateType::NORMAL);
     Eigen::VectorXf predict(Eigen::VectorXf const &input);

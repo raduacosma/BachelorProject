@@ -12,9 +12,9 @@ Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloP
              float pGamma) // TODO: check how size is passed
     : opTrack(opTrackParams.pValueThreshold, opTrackParams.minHistorySize, opTrackParams.maxHistorySize),
       nrEpisodes(_nrEpisodes), nrEpisodesToEpsilonZero(pNrEpisodesToEpsilonZero), rewards(vector<float>(_nrEpisodes)),
-      mlp(agentMLP.sizes, agentMLP.learningRate, agentMLP.regParam, agentMLP.outputActivationFunc, agentMLP.miniBatchSize),
+      mlp(agentMLP.sizes, agentMLP.learningRate, agentMLP.regParam, agentMLP.outputActivationFunc, agentMLP.miniBatchSize, agentMLP.randInit),
       opList{ MLP(opponentMLP.sizes, opponentMLP.learningRate, opponentMLP.regParam, opponentMLP.outputActivationFunc,
-                  opponentMLP.miniBatchSize) },
+                  opponentMLP.miniBatchSize, agentMLP.randInit) },
       currOp(0), opModellingType(pOpModellingType), alpha(pAlpha), epsilon(pEpsilon), gamma(pGamma),
       maxNrSteps(agentMonteCarloParams.maxNrSteps), nrRollouts(agentMonteCarloParams.nrRollouts),
       opMLPParams(opponentMLP), opDeathsPerEp(nrEpisodes, 0)
@@ -158,6 +158,7 @@ void Agent::opPredict(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf co
     float currentLoss = opList[currOp].update(opponentActionTarget);
     // TODO: Be careful with end of episode and reset and such
     currentEpisodeOpLoss += currentLoss;
+//    std::cout<<"Op loss: "<<currentLoss<<std::endl;
     (opTrack.*tracking)(*this, lastOpponentState, opponentActionTarget, currentLoss);
     //    thisEpisodeLoss.push_back(currentLoss); // TODO: only turn this on when needed
     lastOpponentState = newOpponentState;
