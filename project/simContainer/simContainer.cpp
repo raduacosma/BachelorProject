@@ -26,6 +26,7 @@ bool SimContainer::nextLevel()
     ++currSimState;
     if (currSimState == simStates.size())
     {
+//        std::shuffle(simStates.begin(),simStates.end(),globalRng.getRngEngine());
         currSimState = 0;
         //        simStates[currSimState].resetForNextEpisode();
         return false; // no more levels

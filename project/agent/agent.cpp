@@ -1,6 +1,7 @@
 #include "agent.h"
 #include "../simContainer/simContainer.h"
 #include <iostream>
+#include <fstream>
 #include <random>
 #include <tuple>
 // TODO: check out monte carlo estimates for target Q-values
@@ -29,6 +30,7 @@ Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloP
     opponentPredictionLosses.reserve(nrEpisodes);
     opponentCorrectPredictionPercentage.reserve(nrEpisodes);
     thisEpisodeLoss.reserve(nrEpisodes);
+    learningLosses.reserve(nrEpisodes);
 }
 bool Agent::performOneStep()
 {
@@ -50,7 +52,8 @@ void Agent::run()
         std::cout << epsilon << std::endl;
         // d_oldstate was modified from Maze so it's fine, anything else?
         newEpisode();
-        currentEpisodeLoss = 0;
+        currentEpisodeOpLoss = 0;
+        currentEpisodeAgentLoss = 0;
         currentEpisodeCorrectPredictions = 0;
         size_t stepCount = 0;
         float totalReward = 0;
@@ -76,7 +79,15 @@ void Agent::run()
         }
         std::cout << "totalReward: " << totalReward << std::endl;
         std::cout << opList.size() << std::endl;
-        opponentPredictionLosses.push_back(currentEpisodeLoss / stepCount);
+        learningLosses.push_back(currentEpisodeAgentLoss / stepCount);
+        if(nrEpisode%1000==0)
+        {
+            std::ofstream trainLoss{"results/trainLoss2.txt"};
+            copy(learningLosses.begin(), learningLosses.end(),
+                 std::ostream_iterator<float>(trainLoss, "\n"));
+        }
+
+        opponentPredictionLosses.push_back(currentEpisodeOpLoss / stepCount);
         opponentCorrectPredictionPercentage.push_back(static_cast<float>(currentEpisodeCorrectPredictions) / stepCount);
         runReward += totalReward;
         rewards[nrEpisode] = totalReward;
@@ -146,7 +157,7 @@ void Agent::opPredict(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf co
         ++currentEpisodeCorrectPredictions;
     float currentLoss = opList[currOp].update(opponentActionTarget);
     // TODO: Be careful with end of episode and reset and such
-    currentEpisodeLoss += currentLoss;
+    currentEpisodeOpLoss += currentLoss;
     (opTrack.*tracking)(*this, lastOpponentState, opponentActionTarget, currentLoss);
     //    thisEpisodeLoss.push_back(currentLoss); // TODO: only turn this on when needed
     lastOpponentState = newOpponentState;
@@ -271,3 +282,4 @@ float Agent::getOpDeathPercentage() const
             ++count;
     return static_cast<float>(count) / nrEpisodes;
 }
+

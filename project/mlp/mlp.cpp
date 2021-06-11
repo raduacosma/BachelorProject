@@ -204,7 +204,10 @@ float MLP::update(Eigen::VectorXf const &output, MLPUpdateType updateType)
             updateWeights();
     }
     else
+    {
         updateMiniBatchNablas();
+    }
+
     return loss;
 }
 void MLP::initMiniBatchNablas()

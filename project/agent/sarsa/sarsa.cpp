@@ -23,22 +23,33 @@ bool Sarsa::performOneStep()
     Eigen::VectorXf newState = maze->getStateForAgent();
 
     //    float lastBestQValue = lastQValues(lastAction);
+
     if (not canContinue)
     {
         float diff = reward;
         lastQValues(lastAction) = diff;
-        mlp.update(lastQValues);
+        currentEpisodeAgentLoss+=mlp.update(lastQValues);
         // lastState and lastAction will probably be handled by newEpisode so they should not matter
         return false;
     }
 
+
     Eigen::VectorXf newQValues = mlp.predict(newState);
     size_t newAction =
         actionWithQ(newQValues); // this needs to be only predict, and store the activations for next time
-    float diff = reward + gamma * newQValues(newAction);
-    lastQValues(lastAction) = diff;
-    //    std::cout<<diff<<" "<<reward<<" "<<gamma<<" "<<newQValues(newAction)<<std::endl;
-    mlp.update(lastQValues);
+    if (maze->getLastSwitchedLevel())
+    {
+        float diff = reward;
+        lastQValues(lastAction) = diff;
+    }
+    else
+    {
+        float diff = reward + gamma * newQValues(newAction);
+        lastQValues(lastAction) = diff;
+        //    std::cout<<diff<<" "<<reward<<" "<<gamma<<" "<<newQValues(newAction)<<std::endl;
+
+    }
+    currentEpisodeAgentLoss+=mlp.update(lastQValues);
     // do I need lastState somewhere? Since learning rate is 1 it reduces in the equation and
     // the backprop is already done on the deltas from lastState
     // check if d_oldstate should be updated even if we can't continue

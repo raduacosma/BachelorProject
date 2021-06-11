@@ -50,13 +50,19 @@ class Agent
     size_t lastAction;
     size_t nrEpisodes;
     size_t nrEpisodesToEpsilonZero;
-    float currentEpisodeLoss;
+    float currentEpisodeOpLoss;
+    float currentEpisodeAgentLoss;
     size_t currentEpisodeCorrectPredictions;
     std::vector<float> rewards;
     std::vector<float> opponentPredictionLosses;
     std::vector<float> opponentCorrectPredictionPercentage;
     std::vector<float> thisEpisodeLoss;
+    std::vector<float> learningLosses;
 
+  public:
+    std::vector<float> const &getLearningLosses() const;
+
+  protected:
     size_t correctOpCurrentEpisode = 0;
     size_t totalPredOpCurrentEpisode = 0;
 
@@ -131,5 +137,8 @@ inline void Agent::setMaze(SimContainer *simCont)
 {
     maze = simCont;
 }
-
+inline std::vector<float> const &Agent::getLearningLosses() const
+{
+    return learningLosses;
+}
 #endif

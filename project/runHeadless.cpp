@@ -53,7 +53,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
 
     // could also use stack but meh, this way is more certain
     std::unique_ptr<Agent> agent = std::make_unique<QERQueueLearning>(
-        kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams, numberOfEpisodes,
+        pettittParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams, numberOfEpisodes,
         nrEpisodesToEpsilonZero, OpModellingType::ONEFORALL, alpha, 0.5, gamma);
 //        std::unique_ptr<Agent> agent =
 //            std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP,
@@ -70,7 +70,10 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     std::ofstream opponentPerc{ "results/opponentPredictionPercentageTwoDOUBLE.txt" };
     std::vector<float> const &opponentPredPerc = agent->getOpponentCorrectPredictionPercentage();
     copy(opponentPredPerc.begin(), opponentPredPerc.end(), std::ostream_iterator<float>(opponentPerc, "\n"));
-
+    std::ofstream trainLoss{"results/trainLoss2.txt"};
+    std::vector<float> const &trainLossPerEp = agent->getLearningLosses();
+    copy(trainLossPerEp.begin(), trainLossPerEp.end(),
+             std::ostream_iterator<float>(trainLoss, "\n"));
     std::cout << "opponent prediction percentage: " << agent->getCorrectOpponentTypePredictionPercentage() << std::endl;
     std::cout << "nr of times killed by opponent: " << agent->getOpDeathPercentage() << std::endl;
     //    std::ofstream opponentLoss{"results/opponentFirstEpLoss.txt"};
