@@ -76,6 +76,11 @@ void Agent::run()
             {
                 opponentNotInit = true;
             }
+            if(stepCount >= 1000)   // max nr of timesteps
+            {
+                maze->resetNextEpisode();
+                break;
+            }
         }
         std::cout << "totalReward: " << totalReward << std::endl;
         std::cout << opList.size() << std::endl;

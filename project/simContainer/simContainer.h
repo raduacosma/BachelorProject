@@ -40,6 +40,7 @@ class SimContainer
     void goToBeginning();
 
     Eigen::VectorXf getStateForOpponent() const;
+    void resetNextEpisode();
 };
 
 inline Eigen::VectorXf SimContainer::getStateForOpponent() const

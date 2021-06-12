@@ -67,13 +67,17 @@ std::tuple<float, bool> SimContainer::computeNextStateAndReward(Actions action)
         case SimResult::KILLED_BY_OPPONENT:
             cout << "hit opponent" << endl;
             canContinue = false;
-            goToBeginning();
-            simStates[currSimState].resetForNextEpisode();
-            //            agent->maze(this); // needed? since everything goes through simContainer probably not
-            ++episodeCount;
-            lastSwitchedLevel = true;
+            resetNextEpisode();
             break;
     }
     lastReward = reward;
     return make_tuple(reward, canContinue);
+}
+void SimContainer::resetNextEpisode()
+{
+    goToBeginning();
+    simStates[currSimState].resetForNextEpisode();
+    //            agent->maze(this); // needed? since everything goes through simContainer probably not
+    ++episodeCount;
+    lastSwitchedLevel = true;
 }
