@@ -39,14 +39,18 @@ MLP::MLP(std::vector<size_t> _sizes, float _learningRate, float pRegParam, Activ
                                                            }));
         else
         {
-//            std::normal_distribution<float> norm{ 0, std::sqrt(2.0f / (sizes[x]+sizes[y])) };
+//            std::normal_distribution<float> norm{ 0, 4.0f*std::sqrt(2.0f / (sizes[x]+sizes[y])) };
+//            std::uniform_real_distribution<float> uni{-4.0f*std::sqrt(6.0f/static_cast<float>(sizes[x]+sizes[y])),4.0f*std::sqrt(6.0f/static_cast<float>(sizes[x]+sizes[y]))};
             std::uniform_real_distribution<float> uni{-1.0f/std::sqrt(static_cast<float>(sizes[x])),1.0f/std::sqrt(static_cast<float>(sizes[x]))};
 
+
 //            std::normal_distribution<float> norm{ 0, 1.0f / static_cast<float>(sizes[x]) };
+            //            std::uniform_real_distribution<float> uni{-4.0f*std::sqrt(6.0f/static_cast<float>(sizes[x]+sizes[y])),4.0f*std::sqrt(6.0f/static_cast<float>(sizes[x]+sizes[y]))};
+
             weights.push_back(Eigen::MatrixXf::NullaryExpr(sizes[y], sizes[x],
                                                            [&]()
                                                            {
-                                                               return uni(globalRng.getRngEngine());
+                                                                   return uni(globalRng.getRngEngine());
                                                            }));
         }
         nablaWeights.emplace_back(sizes[y], sizes[x]);
@@ -78,8 +82,7 @@ void MLP::randomizeWeights()
         else
         {
             //            std::normal_distribution<float> norm{ 0, 1.0f / static_cast<float>(sizes[x]) };
-            std::uniform_real_distribution<float> uni{-1.0f/std::sqrt(static_cast<float>(sizes[x])),1.0f/std::sqrt(static_cast<float>(sizes[x]))};
-//            std::normal_distribution<float> norm{ 0, std::sqrt(2.0f / (sizes[x]+sizes[y])) };
+            std::uniform_real_distribution<float> uni{-1.0f/std::sqrt(static_cast<float>(sizes[x])),1.0f/std::sqrt(static_cast<float>(sizes[x]))};//            std::normal_distribution<float> norm{ 0, std::sqrt(2.0f / (sizes[x]+sizes[y])) };
             weights[x] = Eigen::MatrixXf::NullaryExpr(sizes[y], sizes[x],
                                                       [&]()
                                                       {
