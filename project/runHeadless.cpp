@@ -56,7 +56,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     // could also use stack but meh, this way is more certain
     std::unique_ptr<Agent> agent = std::make_unique<QERQueueLearning>(
         kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams, numberOfEpisodes,
-        nrEpisodesToEpsilonZero, OpModellingType::ONEFORALL, alpha, 0.5, gamma);
+        nrEpisodesToEpsilonZero, OpModellingType::KOLSMIR, alpha, 0.5, gamma);
 //        std::unique_ptr<Agent> agent =
 //            std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP,
 //                                               numberOfEpisodes,nrEpisodesToEpsilonZero,

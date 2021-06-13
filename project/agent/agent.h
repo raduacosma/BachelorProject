@@ -29,7 +29,7 @@ enum class OpModellingType
 {
     NEWEVERYTIME,
     ONEFORALL,
-    PETTITT,
+    BADLOSSPETTITT,
     KOLSMIR,
     NOTRAINPETTITT
 };

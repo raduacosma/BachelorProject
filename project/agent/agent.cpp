@@ -122,7 +122,7 @@ void Agent::handleOpponentAction()
             case OpModellingType::KOLSMIR:
                 opTrack.kolsmirOpInit(*this);
                 break;
-            case OpModellingType::PETTITT:
+            case OpModellingType::BADLOSSPETTITT:
                 opTrack.pettittOpInit(*this);
                 break;
             case OpModellingType::NOTRAINPETTITT:
@@ -139,13 +139,13 @@ void Agent::handleOpponentAction()
             opPredict(&OpTrack::normalOpTracking);
             break;
         case OpModellingType::KOLSMIR:
-            opPredict(&OpTrack::kolsmirOpTracking); // TODO: handle level change in init
+            opPredictInterLoss(&OpTrack::kolsmirOpTracking); // TODO: handle level change in init
             break;
-        case OpModellingType::PETTITT:
-            opPredict(&OpTrack::pettittOpTracking);
+        case OpModellingType::BADLOSSPETTITT:
+            opPredictInterLoss(&OpTrack::pettittOpTracking);
             break;
         case OpModellingType::NOTRAINPETTITT:
-            opPredict(&OpTrack::noTrainPettittOpTracking);
+            opPredictInterLoss(&OpTrack::noTrainPettittOpTracking);
             break;
     }
 }
