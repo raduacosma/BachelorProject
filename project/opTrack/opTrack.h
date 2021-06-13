@@ -20,6 +20,11 @@ class OpTrack
     std::vector<MLP> opCopies;
     bool firstTime = true;
     bool foundOpModel = false;
+
+  public:
+    bool isFoundOpModel() const;
+
+  private:
     size_t opHistoryCounter = 0;
     size_t minHistorySize = 10;
     size_t maxHistorySize = 20;
@@ -41,4 +46,10 @@ class OpTrack
     void destroyRandomKolsmir(Agent &agent);
     static void updateCorrectPercentage(Agent &agent);
 };
+
+inline bool OpTrack::isFoundOpModel() const
+{
+    return foundOpModel;
+}
+
 #endif

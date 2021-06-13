@@ -68,6 +68,7 @@ class Agent
 
     MLP mlp;
     std::vector<MLP> opList;
+    std::vector<float> opLosses;
     size_t currOp;
 
     bool isNewLevel = false;
@@ -83,6 +84,7 @@ class Agent
     std::vector<size_t> opDeathsPerEp;
 
     void opPredict(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf const &, Eigen::VectorXf const &, float));
+    void opPredictInterLoss(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf const &, Eigen::VectorXf const &, float));
 
   public:
     explicit Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
@@ -108,6 +110,7 @@ class Agent
     std::vector<float> const &getOpponentCorrectPredictionPercentage() const;
     std::vector<float> const &getOpponentPredictionLosses() const;
     float getOpDeathPercentage() const;
+
 };
 inline float Agent::getCorrectOpponentTypePredictionPercentage() const
 {

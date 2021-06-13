@@ -12,17 +12,20 @@ OpTrack::OpTrack(double pPValueThreshold, size_t pMinHistorySize, size_t pMaxHis
 void OpTrack::destroyRandomKolsmir(Agent &agent)
 {
     agent.opList.pop_back();
+    agent.opLosses.pop_back();
     opListLossHistory.pop_back();
     opListStateHistory.pop_back();
 }
 void OpTrack::destroyRandomPettitt(Agent &agent)
 {
     agent.opList.pop_back();
+    agent.opLosses.pop_back();
     opDequeLossHistory.pop_back();
 }
 void OpTrack::destroyRandomNoTrainPettitt(Agent &agent)
 {
     agent.opList.pop_back();
+    agent.opLosses.pop_back();
     opListLossHistory.pop_back();
     opDequeStateHistory.pop_back();
 }
@@ -42,6 +45,7 @@ void OpTrack::commonOpInit(Agent &agent)
     // this is just because the other baseline algorithms only use 1 MLP and therefore the initial opList
     // gets initialised with one MLP which we need to take care of the first time
     // probably need an initializer list or something so it jives with the initial opponentMlp hyperparams
+    agent.opLosses.push_back(0.0f);
     agent.opList.emplace_back(agent.opMLPParams.sizes, agent.opMLPParams.learningRate, agent.opMLPParams.regParam,
                               agent.opMLPParams.outputActivationFunc, agent.opMLPParams.miniBatchSize, agent.opMLPParams.randInit);
     agent.currOp = agent.opList.size() - 1;

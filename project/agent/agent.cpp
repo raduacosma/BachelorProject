@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <random>
+#include <assert.h>
 #include <tuple>
 // TODO: check out monte carlo estimates for target Q-values
 using namespace std;
@@ -14,7 +15,7 @@ Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloP
       nrEpisodes(_nrEpisodes), nrEpisodesToEpsilonZero(pNrEpisodesToEpsilonZero), rewards(vector<float>(_nrEpisodes)),
       mlp(agentMLP.sizes, agentMLP.learningRate, agentMLP.regParam, agentMLP.outputActivationFunc, agentMLP.miniBatchSize, agentMLP.randInit),
       opList{ MLP(opponentMLP.sizes, opponentMLP.learningRate, opponentMLP.regParam, opponentMLP.outputActivationFunc,
-                  opponentMLP.miniBatchSize, agentMLP.randInit) },
+                  opponentMLP.miniBatchSize, agentMLP.randInit) },opLosses{0.0f},
       currOp(0), opModellingType(pOpModellingType), alpha(pAlpha), epsilon(pEpsilon), gamma(pGamma),
       maxNrSteps(agentMonteCarloParams.maxNrSteps), nrRollouts(agentMonteCarloParams.nrRollouts),
       opMLPParams(opponentMLP), opDeathsPerEp(nrEpisodes, 0)
@@ -148,7 +149,6 @@ void Agent::handleOpponentAction()
             break;
     }
 }
-
 void Agent::opPredict(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf const &, Eigen::VectorXf const &, float))
 { // TODO: check that level switching works properly
     Eigen::VectorXf newOpponentState = maze->getStateForOpponent();
@@ -169,6 +169,55 @@ void Agent::opPredict(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf co
     lastOpponentState = newOpponentState;
 }
 
+
+void Agent::opPredictInterLoss(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf const &, Eigen::VectorXf const &, float))
+{ // TODO: check that level switching works properly
+    Eigen::VectorXf newOpponentState = maze->getStateForOpponent();
+    size_t newOpponentAction = maze->getLastOpponentAction();
+    Eigen::VectorXf opponentActionTarget = Eigen::VectorXf::Zero(4);
+    opponentActionTarget(static_cast<size_t>(newOpponentAction)) = 1.0f;
+    size_t opponentActionIdx;
+    size_t currIdx = currOp;
+    if(not opTrack.isFoundOpModel())
+    {
+        for (size_t idx = 0, sz = opList.size(); idx != sz; ++idx)
+            opLosses[idx] += opList[idx].predictWithLoss(lastOpponentState, opponentActionTarget);
+        int minIdx = -1;
+        float minLoss = std::numeric_limits<float>::max();
+        for (int idx = 0, sz = opLosses.size(); idx != sz; ++idx)
+            if (minLoss > opLosses[idx])
+            {
+                minIdx = idx;
+                minLoss = opLosses[idx];
+            }
+        if(minIdx >=0)
+            currIdx = minIdx;
+    }
+    Eigen::VectorXf currPrediction = opList[currIdx].predict(lastOpponentState);
+    currPrediction.maxCoeff(&opponentActionIdx);
+    //    std::cout<<opponentActionIdx<<" "<<newOpponentAction<<std::endl;
+    if (newOpponentAction == opponentActionIdx)
+        ++currentEpisodeCorrectPredictions;
+    float currentLoss = opList[currIdx].computeLoss(currPrediction,opponentActionTarget);
+    // TODO: Be careful with end of episode and reset and such
+    currentEpisodeOpLoss += currentLoss;
+//    std::cout<<"Op loss: "<<currentLoss<<std::endl;
+    if(not opTrack.isFoundOpModel())
+    {
+        currOp = opList.size() - 1;
+    }
+    opList[currOp].train(lastOpponentState, opponentActionTarget);
+    (opTrack.*tracking)(*this, lastOpponentState, opponentActionTarget, currentLoss);
+    //    thisEpisodeLoss.push_back(currentLoss); // TODO: only turn this on when needed
+    if(not opTrack.isFoundOpModel())
+        currOp = currIdx;
+    else
+    {
+        for(auto &item:opLosses)
+            item = 0;
+    }
+    lastOpponentState = newOpponentState;
+}
 // if I pass an agentState here it should already be the current state in maze that I will get anyways
 float Agent::MonteCarloRollout(size_t action)
 {

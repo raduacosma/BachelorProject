@@ -130,6 +130,11 @@ Eigen::VectorXf MLP::predict(Eigen::VectorXf const &input)
 float MLP::predictWithLoss(Eigen::VectorXf const &input, Eigen::VectorXf const &output)
 { // TODO: check this function with MLP subproject
     Eigen::VectorXf prediction = predict(input);
+    return computeLoss(prediction,output);
+
+}
+float MLP::computeLoss(Eigen::VectorXf const &prediction, Eigen::VectorXf const &output)
+{
     float loss;
     if (outputActivationFunction == ActivationFunction::SOFTMAX)
     {

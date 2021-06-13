@@ -19,7 +19,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
 {
 
     //    std::cout.setstate(std::ios_base::failbit);
-    std::string files = "longClock.txt,longCounter.txt,complex.txt";
+    std::string files = "try1.txt,try2.txt,try3.txt";
     size_t cMiniBatchSize = 16;
     size_t numberOfEpisodes = 10000; // ignore the function parameter for now until proper framework is in place
     size_t nrEpisodesToEpsilonZero = numberOfEpisodes / 4 * 3;
@@ -50,12 +50,12 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
                         .outOfBoundsReward = -0.01f,
                         .reachedGoalReward = 1.0f };
     SimStateParams simStateParams = { .traceSize = 6, .visionGridSize = 2, .randomOpCoef = -1 };
-    OpTrackParams kolsmirParams = { .pValueThreshold = 0.05, .minHistorySize = 10, .maxHistorySize = 10 };
+    OpTrackParams kolsmirParams = { .pValueThreshold = 0.05, .minHistorySize = 10, .maxHistorySize = 20 };
     OpTrackParams pettittParams = { .pValueThreshold = 0.01, .minHistorySize = 10, .maxHistorySize = 20 };
 
     // could also use stack but meh, this way is more certain
     std::unique_ptr<Agent> agent = std::make_unique<QERQueueLearning>(
-        pettittParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams, numberOfEpisodes,
+        kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams, numberOfEpisodes,
         nrEpisodesToEpsilonZero, OpModellingType::ONEFORALL, alpha, 0.5, gamma);
 //        std::unique_ptr<Agent> agent =
 //            std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP,

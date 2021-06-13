@@ -58,5 +58,6 @@ class MLP
     float predictWithLoss(Eigen::VectorXf const &input, Eigen::VectorXf const &output);
     void updateMiniBatchWeightsWithReg();
     void updateWeightsWithReg();
+    float computeLoss(Eigen::VectorXf const &prediction, Eigen::VectorXf const &output);
 };
 #endif
