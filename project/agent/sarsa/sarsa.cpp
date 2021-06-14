@@ -13,7 +13,8 @@ Sarsa::Sarsa(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloP
 void Sarsa::newEpisode()
 {
     Agent::newEpisode();
-    lastAction = actionWithQ(mlp.predict(lastState));
+//    lastAction = actionWithQ(mlp.predict(lastState));
+    lastAction = actionWithQ(MonteCarloAllActions());
 }
 bool Sarsa::performOneStep()
 {
@@ -34,7 +35,8 @@ bool Sarsa::performOneStep()
     }
 
 
-    Eigen::VectorXf newQValues = mlp.predict(newState);
+//    Eigen::VectorXf newQValues = mlp.predict(newState);
+    Eigen::VectorXf newQValues = MonteCarloAllActions();
     size_t newAction =
         actionWithQ(newQValues); // this needs to be only predict, and store the activations for next time
     if (maze->getLastSwitchedLevel())

@@ -19,7 +19,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
 {
 
     //    std::cout.setstate(std::ios_base::failbit);
-    std::string files = "try1.txt,try2.txt,try3.txt";
+    std::string files = "try1.txt,try2.txt,try3.txt,try4.txt,try5.txt,try6.txt";
     size_t cMiniBatchSize = 16;
     size_t numberOfEpisodes = 10000; // ignore the function parameter for now until proper framework is in place
     size_t nrEpisodesToEpsilonZero = numberOfEpisodes / 4 * 3;
@@ -27,19 +27,22 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     float alpha = 0.001;
     float epsilon = 0.5;
     float gamma = 0.9;
+    size_t visionGridSize = 2;
+    size_t visionGridArea = visionGridSize*2+1;
+    visionGridArea*=visionGridArea;
     globalRng = RandObj(275165314, -1, 1, sizeExperience);
     OpModellingType opModellingType = OpModellingType::ONEFORALL;
     ExpReplayParams expReplayParams{ .cSwapPeriod = 1000,
                                      .miniBatchSize = cMiniBatchSize,
                                      .sizeExperience = sizeExperience };
     AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = 1, .nrRollouts = 5 };
-    MLPParams agentMLP{ .sizes = { 54, 200, 4 },
+    MLPParams agentMLP{ .sizes = { visionGridArea*2+4, 200, 4 },
                         .learningRate = 0.001,
                         .regParam = 1,
                         .outputActivationFunc = ActivationFunction::LINEAR,
                         .miniBatchSize = cMiniBatchSize,
                         .randInit = false};
-    MLPParams opponentMLP{ .sizes = { 75, 200, 4 },
+    MLPParams opponentMLP{ .sizes = { visionGridArea*3, 200, 4 },
                            .learningRate = 0.001,
                            .regParam  = -1,
                            .outputActivationFunc = ActivationFunction::SOFTMAX,
@@ -49,7 +52,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
                         .killedByOpponentReward = -1.0f,
                         .outOfBoundsReward = -0.01f,
                         .reachedGoalReward = 1.0f };
-    SimStateParams simStateParams = { .traceSize = 6, .visionGridSize = 2, .randomOpCoef = -1 };
+    SimStateParams simStateParams = { .traceSize = 6, .visionGridSize = visionGridSize, .randomOpCoef = -1 };
     OpTrackParams kolsmirParams = { .pValueThreshold = 0.05, .minHistorySize = 10, .maxHistorySize = 20 };
     OpTrackParams pettittParams = { .pValueThreshold = 0.01, .minHistorySize = 10, .maxHistorySize = 20 };
 
@@ -60,7 +63,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
 //        std::unique_ptr<Agent> agent =
 //            std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP,
 //                                               numberOfEpisodes,nrEpisodesToEpsilonZero,
-//                                               OpModellingType::ONEFORALL,alpha,0.3,gamma);
+//                                               OpModellingType::KOLSMIR,alpha,0.3,gamma);
     SimContainer simContainer{ files, agent.get(), rewards, simStateParams };
     agent->run();
     std::ofstream out{ "results/rewards04AFTER.txt" };
