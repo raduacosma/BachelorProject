@@ -13,15 +13,16 @@
 #include <iostream>
 #include <iterator>
 #include <memory>
+#include <chrono>
 
 RandObj globalRng;
 void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
 {
-
+    auto begin = std::chrono::high_resolution_clock::now();
     //    std::cout.setstate(std::ios_base::failbit);
     std::string files = "try1.txt,try2.txt,try3.txt,try4.txt,try5.txt,try6.txt";
     size_t cMiniBatchSize = 16;
-    size_t numberOfEpisodes = 10000; // ignore the function parameter for now until proper framework is in place
+    size_t numberOfEpisodes = 100; // ignore the function parameter for now until proper framework is in place
     size_t nrEpisodesToEpsilonZero = numberOfEpisodes / 4 * 3;
     size_t sizeExperience = 100000;
     float alpha = 0.001;
@@ -38,7 +39,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = 1, .nrRollouts = 5 };
     MLPParams agentMLP{ .sizes = { visionGridArea*2+4, 200, 4 },
                         .learningRate = 0.001,
-                        .regParam = 1,
+                        .regParam = -1,
                         .outputActivationFunc = ActivationFunction::LINEAR,
                         .miniBatchSize = cMiniBatchSize,
                         .randInit = false};
@@ -85,4 +86,6 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     //    std::vector<float> const &opponentThisLoss = agent->getThisEpisodeLoss();
     //    copy(opponentThisLoss.begin(), opponentThisLoss.end(),
     //         std::ostream_iterator<float>(opponentLoss, "\n"));
+    auto end = std::chrono::high_resolution_clock::now();
+    std::cout << "time in ms: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
 }

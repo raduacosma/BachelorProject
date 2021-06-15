@@ -178,7 +178,7 @@ void OpTrack::pettittOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
                 {
                     currOpListLossHistory.push_back(currDoneOp.train(currState.lastState, currState.newState));
                 }
-                // TODO: wtf happens when  there is nothing in the loss history?
+                // TODO: what happens when  there is nothing in the loss history?
                 // though if there is nothing in history then it should not even be here since only the ones
                 // with minHistory should be in history
                 //                auto [prob, U, K] = Pettitt{}.test2(opDequeLossHistory[opIdx], currOpListLossHistory);
