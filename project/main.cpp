@@ -63,6 +63,7 @@ static void glfw_error_callback(int error, const char *description)
 
 int main(int argc, char **argv)
 {
+//    Eigen::setNbThreads(1);
     std::cout << "nthreads: " << Eigen::nbThreads() << '\n';
     //    feenableexcept(FE_ALL_EXCEPT & ~FE_INEXACT);
     if (argc == 3)

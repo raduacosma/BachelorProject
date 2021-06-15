@@ -71,9 +71,9 @@ add_executable(BachelorProject
         project/simContainer/simContainer.cpp project/simContainer/simContainer.h project/runHeadless.cpp project/runHeadless.h project/agent/sarsa/sarsa.cpp project/agent/sarsa/sarsa.h project/agent/experience.h project/monteCarloSim/monteCarloSim.cpp project/monteCarloSim/monteCarloSim.h project/opTrack/opTrack.cpp project/opTrack/opTrack.h)
 target_link_libraries(BachelorProject GL ${GLFW_STATIC_LIBRARIES})
 
-find_package(OpenMP)
-if (OpenMP_CXX_FOUND)
-    target_link_libraries(BachelorProject OpenMP::OpenMP_CXX)
-endif ()
+#find_package(OpenMP)
+#if (OpenMP_CXX_FOUND)
+#    target_link_libraries(BachelorProject OpenMP::OpenMP_CXX)
+#endif ()
 
 message(${CMAKE_CXX_FLAGS_RELEASE})

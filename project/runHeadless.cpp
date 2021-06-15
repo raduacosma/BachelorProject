@@ -20,9 +20,9 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
 {
     auto begin = std::chrono::high_resolution_clock::now();
     //    std::cout.setstate(std::ios_base::failbit);
-    std::string files = "try1.txt,try2.txt,try3.txt,try4.txt,try5.txt,try6.txt";
+    std::string files = "try1.txt,try2.txt,try3.txt,better4.txt,try4.txt,try5.txt";
     size_t cMiniBatchSize = 16;
-    size_t numberOfEpisodes = 100; // ignore the function parameter for now until proper framework is in place
+    size_t numberOfEpisodes = 10000; // ignore the function parameter for now until proper framework is in place
     size_t nrEpisodesToEpsilonZero = numberOfEpisodes / 4 * 3;
     size_t sizeExperience = 100000;
     float alpha = 0.001;
@@ -60,7 +60,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     // could also use stack but meh, this way is more certain
     std::unique_ptr<Agent> agent = std::make_unique<QERQueueLearning>(
         kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams, numberOfEpisodes,
-        nrEpisodesToEpsilonZero, OpModellingType::KOLSMIR, alpha, 0.5, gamma);
+        nrEpisodesToEpsilonZero, OpModellingType::NOTRAINPETTITT, alpha, 0.5, gamma);
 //        std::unique_ptr<Agent> agent =
 //            std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP,
 //                                               numberOfEpisodes,nrEpisodesToEpsilonZero,
