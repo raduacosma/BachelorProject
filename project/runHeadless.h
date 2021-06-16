@@ -2,7 +2,7 @@
 #define _INCLUDED_RUNHEADLESS
 
 #include <string>
-
-void runHeadless(std::string const &fileList, unsigned long nrEpisodes);
-
+#include "hyperparamSpec/hyperparamSpec.h"
+void runHeadless(std::string const &file);
+HyperparamSpec loadHyperparameters(std::string const &file);
 #endif

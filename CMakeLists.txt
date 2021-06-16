@@ -68,6 +68,8 @@ add_executable(BachelorProject
         project/pettitt/pettitt.h
         project/kolsmir/kolsmir.cpp
         project/pettitt/pettitt.cpp
+        project/hyperparamSpec/hyperparamSpec.cpp
+        project/hyperparamSpec/hyperparamSpec.h
         project/simContainer/simContainer.cpp project/simContainer/simContainer.h project/runHeadless.cpp project/runHeadless.h project/agent/sarsa/sarsa.cpp project/agent/sarsa/sarsa.h project/agent/experience.h project/monteCarloSim/monteCarloSim.cpp project/monteCarloSim/monteCarloSim.h project/opTrack/opTrack.cpp project/opTrack/opTrack.h)
 target_link_libraries(BachelorProject GL ${GLFW_STATIC_LIBRARIES})
 
