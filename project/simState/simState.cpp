@@ -9,8 +9,10 @@
 using namespace std;
 
 SimState::SimState(std::string const &filename, Rewards rewards, SimStateParams simStateParams)
-    : traceSize(simStateParams.traceSize), visionGridSize(simStateParams.visionGridSize),
-      visionGridSideSize(visionGridSize * 2 + 1), agentStateSize(visionGridSideSize * visionGridSideSize),
+    : traceSize(simStateParams.traceSize), agentVisionGridSize(simStateParams.agentVisionGridSize),
+      agentVisionGridSideSize(agentVisionGridSize * 2 + 1), agentStateSize(agentVisionGridSideSize * agentVisionGridSideSize),
+      opponentVisionGridSize(simStateParams.opponentVisionGridSize),opponentVisionGridSideSize(opponentVisionGridSize*2+1),
+      opponentStateSize(opponentVisionGridSideSize*opponentVisionGridSideSize),
       randomOpCoef(simStateParams.randomOpCoef), d_outOfBoundsReward(rewards.outOfBoundsReward),
       d_reachedGoalReward(rewards.reachedGoalReward), d_killedByOpponentReward(rewards.killedByOpponentReward),
       d_normalReward(rewards.normalReward)
@@ -192,11 +194,11 @@ Eigen::VectorXf SimState::getStateForAgent() const
     Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize * 2+4);
     auto applyToArray = [&](Position const &pos, size_t offset)
     {
-        long const rowIdx = pos.y - agentPos.y + visionGridSize;
-        long const colIdx = pos.x - agentPos.x + visionGridSize;
-        if (rowIdx >= 0 and colIdx >= 0 and rowIdx < static_cast<long>(visionGridSideSize) and
-            colIdx < static_cast<long>(visionGridSideSize))
-            agentGrid[rowIdx * visionGridSideSize + colIdx + offset] = 1.0f;
+        long const rowIdx = pos.y - agentPos.y + agentVisionGridSize;
+        long const colIdx = pos.x - agentPos.x + agentVisionGridSize;
+        if (rowIdx >= 0 and colIdx >= 0 and rowIdx < static_cast<long>(agentVisionGridSideSize) and
+            colIdx < static_cast<long>(agentVisionGridSideSize))
+            agentGrid[rowIdx * agentVisionGridSideSize + colIdx + offset] = 1.0f;
     };
     for (auto const &wall : walls)
     {
@@ -239,15 +241,15 @@ Eigen::VectorXf SimState::getStateForOpponent() const
 { // should the goal really be a vision grid?
     // also, everywhere the agent center is included for avoiding the performance cost
     // of the if and supposedly being better for 2D representations but debatable
-    Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize * 3);
+    Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(opponentStateSize * 3);
     Position opPosNow = currOpTrace.back();
     auto applyToArray = [&](Position const &pos, size_t offset)
     {
-        long const rowIdx = pos.y - opPosNow.y + visionGridSize;
-        long const colIdx = pos.x - opPosNow.x + visionGridSize;
-        if (rowIdx >= 0 and colIdx >= 0 and rowIdx < static_cast<long>(visionGridSideSize) and
-            colIdx < static_cast<long>(visionGridSideSize))
-            agentGrid[rowIdx * visionGridSideSize + colIdx + offset] = 1.0f;
+        long const rowIdx = pos.y - opPosNow.y + opponentVisionGridSize;
+        long const colIdx = pos.x - opPosNow.x + opponentVisionGridSize;
+        if (rowIdx >= 0 and colIdx >= 0 and rowIdx < static_cast<long>(opponentVisionGridSideSize) and
+            colIdx < static_cast<long>(opponentVisionGridSideSize))
+            agentGrid[rowIdx * opponentVisionGridSideSize + colIdx + offset] = 1.0f;
     };
     for (auto const &wall : walls)
     {
@@ -255,9 +257,9 @@ Eigen::VectorXf SimState::getStateForOpponent() const
     }
     for (auto const &opPos : currOpTrace)
     {
-        applyToArray(opPos, agentStateSize);
+        applyToArray(opPos, opponentStateSize);
     }
-    applyToArray(goalPos, agentStateSize * 2);
+    applyToArray(goalPos, opponentStateSize * 2);
     return agentGrid;
 }
 void SimState::resetAgentPos()
@@ -399,7 +401,7 @@ void SimState::generateStateRepresentation()
         assignWithBoundCheck(opPos, opponentTraceColor);
     }
     assignWithBoundCheck(currOpTrace.back(), opponentColor);
-    auto applyViewColor = [&](Position pos, ImVec4 color)
+    auto applyViewColor = [&](Position pos, ImVec4 color, size_t visionGridSize)
     {
         for (size_t i = 0; i < simSize.x; ++i)
             for (size_t j = 0; j < simSize.y; ++j)
@@ -412,8 +414,8 @@ void SimState::generateStateRepresentation()
                 }
             }
     };
-    applyViewColor(agentPos, agentViewColor);
-    applyViewColor(currOpTrace.back(), opponentViewColor);
+    applyViewColor(agentPos, agentViewColor,agentVisionGridSize);
+    applyViewColor(currOpTrace.back(), opponentViewColor,opponentVisionGridSize);
 
     stateRepresentation = move(repr);
 }

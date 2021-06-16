@@ -178,27 +178,44 @@ int main(int argc, char **argv)
     // FIXME: THESE ARE NOT THE RIGHT ONES, THESE ARE JUST SO THE GUI COMPILES UNTIL I REFACTOR THIS AGENT
     // THE PURPOSE OF THE GUI NOW IS TO EVALUATE THE LEVELS NOT THE AGENT RIGHT NOW
     size_t cMiniBatchSize = 16;
-    size_t numberOfEpisodes = 10000; // ignore the parameter for now until proper framework is in place
+    size_t numberOfEpisodes = 10000; // ignore the function parameter for now until proper framework is in place
     size_t nrEpisodesToEpsilonZero = numberOfEpisodes / 4 * 3;
+    size_t sizeExperience = 100000;
     float alpha = 0.001;
-    float epsilon = 0.1;
+    float epsilon = 0.5;
     float gamma = 0.9;
-    ExpReplayParams expReplayParams{ .cSwapPeriod = 1000, .miniBatchSize = cMiniBatchSize, .sizeExperience = 10000 };
+    size_t agentVisionGridSize = 2;
+    size_t agentVisionGridArea = agentVisionGridSize *2+1;
+    agentVisionGridArea *= agentVisionGridArea;
+    size_t opponentVisionGridSize = 2;
+    size_t opponentVisionGridArea = agentVisionGridSize *2+1;
+    opponentVisionGridArea *= opponentVisionGridArea;
+    globalRng = RandObj(275165314, -1, 1, sizeExperience);
+    OpModellingType opModellingType = OpModellingType::ONEFORALL;
+    ExpReplayParams expReplayParams{ .cSwapPeriod = 1000,
+        .miniBatchSize = cMiniBatchSize,
+        .sizeExperience = sizeExperience };
     AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = 1, .nrRollouts = 5 };
-    MLPParams agentMLP{ .sizes = { 52, 192, 4 },
-                        .learningRate = 0.001,
-                        .outputActivationFunc = ActivationFunction::LINEAR,
-                        .miniBatchSize = cMiniBatchSize };
-    MLPParams opponentMLP{ .sizes = { 50, 100, 4 },
-                           .learningRate = 0.001,
-                           .outputActivationFunc = ActivationFunction::SOFTMAX,
-                           .miniBatchSize = cMiniBatchSize };
-    Rewards rewards = {
-        .normalReward = -0.1, .killedByOpponentReward = -100, .outOfBoundsReward = -0.1, .reachedGoalReward = 100
-    };
-    SimStateParams simStateParams{ .traceSize = 6, .visionGridSize = 2, .randomOpCoef = -1 };
-    OpTrackParams kolsmirParams = { .pValueThreshold = 0.05, .minHistorySize = 10, .maxHistorySize = 10 };
+    MLPParams agentMLP{ .sizes = { agentVisionGridArea *2+4, 200, 4 },
+        .learningRate = 0.001,
+        .regParam = -1,
+        .outputActivationFunc = ActivationFunction::LINEAR,
+        .miniBatchSize = cMiniBatchSize,
+        .randInit = false};
+    MLPParams opponentMLP{ .sizes = { opponentVisionGridArea *3, 200, 4 },
+        .learningRate = 0.001,
+        .regParam  = -1,
+        .outputActivationFunc = ActivationFunction::SOFTMAX,
+        .miniBatchSize = cMiniBatchSize,
+        .randInit = false };
+    Rewards rewards = { .normalReward = -0.01f,
+        .killedByOpponentReward = -1.0f,
+        .outOfBoundsReward = -0.01f,
+        .reachedGoalReward = 1.0f };
+    SimStateParams simStateParams = { .traceSize = 6, .agentVisionGridSize = agentVisionGridSize,.opponentVisionGridSize = opponentVisionGridSize, .randomOpCoef = -1 };
+    OpTrackParams kolsmirParams = { .pValueThreshold = 0.05, .minHistorySize = 10, .maxHistorySize = 20 };
     OpTrackParams pettittParams = { .pValueThreshold = 0.01, .minHistorySize = 10, .maxHistorySize = 20 };
+
     std::unique_ptr<Agent> agent =
         std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, numberOfEpisodes,
                                 nrEpisodesToEpsilonZero, OpModellingType::ONEFORALL, alpha, epsilon, gamma);

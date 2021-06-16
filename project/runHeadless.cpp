@@ -20,7 +20,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
 {
     auto begin = std::chrono::high_resolution_clock::now();
     //    std::cout.setstate(std::ios_base::failbit);
-    std::string files = "try1.txt,try2.txt,try3.txt,better4.txt,try4.txt,try5.txt";
+    std::string files = "try1.txt,try2.txt,try3.txt,better4.txt,better5.txt,try6.txt";
     size_t cMiniBatchSize = 16;
     size_t numberOfEpisodes = 10000; // ignore the function parameter for now until proper framework is in place
     size_t nrEpisodesToEpsilonZero = numberOfEpisodes / 4 * 3;
@@ -28,22 +28,25 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     float alpha = 0.001;
     float epsilon = 0.5;
     float gamma = 0.9;
-    size_t visionGridSize = 2;
-    size_t visionGridArea = visionGridSize*2+1;
-    visionGridArea*=visionGridArea;
+    size_t agentVisionGridSize = 1;
+    size_t agentVisionGridArea = agentVisionGridSize *2+1;
+    agentVisionGridArea *= agentVisionGridArea;
+    size_t opponentVisionGridSize = 1;
+    size_t opponentVisionGridArea = agentVisionGridSize *2+1;
+    opponentVisionGridArea *= opponentVisionGridArea;
     globalRng = RandObj(275165314, -1, 1, sizeExperience);
     OpModellingType opModellingType = OpModellingType::ONEFORALL;
     ExpReplayParams expReplayParams{ .cSwapPeriod = 1000,
                                      .miniBatchSize = cMiniBatchSize,
                                      .sizeExperience = sizeExperience };
     AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = 1, .nrRollouts = 5 };
-    MLPParams agentMLP{ .sizes = { visionGridArea*2+4, 200, 4 },
+    MLPParams agentMLP{ .sizes = { agentVisionGridArea *2+4, 200, 4 },
                         .learningRate = 0.001,
                         .regParam = -1,
                         .outputActivationFunc = ActivationFunction::LINEAR,
                         .miniBatchSize = cMiniBatchSize,
                         .randInit = false};
-    MLPParams opponentMLP{ .sizes = { visionGridArea*3, 200, 4 },
+    MLPParams opponentMLP{ .sizes = { opponentVisionGridArea *3, 200, 4 },
                            .learningRate = 0.001,
                            .regParam  = -1,
                            .outputActivationFunc = ActivationFunction::SOFTMAX,
@@ -53,14 +56,14 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
                         .killedByOpponentReward = -1.0f,
                         .outOfBoundsReward = -0.01f,
                         .reachedGoalReward = 1.0f };
-    SimStateParams simStateParams = { .traceSize = 6, .visionGridSize = visionGridSize, .randomOpCoef = -1 };
+    SimStateParams simStateParams = { .traceSize = 6, .agentVisionGridSize = agentVisionGridSize,.opponentVisionGridSize = opponentVisionGridSize, .randomOpCoef = -1 };
     OpTrackParams kolsmirParams = { .pValueThreshold = 0.05, .minHistorySize = 10, .maxHistorySize = 20 };
     OpTrackParams pettittParams = { .pValueThreshold = 0.01, .minHistorySize = 10, .maxHistorySize = 20 };
 
     // could also use stack but meh, this way is more certain
     std::unique_ptr<Agent> agent = std::make_unique<QERQueueLearning>(
         kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams, numberOfEpisodes,
-        nrEpisodesToEpsilonZero, OpModellingType::NOTRAINPETTITT, alpha, 0.5, gamma);
+        nrEpisodesToEpsilonZero, OpModellingType::ONEFORALL, alpha, 0.5, gamma);
 //        std::unique_ptr<Agent> agent =
 //            std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP,
 //                                               numberOfEpisodes,nrEpisodesToEpsilonZero,

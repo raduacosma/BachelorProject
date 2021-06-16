@@ -59,7 +59,8 @@ struct Rewards
 struct SimStateParams
 {
     size_t traceSize;
-    size_t visionGridSize;
+    size_t agentVisionGridSize;
+    size_t opponentVisionGridSize;
     float randomOpCoef;
 };
 struct OpTrackParams
