@@ -181,7 +181,6 @@ int main(int argc, char **argv)
     size_t numberOfEpisodes = 10000; // ignore the function parameter for now until proper framework is in place
     size_t nrEpisodesToEpsilonZero = numberOfEpisodes / 4 * 3;
     size_t sizeExperience = 100000;
-    float alpha = 0.001;
     float epsilon = 0.5;
     float gamma = 0.9;
     size_t agentVisionGridSize = 2;
@@ -218,7 +217,7 @@ int main(int argc, char **argv)
 
     std::unique_ptr<Agent> agent =
         std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, numberOfEpisodes,
-                                nrEpisodesToEpsilonZero, OpModellingType::ONEFORALL, alpha, epsilon, gamma);
+                                nrEpisodesToEpsilonZero, OpModellingType::ONEFORALL, epsilon, gamma);
 
     // Main loop
     while (!glfwWindowShouldClose(window))
@@ -252,7 +251,7 @@ int main(int argc, char **argv)
                 simContainer = nullptr;
                 agent = std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP,
                                                 numberOfEpisodes, nrEpisodesToEpsilonZero, OpModellingType::ONEFORALL,
-                                                alpha, epsilon, gamma);
+                                                 epsilon, gamma);
             }
             drawStartMenu(uiStateTracker);
         }

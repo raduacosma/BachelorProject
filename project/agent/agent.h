@@ -19,19 +19,17 @@
 
 enum class AgentType
 {
-    QLEARNING,
-    DQLEARNING,
     SARSA,
-    EXPECTEDSARSA
+    DEEPQLEARNING,
+    DOUBLEDEEPQLEARNING
 };
-
 enum class OpModellingType
 {
     NEWEVERYTIME,
     ONEFORALL,
-    BADLOSSPETTITT,
     KOLSMIR,
-    NOTRAINPETTITT
+    NOTRAINPETTITT,
+    BADLOSSPETTITT
 };
 
 class Agent

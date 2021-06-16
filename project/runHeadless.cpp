@@ -30,7 +30,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     size_t agentVisionGridSize = 1;
     size_t agentVisionGridArea = agentVisionGridSize *2+1;
     agentVisionGridArea *= agentVisionGridArea;
-    size_t opponentVisionGridSize = 1;
+    size_t opponentVisionGridSize = 2;
     size_t opponentVisionGridArea = opponentVisionGridSize *2+1;
     opponentVisionGridArea *= opponentVisionGridArea;
     globalRng = RandObj(275165314, -1, 1, sizeExperience);
@@ -62,7 +62,7 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     // could also use stack but meh, this way is more certain
     std::unique_ptr<Agent> agent = std::make_unique<QERQueueLearning>(
         kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams, numberOfEpisodes,
-        nrEpisodesToEpsilonZero, OpModellingType::ONEFORALL, 0.5, gamma);
+        nrEpisodesToEpsilonZero, OpModellingType::KOLSMIR, 0.5, gamma);
 //        std::unique_ptr<Agent> agent =
 //            std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP,
 //                                               numberOfEpisodes,nrEpisodesToEpsilonZero,

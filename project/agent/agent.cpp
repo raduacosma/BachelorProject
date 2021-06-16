@@ -35,7 +35,7 @@ Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloP
 }
 bool Agent::performOneStep()
 {
-    throw std::runtime_error("In Agent's performOneStep, should not be here");
+//    throw std::runtime_error("In Agent's performOneStep, should not be here");
 }
 void Agent::run()
 {
