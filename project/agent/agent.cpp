@@ -9,14 +9,14 @@
 using namespace std;
 Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
              MLPParams opponentMLP, size_t _nrEpisodes, size_t pNrEpisodesToEpsilonZero,
-             OpModellingType pOpModellingType, float pAlpha, float pEpsilon,
+             OpModellingType pOpModellingType, float pEpsilon,
              float pGamma) // TODO: check how size is passed
     : opTrack(opTrackParams.pValueThreshold, opTrackParams.minHistorySize, opTrackParams.maxHistorySize),
       nrEpisodes(_nrEpisodes), nrEpisodesToEpsilonZero(pNrEpisodesToEpsilonZero), rewards(vector<float>(_nrEpisodes)),
       mlp(agentMLP.sizes, agentMLP.learningRate, agentMLP.regParam, agentMLP.outputActivationFunc, agentMLP.miniBatchSize, agentMLP.randInit),
       opList{ MLP(opponentMLP.sizes, opponentMLP.learningRate, opponentMLP.regParam, opponentMLP.outputActivationFunc,
                   opponentMLP.miniBatchSize, agentMLP.randInit) },opLosses{0.0f},
-      currOp(0), opModellingType(pOpModellingType), alpha(pAlpha), epsilon(pEpsilon), gamma(pGamma),
+      currOp(0), opModellingType(pOpModellingType), epsilon(pEpsilon), gamma(pGamma),
       maxNrSteps(agentMonteCarloParams.maxNrSteps), nrRollouts(agentMonteCarloParams.nrRollouts),
       opMLPParams(opponentMLP), opDeathsPerEp(nrEpisodes, 0)
 {

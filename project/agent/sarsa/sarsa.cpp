@@ -4,10 +4,10 @@
 
 Sarsa::Sarsa(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
              MLPParams opponentMLP, size_t _nrEpisodes, size_t pNrEpisodesToEpsilonZero,
-             OpModellingType pOpModellingType, float pAlpha, float pEpsilon,
+             OpModellingType pOpModellingType, float pEpsilon,
              float pGamma) // TODO: check how size is passed
     : Agent(opTrackParams, agentMonteCarloParams, std::move(agentMLP), std::move(opponentMLP), _nrEpisodes,
-            pNrEpisodesToEpsilonZero, pOpModellingType, pAlpha, pEpsilon, pGamma)
+            pNrEpisodesToEpsilonZero, pOpModellingType, pEpsilon, pGamma)
 {
 }
 void Sarsa::newEpisode()

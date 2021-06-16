@@ -25,14 +25,13 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     size_t numberOfEpisodes = 10000; // ignore the function parameter for now until proper framework is in place
     size_t nrEpisodesToEpsilonZero = numberOfEpisodes / 4 * 3;
     size_t sizeExperience = 100000;
-    float alpha = 0.001;
     float epsilon = 0.5;
     float gamma = 0.9;
     size_t agentVisionGridSize = 1;
     size_t agentVisionGridArea = agentVisionGridSize *2+1;
     agentVisionGridArea *= agentVisionGridArea;
     size_t opponentVisionGridSize = 1;
-    size_t opponentVisionGridArea = agentVisionGridSize *2+1;
+    size_t opponentVisionGridArea = opponentVisionGridSize *2+1;
     opponentVisionGridArea *= opponentVisionGridArea;
     globalRng = RandObj(275165314, -1, 1, sizeExperience);
     OpModellingType opModellingType = OpModellingType::ONEFORALL;
@@ -63,11 +62,11 @@ void runHeadless(std::string const &fileList, unsigned long nrEpisodes)
     // could also use stack but meh, this way is more certain
     std::unique_ptr<Agent> agent = std::make_unique<QERQueueLearning>(
         kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams, numberOfEpisodes,
-        nrEpisodesToEpsilonZero, OpModellingType::ONEFORALL, alpha, 0.5, gamma);
+        nrEpisodesToEpsilonZero, OpModellingType::ONEFORALL, 0.5, gamma);
 //        std::unique_ptr<Agent> agent =
 //            std::make_unique<Sarsa>(kolsmirParams, agentMonteCarloParams, agentMLP, opponentMLP,
 //                                               numberOfEpisodes,nrEpisodesToEpsilonZero,
-//                                               OpModellingType::KOLSMIR,alpha,0.3,gamma);
+//                                               OpModellingType::KOLSMIR,0.3,gamma);
     SimContainer simContainer{ files, agent.get(), rewards, simStateParams };
     agent->run();
     std::ofstream out{ "results/rewards04AFTER.txt" };

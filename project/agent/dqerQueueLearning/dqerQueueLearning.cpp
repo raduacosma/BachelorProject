@@ -5,9 +5,9 @@
 DQERQueueLearning::DQERQueueLearning(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams,
                                      MLPParams agentMLP, MLPParams opponentMLP, ExpReplayParams expReplayParams,
                                      size_t _nrEpisodes, size_t pNrEpisodesToEpsilonZero,
-                                     OpModellingType pOpModellingType, float pAlpha, float pEpsilon, float pGamma)
+                                     OpModellingType pOpModellingType, float pEpsilon, float pGamma)
     : Agent(opTrackParams, agentMonteCarloParams, std::move(agentMLP), std::move(opponentMLP), _nrEpisodes,
-            pNrEpisodesToEpsilonZero, pOpModellingType, pAlpha, pEpsilon, pGamma),
+            pNrEpisodesToEpsilonZero, pOpModellingType, pEpsilon, pGamma),
       targetMLP(mlp), cSwapPeriod(expReplayParams.cSwapPeriod), miniBatchSize(expReplayParams.miniBatchSize),
       sizeExperience(expReplayParams.sizeExperience)
 {

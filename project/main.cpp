@@ -188,7 +188,7 @@ int main(int argc, char **argv)
     size_t agentVisionGridArea = agentVisionGridSize *2+1;
     agentVisionGridArea *= agentVisionGridArea;
     size_t opponentVisionGridSize = 2;
-    size_t opponentVisionGridArea = agentVisionGridSize *2+1;
+    size_t opponentVisionGridArea = opponentVisionGridSize *2+1;
     opponentVisionGridArea *= opponentVisionGridArea;
     globalRng = RandObj(275165314, -1, 1, sizeExperience);
     OpModellingType opModellingType = OpModellingType::ONEFORALL;

@@ -74,7 +74,6 @@ class Agent
     bool isNewLevel = false;
 
     OpModellingType opModellingType;
-    float alpha;
     float epsilon;
     float gamma;
     size_t maxNrSteps;
@@ -89,7 +88,7 @@ class Agent
   public:
     explicit Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
                    MLPParams opponentMLP, size_t _nrEpisodes, size_t pNrEpisodesToEpsilonZero,
-                   OpModellingType pOpModellingType, float pAlpha, float pEpsilon, float pGamma);
+                   OpModellingType pOpModellingType, float pEpsilon, float pGamma);
     virtual ~Agent();
 
     void run();

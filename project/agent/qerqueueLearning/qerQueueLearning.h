@@ -26,7 +26,7 @@ class QERQueueLearning : public Agent
   public:
     QERQueueLearning(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
                      MLPParams opponentMLP, ExpReplayParams expReplayParams, size_t _nrEpisodes,
-                     size_t pNrEpisodesToEpsilonZero, OpModellingType pOpModellingType, float pAlpha, float pEpsilon,
+                     size_t pNrEpisodesToEpsilonZero, OpModellingType pOpModellingType, float pEpsilon,
                      float pGamma);
     ~QERQueueLearning() override;
     bool performOneStep() override;
