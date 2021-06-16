@@ -9,18 +9,18 @@
 #include "simContainer/simContainer.h"
 #include "utilities/utilities.h"
 #include <algorithm>
+#include <chrono>
 #include <fstream>
 #include <iostream>
 #include <iterator>
 #include <memory>
-#include <chrono>
 
 RandObj globalRng;
 
 HyperparamSpec loadHyperparameters(std::string const &file)
 {
     std::ifstream in(file);
-    if(not in)
+    if (not in)
     {
         throw std::runtime_error("could not open file");
     }
@@ -35,10 +35,10 @@ void runHeadless(std::string const &file)
     HyperparamSpec hs = loadHyperparameters(file);
     size_t nrEpisodesToEpsilonZero = hs.numberOfEpisodes / 4 * 3;
 
-    size_t agentVisionGridArea = hs.agentVisionGridSize *2+1;
+    size_t agentVisionGridArea = hs.agentVisionGridSize * 2 + 1;
     agentVisionGridArea *= agentVisionGridArea;
 
-    size_t opponentVisionGridArea = hs.opponentVisionGridSize *2+1;
+    size_t opponentVisionGridArea = hs.opponentVisionGridSize * 2 + 1;
     opponentVisionGridArea *= opponentVisionGridArea;
     globalRng = RandObj(hs.seed, -1, 1, hs.sizeExperience);
     OpModellingType opModellingType = hs.opModellingType;
@@ -46,47 +46,49 @@ void runHeadless(std::string const &file)
                                      .miniBatchSize = hs.miniBatchSize,
                                      .sizeExperience = hs.sizeExperience };
     AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = hs.maxNrSteps, .nrRollouts = hs.nrRollouts };
-    MLPParams agentMLP{ .sizes = { agentVisionGridArea *2+4, 200, 4 },
+    MLPParams agentMLP{ .sizes = { agentVisionGridArea * 2 + 4, 200, 4 },
                         .learningRate = hs.agentLearningRate,
                         .regParam = hs.agentRegParam,
                         .outputActivationFunc = ActivationFunction::LINEAR,
                         .miniBatchSize = hs.miniBatchSize,
-                        .randInit = false};
-    MLPParams opponentMLP{ .sizes = { opponentVisionGridArea *3, 200, 4 },
+                        .randInit = false };
+    MLPParams opponentMLP{ .sizes = { opponentVisionGridArea * 3, 200, 4 },
                            .learningRate = hs.opponentLearningRate,
-                           .regParam  = hs.opponentRegParam,
+                           .regParam = hs.opponentRegParam,
                            .outputActivationFunc = ActivationFunction::SOFTMAX,
                            .miniBatchSize = hs.miniBatchSize,
                            .randInit = false };
-    Rewards rewards = { .normalReward = -0.01f,
-                        .killedByOpponentReward = -1.0f,
-                        .outOfBoundsReward = -0.01f,
-                        .reachedGoalReward = 1.0f };
-    SimStateParams simStateParams = { .traceSize = hs.traceSize, .agentVisionGridSize = hs.agentVisionGridSize,.opponentVisionGridSize = hs.opponentVisionGridSize, .randomOpCoef = hs.randomOpCoef };
-    OpTrackParams opTrackParams = { .pValueThreshold = hs.pValueThreshold, .minHistorySize = hs.minHistorySize, .maxHistorySize = hs.maxHistorySize};
+    Rewards rewards = {
+        .normalReward = -0.01f, .killedByOpponentReward = -1.0f, .outOfBoundsReward = -0.01f, .reachedGoalReward = 1.0f
+    };
+    SimStateParams simStateParams = { .traceSize = hs.traceSize,
+                                      .agentVisionGridSize = hs.agentVisionGridSize,
+                                      .opponentVisionGridSize = hs.opponentVisionGridSize,
+                                      .randomOpCoef = hs.randomOpCoef };
+    OpTrackParams opTrackParams = { .pValueThreshold = hs.pValueThreshold,
+                                    .minHistorySize = hs.minHistorySize,
+                                    .maxHistorySize = hs.maxHistorySize };
     // could also use stack but meh, this way is more certain
     std::unique_ptr<Agent> agent;
-    switch(hs.agentType)
+    switch (hs.agentType)
     {
 
         case AgentType::SARSA:
-            agent =
-                std::make_unique<Sarsa>(opTrackParams, agentMonteCarloParams, agentMLP, opponentMLP,
-                                        hs.numberOfEpisodes,nrEpisodesToEpsilonZero,
-                                        opModellingType,hs.epsilon,hs.gamma);
+            agent = std::make_unique<Sarsa>(opTrackParams, agentMonteCarloParams, agentMLP, opponentMLP,
+                                            hs.numberOfEpisodes, nrEpisodesToEpsilonZero, opModellingType, hs.epsilon,
+                                            hs.gamma);
             break;
         case AgentType::DEEPQLEARNING:
-            agent = std::make_unique<QERQueueLearning>(
-                opTrackParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams, hs.numberOfEpisodes,
-                nrEpisodesToEpsilonZero, opModellingType, hs.epsilon, hs.gamma);
+            agent = std::make_unique<QERQueueLearning>(opTrackParams, agentMonteCarloParams, agentMLP, opponentMLP,
+                                                       expReplayParams, hs.numberOfEpisodes, nrEpisodesToEpsilonZero,
+                                                       opModellingType, hs.epsilon, hs.gamma);
             break;
         case AgentType::DOUBLEDEEPQLEARNING:
-            agent = std::make_unique<DQERQueueLearning>(
-                opTrackParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams, hs.numberOfEpisodes,
-                nrEpisodesToEpsilonZero, opModellingType, hs.epsilon, hs.gamma);
+            agent = std::make_unique<DQERQueueLearning>(opTrackParams, agentMonteCarloParams, agentMLP, opponentMLP,
+                                                        expReplayParams, hs.numberOfEpisodes, nrEpisodesToEpsilonZero,
+                                                        opModellingType, hs.epsilon, hs.gamma);
             break;
     }
-
 
     SimContainer simContainer{ hs.files, agent.get(), rewards, simStateParams };
     agent->run();
@@ -99,10 +101,9 @@ void runHeadless(std::string const &file)
     std::ofstream opponentPerc{ "results/opponentPredictionPercentageTwoDOUBLE.txt" };
     std::vector<float> const &opponentPredPerc = agent->getOpponentCorrectPredictionPercentage();
     copy(opponentPredPerc.begin(), opponentPredPerc.end(), std::ostream_iterator<float>(opponentPerc, "\n"));
-    std::ofstream trainLoss{"results/trainLoss2.txt"};
+    std::ofstream trainLoss{ "results/trainLoss2.txt" };
     std::vector<float> const &trainLossPerEp = agent->getLearningLosses();
-    copy(trainLossPerEp.begin(), trainLossPerEp.end(),
-             std::ostream_iterator<float>(trainLoss, "\n"));
+    copy(trainLossPerEp.begin(), trainLossPerEp.end(), std::ostream_iterator<float>(trainLoss, "\n"));
     std::cout << "opponent prediction percentage: " << agent->getCorrectOpponentTypePredictionPercentage() << std::endl;
     std::cout << "nr of times killed by opponent: " << agent->getOpDeathPercentage() << std::endl;
     //    std::ofstream opponentLoss{"results/opponentFirstEpLoss.txt"};

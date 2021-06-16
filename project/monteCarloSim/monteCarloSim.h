@@ -22,10 +22,10 @@ class MonteCarloSim
     size_t traceSize;
     size_t agentVisionGridSize;
     size_t agentVisionGridSideSize; // visionGridSize*2+1
-    size_t agentStateSize;     // visionGridSizeSize^2
+    size_t agentStateSize;          // visionGridSizeSize^2
     size_t opponentVisionGridSize;
     size_t opponentVisionGridSideSize; // visionGridSize*2+1
-    size_t opponentStateSize;     // visionGridSizeSize^2
+    size_t opponentStateSize;          // visionGridSizeSize^2
 
     std::vector<Position> const &walls;
 

@@ -10,9 +10,11 @@ using namespace std;
 
 SimState::SimState(std::string const &filename, Rewards rewards, SimStateParams simStateParams)
     : traceSize(simStateParams.traceSize), agentVisionGridSize(simStateParams.agentVisionGridSize),
-      agentVisionGridSideSize(agentVisionGridSize * 2 + 1), agentStateSize(agentVisionGridSideSize * agentVisionGridSideSize),
-      opponentVisionGridSize(simStateParams.opponentVisionGridSize),opponentVisionGridSideSize(opponentVisionGridSize*2+1),
-      opponentStateSize(opponentVisionGridSideSize*opponentVisionGridSideSize),
+      agentVisionGridSideSize(agentVisionGridSize * 2 + 1),
+      agentStateSize(agentVisionGridSideSize * agentVisionGridSideSize),
+      opponentVisionGridSize(simStateParams.opponentVisionGridSize),
+      opponentVisionGridSideSize(opponentVisionGridSize * 2 + 1),
+      opponentStateSize(opponentVisionGridSideSize * opponentVisionGridSideSize),
       randomOpCoef(simStateParams.randomOpCoef), d_outOfBoundsReward(rewards.outOfBoundsReward),
       d_reachedGoalReward(rewards.reachedGoalReward), d_killedByOpponentReward(rewards.killedByOpponentReward),
       d_normalReward(rewards.normalReward)
@@ -191,7 +193,7 @@ Eigen::VectorXf SimState::getStateForAgent() const
     // of the if and supposedly being better for 2D representations but debatable
     // TODO: maybe make the goal/non-goal configurable
     size_t offsetForGoal = agentStateSize * 2;
-    Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize * 2+4);
+    Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize * 2 + 4);
     auto applyToArray = [&](Position const &pos, size_t offset)
     {
         long const rowIdx = pos.y - agentPos.y + agentVisionGridSize;
@@ -209,32 +211,32 @@ Eigen::VectorXf SimState::getStateForAgent() const
     {
         applyToArray(opPos, agentStateSize);
     }
-//        applyToArray(goalPos,agentStateSize*2);
-    float xDiff = static_cast<int>(goalPos.x-agentPos.x)/5.0f;
-    float yDiff = static_cast<int>(goalPos.y-agentPos.y)/5.0f;
-    if(xDiff < 0)
+    //        applyToArray(goalPos,agentStateSize*2);
+    float xDiff = static_cast<int>(goalPos.x - agentPos.x) / 5.0f;
+    float yDiff = static_cast<int>(goalPos.y - agentPos.y) / 5.0f;
+    if (xDiff < 0)
     {
         agentGrid[offsetForGoal] = -xDiff;
-        agentGrid[offsetForGoal+1] = 0;
+        agentGrid[offsetForGoal + 1] = 0;
     }
     else
     {
         agentGrid[offsetForGoal] = 0;
-        agentGrid[offsetForGoal+1] = xDiff;
+        agentGrid[offsetForGoal + 1] = xDiff;
     }
-    if(yDiff < 0)
+    if (yDiff < 0)
     {
-        agentGrid[offsetForGoal+2] = -yDiff;
-        agentGrid[offsetForGoal+3] = 0;
+        agentGrid[offsetForGoal + 2] = -yDiff;
+        agentGrid[offsetForGoal + 3] = 0;
     }
     else
     {
-        agentGrid[offsetForGoal+2] = 0;
-        agentGrid[offsetForGoal+3] = yDiff;
+        agentGrid[offsetForGoal + 2] = 0;
+        agentGrid[offsetForGoal + 3] = yDiff;
     }
-//    std::cout<<agentGrid[offsetForGoal]<<" "<<agentGrid[offsetForGoal+1]<<" "<<agentGrid[offsetForGoal+2]<<" "<<agentGrid[offsetForGoal+3]<<std::endl;
-//    agentGrid[offsetForGoal] = static_cast<int>(goalPos.x - agentPos.x) / 20.0f;
-//    agentGrid[offsetForGoal + 1] = static_cast<int>(goalPos.y - agentPos.y) / 20.0f;
+    //    std::cout<<agentGrid[offsetForGoal]<<" "<<agentGrid[offsetForGoal+1]<<" "<<agentGrid[offsetForGoal+2]<<"
+    //    "<<agentGrid[offsetForGoal+3]<<std::endl; agentGrid[offsetForGoal] = static_cast<int>(goalPos.x - agentPos.x)
+    //    / 20.0f; agentGrid[offsetForGoal + 1] = static_cast<int>(goalPos.y - agentPos.y) / 20.0f;
     return agentGrid;
 }
 Eigen::VectorXf SimState::getStateForOpponent() const
@@ -264,9 +266,9 @@ Eigen::VectorXf SimState::getStateForOpponent() const
 }
 void SimState::resetAgentPos()
 {
-//    std::uniform_int_distribution<> distr{ -2, 2 }; // hardcoded but no need for tweaks
-//    auto &rngEngine = globalRng.getRngEngine();
-//    agentPos = { initialAgentPos.x + distr(rngEngine), initialAgentPos.y + distr(rngEngine) };
+    //    std::uniform_int_distribution<> distr{ -2, 2 }; // hardcoded but no need for tweaks
+    //    auto &rngEngine = globalRng.getRngEngine();
+    //    agentPos = { initialAgentPos.x + distr(rngEngine), initialAgentPos.y + distr(rngEngine) };
     agentPos = initialAgentPos;
 }
 
@@ -414,8 +416,8 @@ void SimState::generateStateRepresentation()
                 }
             }
     };
-    applyViewColor(agentPos, agentViewColor,agentVisionGridSize);
-    applyViewColor(currOpTrace.back(), opponentViewColor,opponentVisionGridSize);
+    applyViewColor(agentPos, agentViewColor, agentVisionGridSize);
+    applyViewColor(currOpTrace.back(), opponentViewColor, opponentVisionGridSize);
 
     stateRepresentation = move(repr);
 }

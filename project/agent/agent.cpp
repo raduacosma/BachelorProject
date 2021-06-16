@@ -1,9 +1,9 @@
 #include "agent.h"
 #include "../simContainer/simContainer.h"
-#include <iostream>
-#include <fstream>
-#include <random>
 #include <assert.h>
+#include <fstream>
+#include <iostream>
+#include <random>
 #include <tuple>
 // TODO: check out monte carlo estimates for target Q-values
 using namespace std;
@@ -13,10 +13,11 @@ Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloP
              float pGamma) // TODO: check how size is passed
     : opTrack(opTrackParams.pValueThreshold, opTrackParams.minHistorySize, opTrackParams.maxHistorySize),
       nrEpisodes(_nrEpisodes), nrEpisodesToEpsilonZero(pNrEpisodesToEpsilonZero), rewards(vector<float>(_nrEpisodes)),
-      mlp(agentMLP.sizes, agentMLP.learningRate, agentMLP.regParam, agentMLP.outputActivationFunc, agentMLP.miniBatchSize, agentMLP.randInit),
+      mlp(agentMLP.sizes, agentMLP.learningRate, agentMLP.regParam, agentMLP.outputActivationFunc,
+          agentMLP.miniBatchSize, agentMLP.randInit),
       opList{ MLP(opponentMLP.sizes, opponentMLP.learningRate, opponentMLP.regParam, opponentMLP.outputActivationFunc,
-                  opponentMLP.miniBatchSize, agentMLP.randInit) },opLosses{0.0f},
-      currOp(0), opModellingType(pOpModellingType), epsilon(pEpsilon), gamma(pGamma),
+                  opponentMLP.miniBatchSize, agentMLP.randInit) },
+      opLosses{ 0.0f }, currOp(0), opModellingType(pOpModellingType), epsilon(pEpsilon), gamma(pGamma),
       maxNrSteps(agentMonteCarloParams.maxNrSteps), nrRollouts(agentMonteCarloParams.nrRollouts),
       opMLPParams(opponentMLP), opDeathsPerEp(nrEpisodes, 0)
 {
@@ -35,7 +36,7 @@ Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloP
 }
 bool Agent::performOneStep()
 {
-//    throw std::runtime_error("In Agent's performOneStep, should not be here");
+    //    throw std::runtime_error("In Agent's performOneStep, should not be here");
 }
 void Agent::run()
 {
@@ -77,7 +78,7 @@ void Agent::run()
             {
                 opponentNotInit = true;
             }
-            if(stepCount >= 1000)   // max nr of timesteps
+            if (stepCount >= 1000) // max nr of timesteps
             {
                 maze->resetNextEpisode();
                 break;
@@ -86,12 +87,12 @@ void Agent::run()
         std::cout << "totalReward: " << totalReward << std::endl;
         std::cout << opList.size() << std::endl;
         learningLosses.push_back(currentEpisodeAgentLoss / stepCount);
-//        if(nrEpisode%1000==0)
-//        {
-//            std::ofstream trainLoss{"results/trainLoss2.txt"};
-//            copy(learningLosses.begin(), learningLosses.end(),
-//                 std::ostream_iterator<float>(trainLoss, "\n"));
-//        }
+        //        if(nrEpisode%1000==0)
+        //        {
+        //            std::ofstream trainLoss{"results/trainLoss2.txt"};
+        //            copy(learningLosses.begin(), learningLosses.end(),
+        //                 std::ostream_iterator<float>(trainLoss, "\n"));
+        //        }
 
         opponentPredictionLosses.push_back(currentEpisodeOpLoss / stepCount);
         opponentCorrectPredictionPercentage.push_back(static_cast<float>(currentEpisodeCorrectPredictions) / stepCount);
@@ -163,14 +164,14 @@ void Agent::opPredict(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf co
     float currentLoss = opList[currOp].update(opponentActionTarget);
     // TODO: Be careful with end of episode and reset and such
     currentEpisodeOpLoss += currentLoss;
-//    std::cout<<"Op loss: "<<currentLoss<<std::endl;
+    //    std::cout<<"Op loss: "<<currentLoss<<std::endl;
     (opTrack.*tracking)(*this, lastOpponentState, opponentActionTarget, currentLoss);
     //    thisEpisodeLoss.push_back(currentLoss); // TODO: only turn this on when needed
     lastOpponentState = newOpponentState;
 }
 
-
-void Agent::opPredictInterLoss(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf const &, Eigen::VectorXf const &, float))
+void Agent::opPredictInterLoss(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf const &, Eigen::VectorXf const &,
+                                                         float))
 { // TODO: check that level switching works properly
     Eigen::VectorXf newOpponentState = maze->getStateForOpponent();
     size_t newOpponentAction = maze->getLastOpponentAction();
@@ -178,7 +179,7 @@ void Agent::opPredictInterLoss(void (OpTrack::*tracking)(Agent &agent, Eigen::Ve
     opponentActionTarget(static_cast<size_t>(newOpponentAction)) = 1.0f;
     size_t opponentActionIdx;
     size_t currIdx = currOp;
-    if(not opTrack.isFoundOpModel())
+    if (not opTrack.isFoundOpModel())
     {
         for (size_t idx = 0, sz = opList.size(); idx != sz; ++idx)
             opLosses[idx] += opList[idx].predictWithLoss(lastOpponentState, opponentActionTarget);
@@ -190,7 +191,7 @@ void Agent::opPredictInterLoss(void (OpTrack::*tracking)(Agent &agent, Eigen::Ve
                 minIdx = idx;
                 minLoss = opLosses[idx];
             }
-        if(minIdx >=0)
+        if (minIdx >= 0)
             currIdx = minIdx;
     }
     Eigen::VectorXf currPrediction = opList[currIdx].predict(lastOpponentState);
@@ -198,22 +199,22 @@ void Agent::opPredictInterLoss(void (OpTrack::*tracking)(Agent &agent, Eigen::Ve
     //    std::cout<<opponentActionIdx<<" "<<newOpponentAction<<std::endl;
     if (newOpponentAction == opponentActionIdx)
         ++currentEpisodeCorrectPredictions;
-    float currentLoss = opList[currIdx].computeLoss(currPrediction,opponentActionTarget);
+    float currentLoss = opList[currIdx].computeLoss(currPrediction, opponentActionTarget);
     // TODO: Be careful with end of episode and reset and such
     currentEpisodeOpLoss += currentLoss;
-//    std::cout<<"Op loss: "<<currentLoss<<std::endl;
-    if(not opTrack.isFoundOpModel())
+    //    std::cout<<"Op loss: "<<currentLoss<<std::endl;
+    if (not opTrack.isFoundOpModel())
     {
         currOp = opList.size() - 1;
     }
     opList[currOp].train(lastOpponentState, opponentActionTarget);
     (opTrack.*tracking)(*this, lastOpponentState, opponentActionTarget, currentLoss);
     //    thisEpisodeLoss.push_back(currentLoss); // TODO: only turn this on when needed
-    if(not opTrack.isFoundOpModel())
+    if (not opTrack.isFoundOpModel())
         currOp = currIdx;
     else
     {
-        for(auto &item:opLosses)
+        for (auto &item : opLosses)
             item = 0;
     }
     lastOpponentState = newOpponentState;
@@ -337,4 +338,3 @@ float Agent::getOpDeathPercentage() const
             ++count;
     return static_cast<float>(count) / nrEpisodes;
 }
-

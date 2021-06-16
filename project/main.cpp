@@ -9,9 +9,9 @@
 #include <stdio.h>
 
 #include "agent/agent.h"
-#include "agent/sarsa/sarsa.h"
-#include "agent/qerqueueLearning/qerQueueLearning.h"
 #include "agent/dqerQueueLearning/dqerQueueLearning.h"
+#include "agent/qerqueueLearning/qerQueueLearning.h"
+#include "agent/sarsa/sarsa.h"
 #include "runHeadless.h"
 #include "simContainer/simContainer.h"
 #include "uiFunctions/uiFunctions.h"
@@ -65,7 +65,7 @@ static void glfw_error_callback(int error, const char *description)
 
 int main(int argc, char **argv)
 {
-//    Eigen::setNbThreads(1);
+    //    Eigen::setNbThreads(1);
     std::cout << "nthreads: " << Eigen::nbThreads() << '\n';
     //    feenableexcept(FE_ALL_EXCEPT & ~FE_INEXACT);
     if (argc == 2)
@@ -182,55 +182,58 @@ int main(int argc, char **argv)
     HyperparamSpec hs = loadHyperparameters(std::string{ argv[1] });
     size_t nrEpisodesToEpsilonZero = hs.numberOfEpisodes / 4 * 3;
 
-    size_t agentVisionGridArea = hs.agentVisionGridSize *2+1;
+    size_t agentVisionGridArea = hs.agentVisionGridSize * 2 + 1;
     agentVisionGridArea *= agentVisionGridArea;
 
-    size_t opponentVisionGridArea = hs.opponentVisionGridSize *2+1;
+    size_t opponentVisionGridArea = hs.opponentVisionGridSize * 2 + 1;
     opponentVisionGridArea *= opponentVisionGridArea;
     globalRng = RandObj(hs.seed, -1, 1, hs.sizeExperience);
     OpModellingType opModellingType = hs.opModellingType;
     ExpReplayParams expReplayParams{ .cSwapPeriod = hs.swapPeriod,
-        .miniBatchSize = hs.miniBatchSize,
-        .sizeExperience = hs.sizeExperience };
+                                     .miniBatchSize = hs.miniBatchSize,
+                                     .sizeExperience = hs.sizeExperience };
     AgentMonteCarloParams agentMonteCarloParams{ .maxNrSteps = hs.maxNrSteps, .nrRollouts = hs.nrRollouts };
-    MLPParams agentMLP{ .sizes = { agentVisionGridArea *2+4, 200, 4 },
-        .learningRate = hs.agentLearningRate,
-        .regParam = hs.agentRegParam,
-        .outputActivationFunc = ActivationFunction::LINEAR,
-        .miniBatchSize = hs.miniBatchSize,
-        .randInit = false};
-    MLPParams opponentMLP{ .sizes = { opponentVisionGridArea *3, 200, 4 },
-        .learningRate = hs.opponentLearningRate,
-        .regParam  = hs.opponentRegParam,
-        .outputActivationFunc = ActivationFunction::SOFTMAX,
-        .miniBatchSize = hs.miniBatchSize,
-        .randInit = false };
-    Rewards rewards = { .normalReward = -0.01f,
-        .killedByOpponentReward = -1.0f,
-        .outOfBoundsReward = -0.01f,
-        .reachedGoalReward = 1.0f };
-    SimStateParams simStateParams = { .traceSize = hs.traceSize, .agentVisionGridSize = hs.agentVisionGridSize,.opponentVisionGridSize = hs.opponentVisionGridSize, .randomOpCoef = hs.randomOpCoef };
-    OpTrackParams opTrackParams = { .pValueThreshold = hs.pValueThreshold, .minHistorySize = hs.minHistorySize, .maxHistorySize = hs.maxHistorySize};
+    MLPParams agentMLP{ .sizes = { agentVisionGridArea * 2 + 4, 200, 4 },
+                        .learningRate = hs.agentLearningRate,
+                        .regParam = hs.agentRegParam,
+                        .outputActivationFunc = ActivationFunction::LINEAR,
+                        .miniBatchSize = hs.miniBatchSize,
+                        .randInit = false };
+    MLPParams opponentMLP{ .sizes = { opponentVisionGridArea * 3, 200, 4 },
+                           .learningRate = hs.opponentLearningRate,
+                           .regParam = hs.opponentRegParam,
+                           .outputActivationFunc = ActivationFunction::SOFTMAX,
+                           .miniBatchSize = hs.miniBatchSize,
+                           .randInit = false };
+    Rewards rewards = {
+        .normalReward = -0.01f, .killedByOpponentReward = -1.0f, .outOfBoundsReward = -0.01f, .reachedGoalReward = 1.0f
+    };
+    SimStateParams simStateParams = { .traceSize = hs.traceSize,
+                                      .agentVisionGridSize = hs.agentVisionGridSize,
+                                      .opponentVisionGridSize = hs.opponentVisionGridSize,
+                                      .randomOpCoef = hs.randomOpCoef };
+    OpTrackParams opTrackParams = { .pValueThreshold = hs.pValueThreshold,
+                                    .minHistorySize = hs.minHistorySize,
+                                    .maxHistorySize = hs.maxHistorySize };
     // could also use stack but meh, this way is more certain
     std::unique_ptr<Agent> agent;
-    switch(hs.agentType)
+    switch (hs.agentType)
     {
 
         case AgentType::SARSA:
-            agent =
-                std::make_unique<Sarsa>(opTrackParams, agentMonteCarloParams, agentMLP, opponentMLP,
-                                        hs.numberOfEpisodes,nrEpisodesToEpsilonZero,
-                                        opModellingType,hs.epsilon,hs.gamma);
+            agent = std::make_unique<Sarsa>(opTrackParams, agentMonteCarloParams, agentMLP, opponentMLP,
+                                            hs.numberOfEpisodes, nrEpisodesToEpsilonZero, opModellingType, hs.epsilon,
+                                            hs.gamma);
             break;
         case AgentType::DEEPQLEARNING:
-            agent = std::make_unique<QERQueueLearning>(
-                opTrackParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams, hs.numberOfEpisodes,
-                nrEpisodesToEpsilonZero, opModellingType, hs.epsilon, hs.gamma);
+            agent = std::make_unique<QERQueueLearning>(opTrackParams, agentMonteCarloParams, agentMLP, opponentMLP,
+                                                       expReplayParams, hs.numberOfEpisodes, nrEpisodesToEpsilonZero,
+                                                       opModellingType, hs.epsilon, hs.gamma);
             break;
         case AgentType::DOUBLEDEEPQLEARNING:
-            agent = std::make_unique<DQERQueueLearning>(
-                opTrackParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams, hs.numberOfEpisodes,
-                nrEpisodesToEpsilonZero, opModellingType, hs.epsilon, hs.gamma);
+            agent = std::make_unique<DQERQueueLearning>(opTrackParams, agentMonteCarloParams, agentMLP, opponentMLP,
+                                                        expReplayParams, hs.numberOfEpisodes, nrEpisodesToEpsilonZero,
+                                                        opModellingType, hs.epsilon, hs.gamma);
             break;
     }
 
@@ -264,24 +267,23 @@ int main(int argc, char **argv)
             if (simContainer)
             {
                 simContainer = nullptr;
-                switch(hs.agentType)
+                switch (hs.agentType)
                 {
 
                     case AgentType::SARSA:
-                        agent =
-                            std::make_unique<Sarsa>(opTrackParams, agentMonteCarloParams, agentMLP, opponentMLP,
-                                                    hs.numberOfEpisodes,nrEpisodesToEpsilonZero,
-                                                    opModellingType,hs.epsilon,hs.gamma);
+                        agent = std::make_unique<Sarsa>(opTrackParams, agentMonteCarloParams, agentMLP, opponentMLP,
+                                                        hs.numberOfEpisodes, nrEpisodesToEpsilonZero, opModellingType,
+                                                        hs.epsilon, hs.gamma);
                         break;
                     case AgentType::DEEPQLEARNING:
                         agent = std::make_unique<QERQueueLearning>(
-                            opTrackParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams, hs.numberOfEpisodes,
-                            nrEpisodesToEpsilonZero, opModellingType, hs.epsilon, hs.gamma);
+                            opTrackParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams,
+                            hs.numberOfEpisodes, nrEpisodesToEpsilonZero, opModellingType, hs.epsilon, hs.gamma);
                         break;
                     case AgentType::DOUBLEDEEPQLEARNING:
                         agent = std::make_unique<DQERQueueLearning>(
-                            opTrackParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams, hs.numberOfEpisodes,
-                            nrEpisodesToEpsilonZero, opModellingType, hs.epsilon, hs.gamma);
+                            opTrackParams, agentMonteCarloParams, agentMLP, opponentMLP, expReplayParams,
+                            hs.numberOfEpisodes, nrEpisodesToEpsilonZero, opModellingType, hs.epsilon, hs.gamma);
                         break;
                 }
             }

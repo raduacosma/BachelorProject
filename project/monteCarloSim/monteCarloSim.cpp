@@ -10,8 +10,8 @@ using namespace std;
 MonteCarloSim::MonteCarloSim(SimState const &simState)
     : agentPos(simState.agentPos), simSize(simState.simSize), goalPos(simState.goalPos), traceSize(simState.traceSize),
       agentVisionGridSize(simState.agentVisionGridSize), agentVisionGridSideSize(simState.agentVisionGridSideSize),
-      agentStateSize(simState.agentStateSize),opponentVisionGridSize(simState.opponentVisionGridSize),
-      opponentVisionGridSideSize(simState.opponentVisionGridSideSize),opponentStateSize(simState.opponentStateSize),
+      agentStateSize(simState.agentStateSize), opponentVisionGridSize(simState.opponentVisionGridSize),
+      opponentVisionGridSideSize(simState.opponentVisionGridSideSize), opponentStateSize(simState.opponentStateSize),
       walls(simState.walls), d_outOfBoundsReward(simState.d_outOfBoundsReward),
       d_reachedGoalReward(simState.d_reachedGoalReward), d_killedByOpponentReward(simState.d_killedByOpponentReward),
       d_normalReward(simState.d_normalReward), opponentTrace(simState.currOpTrace)
@@ -81,7 +81,7 @@ Eigen::VectorXf MonteCarloSim::getStateForAgent() const
     // also, everywhere the agent center is included for avoiding the performance cost
     // of the if and supposedly being better for 2D representations but debatable
     size_t offsetForGoal = agentStateSize * 2;
-    Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize * 2+4);
+    Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize * 2 + 4);
     auto applyToArray = [&](Position const &pos, size_t offset)
     {
         long const rowIdx = pos.y - agentPos.y + agentVisionGridSize;
@@ -98,31 +98,31 @@ Eigen::VectorXf MonteCarloSim::getStateForAgent() const
     {
         applyToArray(opPos, agentStateSize);
     }
-//        applyToArray(goalPos,agentStateSize*2);
-    float xDiff = static_cast<int>(goalPos.x-agentPos.x)/5.0f;
-    float yDiff = static_cast<int>(goalPos.y-agentPos.y)/5.0f;
-    if(xDiff < 0)
+    //        applyToArray(goalPos,agentStateSize*2);
+    float xDiff = static_cast<int>(goalPos.x - agentPos.x) / 5.0f;
+    float yDiff = static_cast<int>(goalPos.y - agentPos.y) / 5.0f;
+    if (xDiff < 0)
     {
         agentGrid[offsetForGoal] = -xDiff;
-        agentGrid[offsetForGoal+1] = 0;
+        agentGrid[offsetForGoal + 1] = 0;
     }
     else
     {
         agentGrid[offsetForGoal] = 0;
-        agentGrid[offsetForGoal+1] = xDiff;
+        agentGrid[offsetForGoal + 1] = xDiff;
     }
-    if(yDiff < 0)
+    if (yDiff < 0)
     {
-        agentGrid[offsetForGoal+2] = -yDiff;
-        agentGrid[offsetForGoal+3] = 0;
+        agentGrid[offsetForGoal + 2] = -yDiff;
+        agentGrid[offsetForGoal + 3] = 0;
     }
     else
     {
-        agentGrid[offsetForGoal+2] = 0;
-        agentGrid[offsetForGoal+3] = yDiff;
+        agentGrid[offsetForGoal + 2] = 0;
+        agentGrid[offsetForGoal + 3] = yDiff;
     }
-//    agentGrid[offsetForGoal] = static_cast<int>(goalPos.x - agentPos.x) / 20.0f;
-//    agentGrid[offsetForGoal + 1] = static_cast<int>(goalPos.y - agentPos.y) / 20.0f;
+    //    agentGrid[offsetForGoal] = static_cast<int>(goalPos.x - agentPos.x) / 20.0f;
+    //    agentGrid[offsetForGoal + 1] = static_cast<int>(goalPos.y - agentPos.y) / 20.0f;
     return agentGrid;
 }
 Eigen::VectorXf MonteCarloSim::getStateForOpponent() const

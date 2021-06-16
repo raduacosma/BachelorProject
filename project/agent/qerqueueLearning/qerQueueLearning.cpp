@@ -1,8 +1,7 @@
 #include "qerQueueLearning.h"
+#include <fstream>
 #include <iostream>
 #include <utility>
-#include <fstream>
-
 
 QERQueueLearning::QERQueueLearning(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams,
                                    MLPParams agentMLP, MLPParams opponentMLP, ExpReplayParams expReplayParams,
@@ -33,7 +32,7 @@ bool QERQueueLearning::performOneStep()
         cCounter = 0;
     }
     // TODO: make monte carlo vs normal configurable
-//            Eigen::VectorXf qValues = mlp.predict(lastState);
+    //            Eigen::VectorXf qValues = mlp.predict(lastState);
     Eigen::VectorXf qValues = MonteCarloAllActions();
     //        std::cout<<qValues.transpose()<<std::endl;
     size_t action = actionWithQ(qValues);
@@ -95,11 +94,11 @@ void QERQueueLearning::updateWithExperienceReplay()
             float expDiff = exp.reward + gamma * expNewQValues.maxCoeff();
             expQValues(exp.action) = expDiff;
         }
-        currentLoss+=mlp.update(expQValues, MLPUpdateType::MINIBATCH);
+        currentLoss += mlp.update(expQValues, MLPUpdateType::MINIBATCH);
     }
-    currentEpisodeAgentLoss+=currentLoss;
-//    std::ofstream out{"results/expReplayLoss", std::ios_base::app};
-//    out<<currentLoss<<std::endl;
+    currentEpisodeAgentLoss += currentLoss;
+    //    std::ofstream out{"results/expReplayLoss", std::ios_base::app};
+    //    out<<currentLoss<<std::endl;
     mlp.updateMiniBatchWeights();
 }
 
