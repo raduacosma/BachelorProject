@@ -31,13 +31,13 @@ agentRegParam
 opponentLearningRate
 0.001
 opponentRegParam
-1
+-1
 traceSize
 6
 randomOpCoef
 -1
 opModellingType
-3
+2
 pValueThreshold
 0.05
 minHistorySize
