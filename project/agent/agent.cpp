@@ -59,7 +59,7 @@ void Agent::run()
         currentEpisodeCorrectPredictions = 0;
         size_t stepCount = 0;
         float totalReward = 0;
-        opponentNotInit = true;
+        initOpponentMethod();
         //        thisEpisodeLoss = std::vector<float>();  // this is for the old loss at switch stuff
         while (true)
         {
@@ -74,14 +74,14 @@ void Agent::run()
                     opDeathsPerEp[nrEpisode] = 1;
                 break;
             }
-            if (maze->getLastSwitchedLevel())
-            {
-                opponentNotInit = true;
-            }
             if (stepCount >= 1000) // max nr of timesteps
             {
                 maze->resetNextEpisode();
                 break;
+            }
+            if (maze->getLastSwitchedLevel())
+            {
+                initOpponentMethod();
             }
         }
         std::cout << "totalReward: " << totalReward << std::endl;
@@ -105,34 +105,6 @@ void Agent::run()
 }
 void Agent::handleOpponentAction()
 {
-    if (opponentNotInit)
-    {
-        // same as a bit below? weird actually since it returns after might work
-        // getStateForOpponent might be useless at this point
-        // actually this is probably also fine since this is after a level switch I guess,
-        // since opponentNotInit is set to true after the action is processed
-        lastOpponentState = maze->getStateForOpponent();
-        opponentNotInit = false;
-        switch (opModellingType)
-        {
-            case OpModellingType::NEWEVERYTIME:
-                opList[currOp].randomizeWeights();
-                break;
-            case OpModellingType::ONEFORALL:
-                break;
-            case OpModellingType::KOLSMIR:
-                opTrack.kolsmirOpInit(*this);
-                break;
-            case OpModellingType::BADLOSSPETTITT:
-                opTrack.pettittOpInit(*this);
-                break;
-            case OpModellingType::NOTRAINPETTITT:
-                opTrack.noTrainPettittOpInit(*this);
-                break;
-        }
-
-        return;
-    }
     switch (opModellingType)
     {
         case OpModellingType::NEWEVERYTIME:
@@ -147,6 +119,34 @@ void Agent::handleOpponentAction()
             break;
         case OpModellingType::NOTRAINPETTITT:
             opPredictInterLoss(&OpTrack::noTrainPettittOpTracking);
+            break;
+    }
+}
+void Agent::initOpponentMethod()
+{ // same as a bit below? weird actually since it returns after might work
+    // getStateForOpponent might be useless at this point
+    // actually this is probably also fine since this is after a level switch I guess,
+    // since opponentNotInit is set to true after the action is processed
+    lastOpponentState = maze->getCurrentStateForOpponent();
+    for (auto &item : opLosses)
+        item = 0.0f;
+//    if(not opTrack.isFoundOpModel())
+//        currOp = opList.size() - 1;
+    switch (opModellingType)
+    {
+        case OpModellingType::NEWEVERYTIME:
+            opList[currOp].randomizeWeights();
+            break;
+        case OpModellingType::ONEFORALL:
+            break;
+        case OpModellingType::KOLSMIR:
+            opTrack.kolsmirOpInit(*this);
+            break;
+        case OpModellingType::BADLOSSPETTITT:
+            opTrack.pettittOpInit(*this);
+            break;
+        case OpModellingType::NOTRAINPETTITT:
+            opTrack.noTrainPettittOpInit(*this);
             break;
     }
 }
@@ -177,15 +177,24 @@ void Agent::opPredictInterLoss(void (OpTrack::*tracking)(Agent &agent, Eigen::Ve
     size_t newOpponentAction = maze->getLastOpponentAction();
     Eigen::VectorXf opponentActionTarget = Eigen::VectorXf::Zero(4);
     opponentActionTarget(static_cast<size_t>(newOpponentAction)) = 1.0f;
+    Eigen::VectorXf currPrediction = opList[currOp].predict(lastOpponentState);
     size_t opponentActionIdx;
+    currPrediction.maxCoeff(&opponentActionIdx);
+    //    std::cout<<opponentActionIdx<<" "<<newOpponentAction<<std::endl;
+    if (newOpponentAction == opponentActionIdx)
+        ++currentEpisodeCorrectPredictions;
+    float currentLoss = opList[currOp].computeLoss(currPrediction, opponentActionTarget);
+    // TODO: Be careful with end of episode and reset and such
+    // this is also wrong but since the train loss metric overall is kind of useless for these methods meh
+    currentEpisodeOpLoss += currentLoss;
     size_t currIdx = currOp;
     if (not opTrack.isFoundOpModel())
     {
-        for (size_t idx = 0, sz = opList.size(); idx != sz; ++idx)
+        for (size_t idx = 0, sz = opList.size()-1; idx != sz; ++idx)
             opLosses[idx] += opList[idx].predictWithLoss(lastOpponentState, opponentActionTarget);
         int minIdx = -1;
         float minLoss = std::numeric_limits<float>::max();
-        for (int idx = 0, sz = opLosses.size(); idx != sz; ++idx)
+        for (int idx = 0, sz = opLosses.size()-1; idx != sz; ++idx)
             if (minLoss > opLosses[idx])
             {
                 minIdx = idx;
@@ -193,30 +202,16 @@ void Agent::opPredictInterLoss(void (OpTrack::*tracking)(Agent &agent, Eigen::Ve
             }
         if (minIdx >= 0)
             currIdx = minIdx;
-    }
-    Eigen::VectorXf currPrediction = opList[currIdx].predict(lastOpponentState);
-    currPrediction.maxCoeff(&opponentActionIdx);
-    //    std::cout<<opponentActionIdx<<" "<<newOpponentAction<<std::endl;
-    if (newOpponentAction == opponentActionIdx)
-        ++currentEpisodeCorrectPredictions;
-    float currentLoss = opList[currIdx].computeLoss(currPrediction, opponentActionTarget);
-    // TODO: Be careful with end of episode and reset and such
-    currentEpisodeOpLoss += currentLoss;
-    //    std::cout<<"Op loss: "<<currentLoss<<std::endl;
-    if (not opTrack.isFoundOpModel())
-    {
         currOp = opList.size() - 1;
     }
+    //    std::cout<<"Op loss: "<<currentLoss<<std::endl;
     opList[currOp].train(lastOpponentState, opponentActionTarget);
+    // currentLoss here is bad since it should be the train loss on currOp, but since that is used for old pettitt
+    // I'll leave it like this
     (opTrack.*tracking)(*this, lastOpponentState, opponentActionTarget, currentLoss);
     //    thisEpisodeLoss.push_back(currentLoss); // TODO: only turn this on when needed
     if (not opTrack.isFoundOpModel())
         currOp = currIdx;
-    else
-    {
-        for (auto &item : opLosses)
-            item = 0;
-    }
     lastOpponentState = newOpponentState;
 }
 // if I pass an agentState here it should already be the current state in maze that I will get anyways

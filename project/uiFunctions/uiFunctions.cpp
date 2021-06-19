@@ -100,9 +100,9 @@ void drawStartMenu(UiStateTracker &uiStateTracker)
     }
 
     ImGui::Text("Or prototype on a simulation state; please select the cell width and height of the next simulation");
-    static string width{ "20" };
+    static string width{ "25" };
     ImGui::InputText("World Width", &width);
-    static string height{ "10" };
+    static string height{ "11" };
     ImGui::InputText("World Height", &height);
     if (ImGui::Button("Apply"))
     {

@@ -108,6 +108,7 @@ class Agent
     std::vector<float> const &getOpponentCorrectPredictionPercentage() const;
     std::vector<float> const &getOpponentPredictionLosses() const;
     float getOpDeathPercentage() const;
+    void initOpponentMethod();
 };
 inline float Agent::getCorrectOpponentTypePredictionPercentage() const
 {

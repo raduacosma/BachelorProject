@@ -266,10 +266,10 @@ Eigen::VectorXf SimState::getStateForOpponent() const
 }
 void SimState::resetAgentPos()
 {
-    //    std::uniform_int_distribution<> distr{ -2, 2 }; // hardcoded but no need for tweaks
-    //    auto &rngEngine = globalRng.getRngEngine();
-    //    agentPos = { initialAgentPos.x + distr(rngEngine), initialAgentPos.y + distr(rngEngine) };
-    agentPos = initialAgentPos;
+        std::uniform_int_distribution<> distr{ -3, 3 }; // hardcoded but no need for tweaks
+        auto &rngEngine = globalRng.getRngEngine();
+        agentPos = { initialAgentPos.x, initialAgentPos.y + distr(rngEngine) };
+//    agentPos = initialAgentPos;
 }
 
 void SimState::resetForNextEpisode()

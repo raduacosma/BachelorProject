@@ -58,6 +58,12 @@ void OpTrack::noTrainPettittOpInit(Agent &agent)
     // this will probably always be the random one so I could just to pop_back()
     if (not firstTime)
     {
+//        if(opDequeStateHistory[agent.currOp].size() < minHistorySize and foundOpModel)
+//        {
+//            std::cout<<opDequeStateHistory[agent.currOp].size()<<std::endl;
+//            throw std::runtime_error("WHy is this hit");
+//        }
+
         if (opDequeStateHistory[agent.currOp].size() < minHistorySize or not foundOpModel)
         {
             destroyRandomNoTrainPettitt(agent);
@@ -93,6 +99,11 @@ void OpTrack::kolsmirOpInit(Agent &agent)
     // this will probably always be the random one so I could just to pop_back()
     if (not firstTime)
     {
+//        if(opListStateHistory[agent.currOp].size() < minHistorySize and foundOpModel)
+//        {
+//            std::cout<<opListStateHistory[agent.currOp].size()<<std::endl;
+//            throw std::runtime_error("WHy is this hit");
+//        }
         if (opListStateHistory[agent.currOp].size() < minHistorySize or not foundOpModel)
         {
             destroyRandomKolsmir(agent);
@@ -281,9 +292,8 @@ void OpTrack::kolsmirOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
         // for kolsmir, currOpListStateHistory can be the same as the state history for the random one, as that is what
         // is done here. However, in order for it to be similar with pettitt, we leave it like this for now
         currOpListStateHistory.push_back({ lastState, newState });
-        //        opListStateHistory[agent.currOp].push_back({ lastState, newState });
+        opListStateHistory[agent.currOp].push_back({ lastState, newState });
         ++opHistoryCounter;
-        return;
     }
     if (not foundOpModel and opHistoryCounter >= minHistorySize) // TODO: check this condition
     {
@@ -314,7 +324,6 @@ void OpTrack::kolsmirOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
         // that checks whether we are using a previous MLP, but that check is probably useless if
         // we don't want to avoid the minimum if
         foundOpModel = true;
-
         if (maxProbIdx != -1 and maxProb > pValueThreshold)
         {
             // this should correspond to removing the random MLP that was created
@@ -331,11 +340,11 @@ void OpTrack::kolsmirOpTracking(Agent &agent, Eigen::VectorXf const &lastState, 
                 if (opStateRef.size() < maxHistorySize)
                     opStateRef.push_back(currExperience);
             }
-            currOpRef.train(lastState, newState);
         }
         updateCorrectPercentage(agent);
         // nothing to do here since this is the random opponent and it should already have the state
         // incremented above
+        return;
     }
     // this should get triggered even if the above if is entered, same for pettitt
     if (foundOpModel and opListStateHistory[agent.currOp].size() < maxHistorySize)
@@ -349,9 +358,8 @@ void OpTrack::noTrainPettittOpTracking(Agent &agent, Eigen::VectorXf const &last
         // for kolsmir, currOpListStateHistory can be the same as the state history for the random one, as that is what
         // is done here. However, in order for it to be similar with pettitt, we leave it like this for now
         currOpListStateHistory.push_back({ lastState, newState });
-        //        opListStateHistory[agent.currOp].push_back({ lastState, newState });
+        opDequeStateHistory[agent.currOp].push_back({ lastState, newState });
         ++opHistoryCounter;
-        return;
     }
     if (not foundOpModel and opHistoryCounter >= minHistorySize) // TODO: check this condition
     {
@@ -404,11 +412,11 @@ void OpTrack::noTrainPettittOpTracking(Agent &agent, Eigen::VectorXf const &last
                     opStateRef.push_back(currExperience);
                 }
             }
-            currOpRef.train(lastState, newState);
         }
         updateCorrectPercentage(agent);
         // nothing to do here since this is the random opponent and it should already have the state
         // incremented above
+        return;
     }
     // this should get triggered even if the above if is entered, same for pettitt
     if (foundOpModel and opDequeStateHistory[agent.currOp].size() < maxHistorySize)

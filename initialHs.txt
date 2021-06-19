@@ -1,7 +1,7 @@
 seed
 275165314
 files
-try1.txt,try2.txt,try3.txt,better4.txt,better5.txt,try6.txt
+close.txt,group1.txt,group2.txt,group3.txt,group4.txt,group5.txt,group6.txt,group7.txt,group8.txt
 miniBatchSize
 16
 numberOfEpisodes
@@ -15,7 +15,7 @@ epsilon
 gamma
 0.9
 agentVisionGridSize
-1
+2
 opponentVisionGridSize
 2
 swapPeriod
@@ -37,10 +37,10 @@ traceSize
 randomOpCoef
 -1
 opModellingType
-2
+3
 pValueThreshold
 0.05
 minHistorySize
-10
+8
 maxHistorySize
-20
+50
