@@ -13,10 +13,10 @@ struct SimBuilder
     SimBuilder() = default;
     SimBuilder &operator=(SimBuilder &&tmp);
     //    void swap(SimBuilder &other);
-    std::vector<std::vector<ImVec4>> const &getFullMazeRepr();
-    void updateCanvasStepSize(ImVec2 stepSize);
-    void updateCanvasBegPos(ImVec2 pos);
-    void updateCanvasEndPos(ImVec2 pos);
+    std::vector<std::vector<FloatVec4>> const &getFullMazeRepr();
+    void updateCanvasStepSize(FloatVec2 stepSize);
+    void updateCanvasBegPos(FloatVec2 pos);
+    void updateCanvasEndPos(FloatVec2 pos);
     void generateStateRepresentation();
     size_t getWidth() const;
     size_t getHeight() const;
@@ -26,11 +26,11 @@ struct SimBuilder
     SimObject objToDraw = SimObject::NONE;
 
     std::vector<std::vector<SimObject>> stateRepresentation;
-    std::vector<std::vector<ImVec4>> colorRepresentation;
+    std::vector<std::vector<FloatVec4>> colorRepresentation;
 
-    ImVec2 canvasStepSize;
-    ImVec2 canvasBegPos;
-    ImVec2 canvasEndPos;
+    FloatVec2 canvasStepSize;
+    FloatVec2 canvasBegPos;
+    FloatVec2 canvasEndPos;
 
     Position simSize;
 

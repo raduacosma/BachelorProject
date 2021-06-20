@@ -3,7 +3,6 @@
 
 #include "../../Eigen/Core"
 #include "../utilities/utilities.h"
-#include "imgui.h"
 #include <deque>
 #include <string>
 #include <vector>
@@ -17,10 +16,10 @@ class SimState
     friend class MonteCarloSim;
 
   private:
-    std::vector<std::vector<ImVec4>> stateRepresentation;
-    ImVec2 canvasStepSize;
-    ImVec2 canvasBegPos;
-    ImVec2 canvasEndPos;
+    std::vector<std::vector<FloatVec4>> stateRepresentation;
+    FloatVec2 canvasStepSize;
+    FloatVec2 canvasBegPos;
+    FloatVec2 canvasEndPos;
 
     Position simSize;
 
@@ -52,10 +51,10 @@ class SimState
   public:
     SimState(std::string const &filename, Rewards rewards, SimStateParams simStateParams);
     void generateStateRepresentation();
-    std::vector<std::vector<ImVec4>> const &getFullMazeRepr();
-    void updateCanvasStepSize(ImVec2 stepSize);
-    void updateCanvasBegPos(ImVec2 pos);
-    void updateCanvasEndPos(ImVec2 pos);
+    std::vector<std::vector<FloatVec4>> const &getFullMazeRepr();
+    void updateCanvasStepSize(FloatVec2 stepSize);
+    void updateCanvasBegPos(FloatVec2 pos);
+    void updateCanvasEndPos(FloatVec2 pos);
     size_t getWidth() const;
     size_t getHeight() const;
     Position const &getSimSize() const;
@@ -97,15 +96,15 @@ inline float SimState::killedByOpponentReward()
     return d_killedByOpponentReward;
 }
 
-inline void SimState::updateCanvasBegPos(ImVec2 pos)
+inline void SimState::updateCanvasBegPos(FloatVec2 pos)
 {
     canvasBegPos = pos;
 }
-inline void SimState::updateCanvasEndPos(ImVec2 pos)
+inline void SimState::updateCanvasEndPos(FloatVec2 pos)
 {
     canvasEndPos = pos;
 }
-inline void SimState::updateCanvasStepSize(ImVec2 stepSize)
+inline void SimState::updateCanvasStepSize(FloatVec2 stepSize)
 {
     canvasStepSize = stepSize;
 }

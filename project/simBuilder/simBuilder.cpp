@@ -9,12 +9,12 @@ SimBuilder::SimBuilder(size_t width, size_t height)
 {
     generateStateRepresentation();
 }
-std::vector<std::vector<ImVec4>> const &SimBuilder::getFullMazeRepr()
+std::vector<std::vector<FloatVec4>> const &SimBuilder::getFullMazeRepr()
 { // maybe have generateStateRepr here and remove the move constr along
     // with refactoring main to use uniquePtr for SimBuilder?
     generateStateRepresentation();
-    vector<ImVec4> row{ simSize.y, { 255, 255, 255, 255 } };
-    vector<vector<ImVec4>> repr{ simSize.x, row };
+    vector<FloatVec4> row{ simSize.y, { 255, 255, 255, 255 } };
+    vector<vector<FloatVec4>> repr{ simSize.x, row };
 
     for (size_t i = 0; i < simSize.x; ++i)
         for (size_t j = 0; j < simSize.y; ++j)
@@ -107,15 +107,15 @@ void SimBuilder::removeAtPos(Position pos)
     }
     generateStateRepresentation();
 }
-void SimBuilder::updateCanvasBegPos(ImVec2 pos)
+void SimBuilder::updateCanvasBegPos(FloatVec2 pos)
 {
     canvasBegPos = pos;
 }
-void SimBuilder::updateCanvasStepSize(ImVec2 stepSize)
+void SimBuilder::updateCanvasStepSize(FloatVec2 stepSize)
 {
     canvasStepSize = stepSize;
 }
-void SimBuilder::updateCanvasEndPos(ImVec2 pos)
+void SimBuilder::updateCanvasEndPos(FloatVec2 pos)
 {
     canvasEndPos = pos;
 }

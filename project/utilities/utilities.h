@@ -6,6 +6,29 @@
 #include <vector>
 // TODO: when removing enum, make sure that agent and opponent view are there
 // and remove agent_trace
+// 2D vector (often used to store positions or sizes)
+struct FloatVec2
+{
+    float                                   x, y;
+    FloatVec2()                                { x = y = 0.0f; }
+    FloatVec2(float _x, float _y)              { x = _x; y = _y; }
+    float  operator[] (size_t idx) const    { return (&x)[idx]; }    // We very rarely use this [] operator, the assert overhead is fine.
+    float& operator[] (size_t idx)          { return (&x)[idx]; }    // We very rarely use this [] operator, the assert overhead is fine.
+#ifdef IM_VEC2_CLASS_EXTRA
+    IM_VEC2_CLASS_EXTRA     // Define additional constructors and implicit cast operators in imconfig.h to convert back and forth between your math types and ImVec2.
+#endif
+};
+
+// 4D vector (often used to store floating-point colors)
+struct FloatVec4
+{
+    float                                           x, y, z, w;
+    FloatVec4()                                        { x = y = z = w = 0.0f; }
+    FloatVec4(float _x, float _y, float _z, float _w)  { x = _x; y = _y; z = _z; w = _w; }
+#ifdef IM_VEC4_CLASS_EXTRA
+    IM_VEC4_CLASS_EXTRA     // Define additional constructors and implicit cast operators in imconfig.h to convert back and forth between your math types and ImVec4.
+#endif
+};
 enum class SimObject
 {
     NONE,

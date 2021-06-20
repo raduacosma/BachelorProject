@@ -78,8 +78,8 @@ void renderSimState(StateRepr &simState, ImVec2 const &canvas_p0, ImVec2 const &
     {
         for (size_t j = 0; j < simState.getHeight(); ++j)
         {
-            ImVec4 currTile = stateRepr[i][j];
-            auto drawRect = [&](ImVec4 color)
+            FloatVec4 currTile = stateRepr[i][j];
+            auto drawRect = [&](FloatVec4 color)
             {
                 draw_list->AddRectFilled({ xCurr + 2, yCurr + 2 }, { xCurr + xStepSize - 2, yCurr + yStepSize - 2 },
                                          IM_COL32(color.x, color.y, color.z, color.w));

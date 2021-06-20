@@ -359,7 +359,7 @@ pair<float, SimResult> SimState::updateAgentPos(Actions action)
     return make_pair(d_normalReward, SimResult::CONTINUE);
 }
 
-std::vector<std::vector<ImVec4>> const &SimState::getFullMazeRepr()
+std::vector<std::vector<FloatVec4>> const &SimState::getFullMazeRepr()
 {
     generateStateRepresentation();
     return stateRepresentation;
@@ -367,28 +367,28 @@ std::vector<std::vector<ImVec4>> const &SimState::getFullMazeRepr()
 
 void SimState::generateStateRepresentation()
 {
-    vector<ImVec4> row{ simSize.y, { 211, 211, 211, 255 } };
-    vector<vector<ImVec4>> repr{ simSize.x, row };
+    vector<FloatVec4> row{ simSize.y, { 211, 211, 211, 255 } };
+    vector<vector<FloatVec4>> repr{ simSize.x, row };
 
     // Since default pos's are initialized to 0, the (0,0) tile gets colored
     // even though it should not. Therefore, initialize in the constructor
     // all the empty pos's to {height,width} and then check here if they
     // are indeed out of bounds. Since this is just for the GUI, performance
     // does not really matter so it's fine
-    auto assignWithBoundCheck = [&](Position pos, ImVec4 color)
+    auto assignWithBoundCheck = [&](Position pos, FloatVec4 color)
     {
         if (pos.x >= getWidth() || pos.y >= getHeight() || pos.x < 0 || pos.y < 0)
             return;
         else
             repr[pos.x][pos.y] = color;
     };
-    ImVec4 agentColor = { 0, 0, 255, 255 };
-    ImVec4 goalColor = { 0, 128, 0, 255 };
-    ImVec4 wallColor = { 128, 128, 128, 255 };
-    ImVec4 opponentColor = { 255, 0, 0, 255 };
-    ImVec4 opponentTraceColor = { 243, 122, 122, 255 };
-    ImVec4 agentViewColor = { 135, 206, 235, 255 };
-    ImVec4 opponentViewColor = { 202, 119, 119, 255 };
+    FloatVec4 agentColor = { 0, 0, 255, 255 };
+    FloatVec4 goalColor = { 0, 128, 0, 255 };
+    FloatVec4 wallColor = { 128, 128, 128, 255 };
+    FloatVec4 opponentColor = { 255, 0, 0, 255 };
+    FloatVec4 opponentTraceColor = { 243, 122, 122, 255 };
+    FloatVec4 agentViewColor = { 135, 206, 235, 255 };
+    FloatVec4 opponentViewColor = { 202, 119, 119, 255 };
     assignWithBoundCheck(agentPos, agentColor);
     assignWithBoundCheck(goalPos, goalColor);
     for (auto const &wall : walls)
@@ -403,7 +403,7 @@ void SimState::generateStateRepresentation()
         assignWithBoundCheck(opPos, opponentTraceColor);
     }
     assignWithBoundCheck(currOpTrace.back(), opponentColor);
-    auto applyViewColor = [&](Position pos, ImVec4 color, size_t visionGridSize)
+    auto applyViewColor = [&](Position pos, FloatVec4 color, size_t visionGridSize)
     {
         for (size_t i = 0; i < simSize.x; ++i)
             for (size_t j = 0; j < simSize.y; ++j)

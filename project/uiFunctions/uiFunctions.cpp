@@ -122,13 +122,13 @@ void updateSimBuilder(SimBuilder &simBuilder)
     if (ImGui::IsMouseDragging(0) or ImGui::IsMouseClicked(0))
     {
         simBuilder.drawAtPos(
-            { static_cast<size_t>((mousePos - simBuilder.canvasBegPos).x / simBuilder.canvasStepSize.x),
-              static_cast<size_t>((mousePos - simBuilder.canvasBegPos).y / simBuilder.canvasStepSize.y) });
+            { static_cast<size_t>((mousePos.x - simBuilder.canvasBegPos.x) / simBuilder.canvasStepSize.x),
+              static_cast<size_t>((mousePos.y - simBuilder.canvasBegPos.y) / simBuilder.canvasStepSize.y) });
     }
     if (ImGui::IsMouseDragging(1) or ImGui::IsMouseClicked(1))
     {
         simBuilder.removeAtPos(
-            { static_cast<size_t>((mousePos - simBuilder.canvasBegPos).x / simBuilder.canvasStepSize.x),
-              static_cast<size_t>((mousePos - simBuilder.canvasBegPos).y / simBuilder.canvasStepSize.y) });
+            { static_cast<size_t>((mousePos.x - simBuilder.canvasBegPos.x) / simBuilder.canvasStepSize.x),
+              static_cast<size_t>((mousePos.y - simBuilder.canvasBegPos.y) / simBuilder.canvasStepSize.y) });
     }
 }
