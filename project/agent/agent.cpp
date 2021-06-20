@@ -51,7 +51,7 @@ void Agent::run()
     float killedByOpponentReward = maze->getCurrentLevel().killedByOpponentReward();
     for (size_t nrEpisode = 0; nrEpisode != nrEpisodes; ++nrEpisode)
     {
-//        std::cout << epsilon << std::endl;
+        std::cout << epsilon << std::endl;
         // d_oldstate was modified from Maze so it's fine, anything else?
         newEpisode();
         currentEpisodeOpLoss = 0;
@@ -84,8 +84,8 @@ void Agent::run()
                 initOpponentMethod();
             }
         }
-//        std::cout << "totalReward: " << totalReward << std::endl;
-//        std::cout << opList.size() << std::endl;
+        std::cout << "totalReward: " << totalReward << std::endl;
+        std::cout << opList.size() << std::endl;
         learningLosses.push_back(currentEpisodeAgentLoss / stepCount);
         //        if(nrEpisode%1000==0)
         //        {
@@ -259,7 +259,7 @@ float Agent::MonteCarloRollout(size_t action)
                     innerOpAction = innerDistr(rngEngine);
                 }
                 size_t agentAction;
-                mlp.predict(copyMaze.getStateForAgent())
+                float lastStateVal = mlp.predict(copyMaze.getStateForAgent())
                     .maxCoeff(&agentAction); // this and last if should have the same agent state one call to the other
                 auto [innerReward, innerCanContinue] = copyMaze.computeNextStateAndReward(
                     static_cast<Actions>(agentAction), static_cast<Actions>(innerOpAction));
@@ -270,7 +270,7 @@ float Agent::MonteCarloRollout(size_t action)
                 }
                 if (i == maxNrSteps)
                 {
-                    rolloutReward += gammaVals[i] * mlp.predict(copyMaze.getStateForAgent()).maxCoeff();
+                    rolloutReward += gammaVals[i] * lastStateVal;
                     break;
                 }
             }

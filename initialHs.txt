@@ -1,11 +1,11 @@
 seed
 275165314
 files
-close.txt,group1.txt,group2.txt,group3.txt,group4.txt,group5.txt,group6.txt,group7.txt,group8.txt
+comp41.txt,comp42.txt
 miniBatchSize
 16
 numberOfEpisodes
-200
+10000
 sizeExperience
 100000
 agentType
@@ -41,6 +41,6 @@ opModellingType
 pValueThreshold
 0.05
 minHistorySize
-8
+10
 maxHistorySize
 20

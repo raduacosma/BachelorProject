@@ -60,12 +60,12 @@ std::tuple<float, bool> SimContainer::computeNextStateAndReward(Actions action)
                 ++episodeCount;
             }
             simStates[currSimState].resetForNextEpisode();
-//            cout << "reached goal" << endl;
+            cout << "reached goal" << endl;
             lastSwitchedLevel = true;
             //            agent->maze(this);
             break;
         case SimResult::KILLED_BY_OPPONENT:
-//            cout << "hit opponent" << endl;
+            cout << "hit opponent" << endl;
             canContinue = false;
             resetNextEpisode();
             break;
