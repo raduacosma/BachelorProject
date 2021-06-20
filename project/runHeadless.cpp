@@ -28,6 +28,46 @@ HyperparamSpec loadHyperparameters(std::string const &file)
     in >> hs;
     return hs;
 }
+void writeFullResults(std::unique_ptr<Agent> &agent)
+{
+    std::ofstream out{ "results/rewards04AFTER.txt" };
+    std::vector<float> const &agentRewards = agent->getRewards();
+    copy(agentRewards.begin(), agentRewards.end(), std::ostream_iterator<float>(out, "\n"));
+    std::ofstream opponent{ "results/opponentPredictionLossesTwoDOUBLE.txt" };
+    std::vector<float> const &opponentPred = agent->getOpponentPredictionLosses();
+    copy(opponentPred.begin(), opponentPred.end(), std::ostream_iterator<float>(opponent, "\n"));
+    std::ofstream opponentPerc{ "results/opponentPredictionPercentageTwoDOUBLE.txt" };
+    std::vector<float> const &opponentPredPerc = agent->getOpponentCorrectPredictionPercentage();
+    copy(opponentPredPerc.begin(), opponentPredPerc.end(), std::ostream_iterator<float>(opponentPerc, "\n"));
+    std::ofstream trainLoss{ "results/trainLoss2.txt" };
+    std::vector<float> const &trainLossPerEp = agent->getLearningLosses();
+    copy(trainLossPerEp.begin(), trainLossPerEp.end(), std::ostream_iterator<float>(trainLoss, "\n"));
+    std::cout << "opponent prediction percentage: " << agent->getCorrectOpponentTypePredictionPercentage() << std::endl;
+    std::cout << "nr of times killed by opponent: " << agent->getOpDeathPercentage() << std::endl;
+    //    std::ofstream opponentLoss{"results/opponentFirstEpLoss.txt"};
+    //    std::vector<float> const &opponentThisLoss = agent->getThisEpisodeLoss();
+    //    copy(opponentThisLoss.begin(), opponentThisLoss.end(),
+    //         std::ostream_iterator<float>(opponentLoss, "\n"));
+}
+
+void writeSummaryResults(std::unique_ptr<Agent> &agent, std::string const &fileName, size_t nrEpisodesToEpsilonZero, size_t numberOfEpisodes, long totalTime)
+{
+    std::ofstream out{"summary_"+fileName};
+    std::vector<float> const &agentRewards = agent->getRewards();
+    double rewardSum= std::accumulate(agentRewards.begin() + nrEpisodesToEpsilonZero, agentRewards.begin()+numberOfEpisodes,0.0 );
+    out<<"rewardsMeanLast\n"<<rewardSum/(numberOfEpisodes-nrEpisodesToEpsilonZero)<<'\n';
+    std::vector<float> const &agentPredictions = agent->getOpponentCorrectPredictionPercentage();
+    double opPredSum = std::accumulate(agentPredictions.begin() + nrEpisodesToEpsilonZero, agentPredictions.begin()+numberOfEpisodes,0.0);
+    out<<"opPredMeanLast\n"<<opPredSum/(numberOfEpisodes-nrEpisodesToEpsilonZero)<<'\n';
+    std::vector<size_t> const &killedPerEp = agent->getOpDeathsPerEp();
+    size_t killedSum = std::accumulate(killedPerEp.begin() + nrEpisodesToEpsilonZero, killedPerEp.begin()+numberOfEpisodes,0ul);
+    out<<"killedByOpponentMeanLast\n"<<killedSum/static_cast<double>(numberOfEpisodes-nrEpisodesToEpsilonZero)<<'\n';
+    out << "opponent recognition percentage\n" << agent->getCorrectOpponentTypePredictionPercentage() << '\n';
+    out << "predicted nr of opponents\n" << agent->getPredictedNrOfOpponents()<<'\n';
+    out<<"time in ms\n"<<totalTime<<'\n';
+
+
+}
 void runHeadless(std::string const &file)
 {
     auto begin = std::chrono::high_resolution_clock::now();
@@ -92,24 +132,9 @@ void runHeadless(std::string const &file)
 
     SimContainer simContainer{ hs.files, agent.get(), rewards, simStateParams };
     agent->run();
-    std::ofstream out{ "results/rewards04AFTER.txt" };
-    std::vector<float> const &agentRewards = agent->getRewards();
-    copy(agentRewards.begin(), agentRewards.end(), std::ostream_iterator<float>(out, "\n"));
-    std::ofstream opponent{ "results/opponentPredictionLossesTwoDOUBLE.txt" };
-    std::vector<float> const &opponentPred = agent->getOpponentPredictionLosses();
-    copy(opponentPred.begin(), opponentPred.end(), std::ostream_iterator<float>(opponent, "\n"));
-    std::ofstream opponentPerc{ "results/opponentPredictionPercentageTwoDOUBLE.txt" };
-    std::vector<float> const &opponentPredPerc = agent->getOpponentCorrectPredictionPercentage();
-    copy(opponentPredPerc.begin(), opponentPredPerc.end(), std::ostream_iterator<float>(opponentPerc, "\n"));
-    std::ofstream trainLoss{ "results/trainLoss2.txt" };
-    std::vector<float> const &trainLossPerEp = agent->getLearningLosses();
-    copy(trainLossPerEp.begin(), trainLossPerEp.end(), std::ostream_iterator<float>(trainLoss, "\n"));
-    std::cout << "opponent prediction percentage: " << agent->getCorrectOpponentTypePredictionPercentage() << std::endl;
-    std::cout << "nr of times killed by opponent: " << agent->getOpDeathPercentage() << std::endl;
-    //    std::ofstream opponentLoss{"results/opponentFirstEpLoss.txt"};
-    //    std::vector<float> const &opponentThisLoss = agent->getThisEpisodeLoss();
-    //    copy(opponentThisLoss.begin(), opponentThisLoss.end(),
-    //         std::ostream_iterator<float>(opponentLoss, "\n"));
+//    writeFullResults(agent);
     auto end = std::chrono::high_resolution_clock::now();
-    std::cout << "time in ms: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
+    auto totalTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
+//    std::cout << "time in ms: " << totalTime;
+    writeSummaryResults(agent,file,nrEpisodesToEpsilonZero,hs.numberOfEpisodes,totalTime);
 }

@@ -51,7 +51,7 @@ void Agent::run()
     float killedByOpponentReward = maze->getCurrentLevel().killedByOpponentReward();
     for (size_t nrEpisode = 0; nrEpisode != nrEpisodes; ++nrEpisode)
     {
-        std::cout << epsilon << std::endl;
+//        std::cout << epsilon << std::endl;
         // d_oldstate was modified from Maze so it's fine, anything else?
         newEpisode();
         currentEpisodeOpLoss = 0;
@@ -84,8 +84,8 @@ void Agent::run()
                 initOpponentMethod();
             }
         }
-        std::cout << "totalReward: " << totalReward << std::endl;
-        std::cout << opList.size() << std::endl;
+//        std::cout << "totalReward: " << totalReward << std::endl;
+//        std::cout << opList.size() << std::endl;
         learningLosses.push_back(currentEpisodeAgentLoss / stepCount);
         //        if(nrEpisode%1000==0)
         //        {
@@ -332,4 +332,13 @@ float Agent::getOpDeathPercentage() const
         if (item == 1)
             ++count;
     return static_cast<float>(count) / nrEpisodes;
+}
+vector<size_t> const &Agent::getOpDeathsPerEp() const
+{
+    return opDeathsPerEp;
+}
+
+size_t Agent::getPredictedNrOfOpponents() const
+{
+    return opList.size();
 }

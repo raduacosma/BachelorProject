@@ -80,6 +80,10 @@ class Agent
     MLPParams opMLPParams;
     std::vector<size_t> opDeathsPerEp;
 
+  public:
+    std::vector<size_t> const &getOpDeathsPerEp() const;
+
+  protected:
     void opPredict(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf const &, Eigen::VectorXf const &, float));
     void opPredictInterLoss(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf const &, Eigen::VectorXf const &,
                                                       float));
@@ -109,6 +113,7 @@ class Agent
     std::vector<float> const &getOpponentPredictionLosses() const;
     float getOpDeathPercentage() const;
     void initOpponentMethod();
+    size_t getPredictedNrOfOpponents() const;
 };
 inline float Agent::getCorrectOpponentTypePredictionPercentage() const
 {
