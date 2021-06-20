@@ -3,10 +3,6 @@
 // creation, etc.) If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
 // Read online: https://github.com/ocornut/imgui/tree/master/docs
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-#include <stdio.h>
 
 #include "agent/agent.h"
 #include "agent/dqerQueueLearning/dqerQueueLearning.h"
@@ -14,11 +10,19 @@
 #include "agent/sarsa/sarsa.h"
 #include "runHeadless.h"
 #include "simContainer/simContainer.h"
-#include "uiFunctions/uiFunctions.h"
-#include "uiStateTracker/uiStateTracker.h"
 #include <iostream>
 #include <memory>
 #include <string>
+
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+#include <stdio.h>
+
+
+#include "uiFunctions/uiFunctions.h"
+#include "uiStateTracker/uiStateTracker.h"
+
 
 #include <fenv.h>
 // About Desktop OpenGL function loaders:
