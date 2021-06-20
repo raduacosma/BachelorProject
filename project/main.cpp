@@ -14,7 +14,7 @@
 #include <memory>
 #include <string>
 
-/*
+#if SHOULD_HAVE_GUI
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -67,7 +67,7 @@ static void glfw_error_callback(int error, const char *description)
 {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
-*/
+#endif
 int main(int argc, char **argv)
 {
     //    Eigen::setNbThreads(1);
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
         runHeadless(std::string{ argv[1] });
         return 0;
     }
-    /*
+#if SHOULD_HAVE_GUI
     // Setup window
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
@@ -387,6 +387,6 @@ int main(int argc, char **argv)
 
     glfwDestroyWindow(window);
     glfwTerminate();
-*/
+#endif
     return 0;
 }

@@ -37,10 +37,10 @@ traceSize
 randomOpCoef
 -1
 opModellingType
-3
+2
 pValueThreshold
 0.05
 minHistorySize
 8
 maxHistorySize
-50
+20
