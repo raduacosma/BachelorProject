@@ -1,0 +1,12 @@
+rewardsMeanLast
+1.45359
+opPredMeanLast
+0.965131
+killedByOpponentMeanLast
+0
+opponent recognition percentage
+0.999947
+predicted nr of opponents
+2
+time in ms
+324624
