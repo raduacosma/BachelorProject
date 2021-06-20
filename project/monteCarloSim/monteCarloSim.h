@@ -3,7 +3,6 @@
 
 #include "../../Eigen/Core"
 #include "../utilities/utilities.h"
-#include "imgui.h"
 #include <deque>
 #include <string>
 #include <vector>

@@ -3,7 +3,7 @@
 
 #include <cstddef>
 
-#include "../../../Eigen/Core"
+#include "../../Eigen/Core"
 #include "../createRngObj/createRngObj.h"
 #include "../kolsmir/kolsmir.h"
 #include "../mlp/mlp.h"

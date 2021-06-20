@@ -1,5 +1,5 @@
 #include "pettitt.h"
-#include "../Eigen/Core"
+#include "../../Eigen/Core"
 #include <iostream>
 #include <numeric>
 

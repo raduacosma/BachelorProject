@@ -1,7 +1,7 @@
 #ifndef _INCLUDED_QERLearning
 #define _INCLUDED_QERLearning
 
-#include "../../Eigen/Core"
+#include "../../../Eigen/Core"
 #include "../../createRngObj/createRngObj.h"
 #include "../../mlp/mlp.h"
 #include "../agent.h"
