@@ -1,14 +1,14 @@
 rewardsMeanLast
-6.42412
+7.21067
 opPredMeanLast
-0.801382
-opponentFoundPredMeanLast
--nan
+0.774418
 killedByOpponentMeanLast
-0.0348
+0.799903
+killedByOpponentMeanLast
+0.0464
 opponent recognition percentage
--nan
+0.341647
 predicted nr of opponents
-1
+6
 time in ms
-965776
+718429

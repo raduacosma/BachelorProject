@@ -99,6 +99,7 @@ void Agent::run()
         opponentPredictionLosses.push_back(currentEpisodeOpLoss / stepCount);
         opponentCorrectPredictionPercentage.push_back(static_cast<float>(currentEpisodeCorrectPredictions) / stepCount);
         opponentFoundCorrectPredictionPercentage.push_back(static_cast<float>(foundCurrentEpisodeCorrectPredictions)/countFoundPredictionsCurrentEpisode);
+//        std::cout<<"op predictions: "<<static_cast<float>(currentEpisodeCorrectPredictions) / stepCount<<std::endl;
         runReward += totalReward;
         rewards[nrEpisode] = totalReward;
         if (epsilon > lastEpsilon)

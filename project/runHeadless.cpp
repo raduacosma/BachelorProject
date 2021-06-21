@@ -52,7 +52,7 @@ void writeFullResults(std::unique_ptr<Agent> &agent)
 
 void writeSummaryResults(std::unique_ptr<Agent> &agent, std::string const &fileName, size_t nrEpisodesToEpsilonZero, size_t numberOfEpisodes, long totalTime)
 {
-    std::ofstream out{"summarylikekols_"+fileName};
+    std::ofstream out{"summaryone_"+fileName};
     std::vector<float> const &agentRewards = agent->getRewards();
     double rewardSum= std::accumulate(agentRewards.begin() + nrEpisodesToEpsilonZero, agentRewards.begin()+numberOfEpisodes,0.0 );
     out<<"rewardsMeanLast\n"<<rewardSum/(numberOfEpisodes-nrEpisodesToEpsilonZero)<<'\n';

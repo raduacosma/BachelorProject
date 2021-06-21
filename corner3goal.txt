@@ -9,7 +9,7 @@ simSize
 agentPos
 2 2
 goalPos
-15 15
+14 14
 opponentPos
 13 16
 opponentTrace
