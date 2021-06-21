@@ -52,22 +52,23 @@ void writeFullResults(std::unique_ptr<Agent> &agent)
 
 void writeSummaryResults(std::unique_ptr<Agent> &agent, std::string const &fileName, size_t nrEpisodesToEpsilonZero, size_t numberOfEpisodes, long totalTime)
 {
-    std::ofstream out{"summaryone_"+fileName};
+    std::cout<<fileName<<'\n';
+//    std::ofstream out{"summaryone_"+fileName};
     std::vector<float> const &agentRewards = agent->getRewards();
     double rewardSum= std::accumulate(agentRewards.begin() + nrEpisodesToEpsilonZero, agentRewards.begin()+numberOfEpisodes,0.0 );
-    out<<"rewardsMeanLast\n"<<rewardSum/(numberOfEpisodes-nrEpisodesToEpsilonZero)<<'\n';
+    std::cout<<"rewardsMeanLast\n"<<rewardSum/(numberOfEpisodes-nrEpisodesToEpsilonZero)<<'\n';
     std::vector<float> const &agentPredictions = agent->getOpponentCorrectPredictionPercentage();
     double opPredSum = std::accumulate(agentPredictions.begin() + nrEpisodesToEpsilonZero, agentPredictions.begin()+numberOfEpisodes,0.0);
-    out<<"opPredMeanLast\n"<<opPredSum/(numberOfEpisodes-nrEpisodesToEpsilonZero)<<'\n';
+    std::cout<<"opPredMeanLast\n"<<opPredSum/(numberOfEpisodes-nrEpisodesToEpsilonZero)<<'\n';
     std::vector<float> const &foundOpPred = agent->getOpponentFoundCorrectPredictionPercentage();
     double foundOpSum = std::accumulate(foundOpPred.begin() + nrEpisodesToEpsilonZero, foundOpPred.begin()+numberOfEpisodes,0.0);
-    out<<"opponentFoundPredMeanLast\n"<<foundOpSum/static_cast<double>(numberOfEpisodes-nrEpisodesToEpsilonZero)<<'\n';
+    std::cout<<"opponentFoundPredMeanLast\n"<<foundOpSum/static_cast<double>(numberOfEpisodes-nrEpisodesToEpsilonZero)<<'\n';
     std::vector<size_t> const &killedPerEp = agent->getOpDeathsPerEp();
     size_t killedSum = std::accumulate(killedPerEp.begin() + nrEpisodesToEpsilonZero, killedPerEp.begin()+numberOfEpisodes,0ul);
-    out<<"killedByOpponentMeanLast\n"<<killedSum/static_cast<double>(numberOfEpisodes-nrEpisodesToEpsilonZero)<<'\n';
-    out << "opponent recognition percentage\n" << agent->getCorrectOpponentTypePredictionPercentage() << '\n';
-    out << "predicted nr of opponents\n" << agent->getPredictedNrOfOpponents()<<'\n';
-    out<<"time in ms\n"<<totalTime<<'\n';
+    std::cout<<"killedByOpponentMeanLast\n"<<killedSum/static_cast<double>(numberOfEpisodes-nrEpisodesToEpsilonZero)<<'\n';
+    std::cout << "opponent recognition percentage\n" << agent->getCorrectOpponentTypePredictionPercentage() << '\n';
+    std::cout << "predicted nr of opponents\n" << agent->getPredictedNrOfOpponents()<<'\n';
+    std::cout<<"time in ms\n"<<totalTime<<'\n';
 
 
 }
