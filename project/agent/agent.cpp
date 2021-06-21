@@ -57,6 +57,8 @@ void Agent::run()
         currentEpisodeOpLoss = 0;
         currentEpisodeAgentLoss = 0;
         currentEpisodeCorrectPredictions = 0;
+        countFoundPredictionsCurrentEpisode = 0;
+        foundCurrentEpisodeCorrectPredictions = 0;
         size_t stepCount = 0;
         float totalReward = 0;
         initOpponentMethod();
@@ -96,6 +98,7 @@ void Agent::run()
 
         opponentPredictionLosses.push_back(currentEpisodeOpLoss / stepCount);
         opponentCorrectPredictionPercentage.push_back(static_cast<float>(currentEpisodeCorrectPredictions) / stepCount);
+        opponentFoundCorrectPredictionPercentage.push_back(static_cast<float>(foundCurrentEpisodeCorrectPredictions)/countFoundPredictionsCurrentEpisode);
         runReward += totalReward;
         rewards[nrEpisode] = totalReward;
         if (epsilon > lastEpsilon)
@@ -182,7 +185,11 @@ void Agent::opPredictInterLoss(void (OpTrack::*tracking)(Agent &agent, Eigen::Ve
     currPrediction.maxCoeff(&opponentActionIdx);
     //    std::cout<<opponentActionIdx<<" "<<newOpponentAction<<std::endl;
     if (newOpponentAction == opponentActionIdx)
+    {
         ++currentEpisodeCorrectPredictions;
+        if (opTrack.isFoundOpModel())
+            ++foundCurrentEpisodeCorrectPredictions;
+    }
     float currentLoss = opList[currOp].computeLoss(currPrediction, opponentActionTarget);
     // TODO: Be careful with end of episode and reset and such
     // this is also wrong but since the train loss metric overall is kind of useless for these methods meh
@@ -203,6 +210,10 @@ void Agent::opPredictInterLoss(void (OpTrack::*tracking)(Agent &agent, Eigen::Ve
         if (minIdx >= 0)
             currIdx = minIdx;
         currOp = opList.size() - 1;
+    }
+    else
+    {
+        ++countFoundPredictionsCurrentEpisode;
     }
     //    std::cout<<"Op loss: "<<currentLoss<<std::endl;
     opList[currOp].train(lastOpponentState, opponentActionTarget);
@@ -341,4 +352,8 @@ vector<size_t> const &Agent::getOpDeathsPerEp() const
 size_t Agent::getPredictedNrOfOpponents() const
 {
     return opList.size();
+}
+vector<float> const &Agent::getOpponentFoundCorrectPredictionPercentage() const
+{
+    return opponentFoundCorrectPredictionPercentage;
 }

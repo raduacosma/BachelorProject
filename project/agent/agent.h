@@ -51,6 +51,14 @@ class Agent
     float currentEpisodeOpLoss;
     float currentEpisodeAgentLoss;
     size_t currentEpisodeCorrectPredictions;
+    size_t foundCurrentEpisodeCorrectPredictions;
+    size_t countFoundPredictionsCurrentEpisode;
+    std::vector<float> opponentFoundCorrectPredictionPercentage;
+
+  public:
+    std::vector<float> const &getOpponentFoundCorrectPredictionPercentage() const;
+
+  protected:
     std::vector<float> rewards;
     std::vector<float> opponentPredictionLosses;
     std::vector<float> opponentCorrectPredictionPercentage;
