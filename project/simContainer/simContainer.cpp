@@ -12,7 +12,7 @@ SimContainer::SimContainer(std::string const &filename, Agent *agentParam, Rewar
     istringstream in(filename);
     while (getline(in, file, ','))
     {
-        simStates.emplace_back(file, rewards, simStateParams);
+        simStates.emplace_back("goodLevels/"+file, rewards, simStateParams);
     }
     agent->setMaze(this);
 }
