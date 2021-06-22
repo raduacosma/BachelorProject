@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#SBATCH --ntasks=1
+#SBATCH --mem=200MB
+#SBATCH --time=59
+
+srun ./BachelorProject $1 

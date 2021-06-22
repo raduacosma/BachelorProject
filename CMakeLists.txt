@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(BachelorProject)
 INCLUDE(FindPkgConfig)
-set(SHOULD_HAVE_GUI TRUE)
+set(SHOULD_HAVE_GUI FALSE)
 if(SHOULD_HAVE_GUI)
 pkg_search_module(GLFW REQUIRED glfw3)
 include_directories(${GLFW_INCLUDE_DIRS})
@@ -16,7 +16,7 @@ if(COMPILER_SUPPORTS_MARCH_NATIVE)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native")
 endif()
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall")
-SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BachelorProject_SOURCE_DIR})
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BachelorProject_SOURCE_DIR}/exeFolder)
 
 include_directories(${Eigen})
 
