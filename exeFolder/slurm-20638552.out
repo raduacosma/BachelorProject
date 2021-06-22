@@ -1,0 +1,55 @@
+seed_pValueThreshold_minHistorySize_maxHistorySize/1100seed_pValueThreshold_minHistorySize_maxHistorySize_112.txt
+rewardsMeanLast
+6.40399
+opPredMeanLast
+0.634553
+opponentFoundPredMeanLast
+0.651128
+killedByOpponentMeanLast
+0.0832
+opponent recognition percentage
+0.132984
+predicted nr of opponents
+4
+time in ms
+1916380
+
+
+###############################################################################
+Peregrine Cluster
+Job 20638552 for user 's3601072'
+Finished at: Tue Jun 22 02:31:18 CEST 2021
+
+Job details:
+============
+
+Job ID              : 20638552
+Name                : jobSpec.txt
+User                : s3601072
+Partition           : regular
+Nodes               : pg-node114
+Number of Nodes     : 1
+Cores               : 1
+State               : COMPLETED
+Submit              : 2021-06-22T01:57:25
+Start               : 2021-06-22T01:59:18
+End                 : 2021-06-22T02:31:18
+Reserved walltime   : 00:59:00
+Used walltime       : 00:32:00
+Used CPU time       : 00:31:55 (efficiency: 99.78%)
+% User (Computation): 99.79%
+% System (I/O)      :  0.21%
+Mem reserved        : 200M/node
+Max Mem used        : 63.21M (pg-node114)
+Max Disk Write      : 0.00  (pg-node114)
+Max Disk Read       : 51.20K (pg-node114)
+
+
+Acknowledgements:
+=================
+
+Please see this page for information about acknowledging Peregrine in your publications:
+
+https://wiki.hpc.rug.nl/peregrine/introduction/scientific_output
+
+################################################################################

@@ -1,0 +1,60 @@
+seed_pValueThreshold_minHistorySize_maxHistorySize/5210seed_pValueThreshold_minHistorySize_maxHistorySize_121.txt
+rewardsMeanLast
+5.89993
+opPredMeanLast
+0.633994
+opponentFoundPredMeanLast
+0.646998
+killedByOpponentMeanLast
+0.1664
+opponent recognition percentage
+0.193251
+predicted nr of opponents
+8
+time in ms
+3165018
+
+
+###############################################################################
+Peregrine Cluster
+Job 20639849 for user 's3601072'
+Finished at: Tue Jun 22 03:35:56 CEST 2021
+
+Job details:
+============
+
+Job ID              : 20639849
+Name                : jobSpec.txt
+User                : s3601072
+Partition           : regular
+Nodes               : pg-node036
+Number of Nodes     : 1
+Cores               : 1
+State               : COMPLETED
+Submit              : 2021-06-22T01:58:01
+Start               : 2021-06-22T02:43:03
+End                 : 2021-06-22T03:35:55
+Reserved walltime   : 00:59:00
+Used walltime       : 00:52:52
+Used CPU time       : 00:37:22 (efficiency: 70.69%)
+% User (Computation): 99.16%
+% System (I/O)      :  0.84%
+Mem reserved        : 200M/node
+Max Mem used        : 64.64M (pg-node036)
+Max Disk Write      : 0.00  (pg-node036)
+Max Disk Read       : 51.20K (pg-node036)
+Hints and tips      :
+ 1) The program efficiency is low.
+    Check the file in- and output pattern of your application.
+ *) For more information on these issues see:
+    https://wiki.hpc.rug.nl/peregrine/additional_information/job_hints
+
+
+Acknowledgements:
+=================
+
+Please see this page for information about acknowledging Peregrine in your publications:
+
+https://wiki.hpc.rug.nl/peregrine/introduction/scientific_output
+
+################################################################################

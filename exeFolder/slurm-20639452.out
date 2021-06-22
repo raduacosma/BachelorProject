@@ -1,0 +1,50 @@
+slurmstepd: error: *** JOB 20639452 ON pg-node045 CANCELLED AT 2021-06-22T03:33:45 DUE TO TIME LIMIT ***
+slurmstepd: error: *** STEP 20639452.0 ON pg-node045 CANCELLED AT 2021-06-22T03:33:45 DUE TO TIME LIMIT ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+srun: error: pg-node045: task 0: Terminated
+srun: Terminating job step 20639452.0
+
+
+###############################################################################
+Peregrine Cluster
+Job 20639452 for user 's3601072'
+Finished at: Tue Jun 22 03:33:46 CEST 2021
+
+Job details:
+============
+
+Job ID              : 20639452
+Name                : jobSpec.txt
+User                : s3601072
+Partition           : regular
+Nodes               : pg-node045
+Number of Nodes     : 1
+Cores               : 1
+State               : CANCELLED,TIMEOUT
+Submit              : 2021-06-22T01:57:50
+Start               : 2021-06-22T02:34:43
+End                 : 2021-06-22T03:33:46
+Reserved walltime   : 00:59:00
+Used walltime       : 00:59:03
+Used CPU time       : 00:29:04 (efficiency: 49.25%)
+% User (Computation): 99.31%
+% System (I/O)      :  0.69%
+Mem reserved        : 200M/node
+Max Mem used        : 62.78M (pg-node045)
+Max Disk Write      : 0.00  (pg-node045)
+Max Disk Read       : 51.20K (pg-node045)
+Hints and tips      :
+ 1) The program efficiency is low.
+    Check the file in- and output pattern of your application.
+ *) For more information on these issues see:
+    https://wiki.hpc.rug.nl/peregrine/additional_information/job_hints
+
+
+Acknowledgements:
+=================
+
+Please see this page for information about acknowledging Peregrine in your publications:
+
+https://wiki.hpc.rug.nl/peregrine/introduction/scientific_output
+
+################################################################################
