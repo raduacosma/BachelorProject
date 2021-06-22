@@ -1,0 +1,55 @@
+seed_epsilon_gamma/600seed_epsilon_gamma_011.txt
+rewardsMeanLast
+6.02877
+opPredMeanLast
+0.811349
+opponentFoundPredMeanLast
+0.833493
+killedByOpponentMeanLast
+0.044
+opponent recognition percentage
+0.285626
+predicted nr of opponents
+6
+time in ms
+2263414
+
+
+###############################################################################
+Peregrine Cluster
+Job 20647696 for user 's3601072'
+Finished at: Tue Jun 22 20:20:33 CEST 2021
+
+Job details:
+============
+
+Job ID              : 20647696
+Name                : jobSpec.txt
+User                : s3601072
+Partition           : regular
+Nodes               : pg-node096
+Number of Nodes     : 1
+Cores               : 1
+State               : COMPLETED
+Submit              : 2021-06-22T19:06:44
+Start               : 2021-06-22T19:42:48
+End                 : 2021-06-22T20:20:33
+Reserved walltime   : 01:59:00
+Used walltime       : 00:37:45
+Used CPU time       : 00:37:42 (efficiency: 99.90%)
+% User (Computation): 99.79%
+% System (I/O)      :  0.21%
+Mem reserved        : 200M/node
+Max Mem used        : 65.03M (pg-node096)
+Max Disk Write      : 0.00  (pg-node096)
+Max Disk Read       : 51.20K (pg-node096)
+
+
+Acknowledgements:
+=================
+
+Please see this page for information about acknowledging Peregrine in your publications:
+
+https://wiki.hpc.rug.nl/peregrine/introduction/scientific_output
+
+################################################################################
