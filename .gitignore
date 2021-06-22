@@ -1,8 +1,8 @@
 #ignore executables
 **/*.o
-**/*.out
+# **/*.out
 **/*.gch
-*.out
+# *.out
 
 .idea
 .idea/*
