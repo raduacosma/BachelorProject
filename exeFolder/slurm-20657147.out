@@ -1,0 +1,55 @@
+seed_agentVisionGridSize_agentLearningRate/512seed_agentVisionGridSize_agentLearningRate_021.txt
+rewardsMeanLast
+6.72809
+opPredMeanLast
+0.793556
+opponentFoundPredMeanLast
+0.824674
+killedByOpponentMeanLast
+0.0404
+opponent recognition percentage
+0.247826
+predicted nr of opponents
+5
+time in ms
+2183574
+
+
+###############################################################################
+Peregrine Cluster
+Job 20657147 for user 's3601072'
+Finished at: Wed Jun 23 12:46:17 CEST 2021
+
+Job details:
+============
+
+Job ID              : 20657147
+Name                : jobSpec.txt
+User                : s3601072
+Partition           : regular
+Nodes               : pg-node038
+Number of Nodes     : 1
+Cores               : 1
+State               : RUNNING
+Submit              : 2021-06-23T11:57:45
+Start               : 2021-06-23T12:09:50
+End                 : --
+Reserved walltime   : 01:59:00
+Used walltime       : 00:36:27
+Used CPU time       : --
+% User (Computation): --
+% System (I/O)      : --
+Mem reserved        : 200M/node
+Max Mem used        : 0.00  ()
+Max Disk Write      : 0.00  ()
+Max Disk Read       : 0.00  ()
+
+
+Acknowledgements:
+=================
+
+Please see this page for information about acknowledging Peregrine in your publications:
+
+https://wiki.hpc.rug.nl/peregrine/introduction/scientific_output
+
+################################################################################
