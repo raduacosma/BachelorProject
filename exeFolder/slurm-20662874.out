@@ -1,0 +1,43 @@
+slurmstepd: error: *** STEP 20662874.0 ON pg-node137 CANCELLED AT 2021-06-23T17:14:24 DUE TO TIME LIMIT ***
+slurmstepd: error: *** JOB 20662874 ON pg-node137 CANCELLED AT 2021-06-23T17:14:24 DUE TO TIME LIMIT ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+
+
+###############################################################################
+Peregrine Cluster
+Job 20662874 for user 's3601072'
+Finished at: Wed Jun 23 17:14:27 CEST 2021
+
+Job details:
+============
+
+Job ID              : 20662874
+Name                : jobSpec.txt
+User                : s3601072
+Partition           : regular
+Nodes               : pg-node137
+Number of Nodes     : 1
+Cores               : 1
+State               : CANCELLED,TIMEOUT
+Submit              : 2021-06-23T15:03:35
+Start               : 2021-06-23T15:15:12
+End                 : 2021-06-23T17:14:26
+Reserved walltime   : 01:59:00
+Used walltime       : 01:59:13
+Used CPU time       : 01:59:09 (efficiency: 99.94%)
+% User (Computation): 100.00%
+% System (I/O)      :  0.01%
+Mem reserved        : 200M/node
+Max Mem used        : 64.20M (pg-node137)
+Max Disk Write      : 0.00  (pg-node137)
+Max Disk Read       : 51.20K (pg-node137)
+
+
+Acknowledgements:
+=================
+
+Please see this page for information about acknowledging Peregrine in your publications:
+
+https://wiki.hpc.rug.nl/peregrine/introduction/scientific_output
+
+################################################################################
