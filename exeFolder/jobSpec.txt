@@ -2,6 +2,6 @@
 
 #SBATCH --ntasks=1
 #SBATCH --mem=200MB
-#SBATCH --time=119
+#SBATCH --time=599
 
 srun ./BachelorProject $1 
