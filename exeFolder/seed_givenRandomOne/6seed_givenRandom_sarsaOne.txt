@@ -5,7 +5,7 @@ closelong.txt,group1long.txt,group2long.txt,group3long.txt,group4long.txt,group5
 miniBatchSize
 16
 numberOfEpisodes
-10000
+100000
 sizeExperience
 100000
 agentType
