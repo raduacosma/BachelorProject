@@ -33,6 +33,8 @@ Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloP
     opponentCorrectPredictionPercentage.reserve(nrEpisodes);
     thisEpisodeLoss.reserve(nrEpisodes);
     learningLosses.reserve(nrEpisodes);
+//    predictedOpponentType.reserve(nrEpisodes*maze->getNrOpponents());
+//    actualOpponentType.reserve(nrEpisodes*maze->getNrOpponents());
 }
 bool Agent::performOneStep()
 {
@@ -100,6 +102,7 @@ void Agent::run()
         opponentCorrectPredictionPercentage.push_back(static_cast<float>(currentEpisodeCorrectPredictions) / stepCount);
         opponentFoundCorrectPredictionPercentage.push_back(static_cast<float>(foundCurrentEpisodeCorrectPredictions)/countFoundPredictionsCurrentEpisode);
 //        std::cout<<"op predictions: "<<static_cast<float>(currentEpisodeCorrectPredictions) / stepCount<<std::endl;
+//        std::cout<<static_cast<float>(correctOpCurrentEpisode) / totalPredOpCurrentEpisode<<std::endl;
         runReward += totalReward;
         rewards[nrEpisode] = totalReward;
         if (epsilon > lastEpsilon)
@@ -357,4 +360,12 @@ size_t Agent::getPredictedNrOfOpponents() const
 vector<float> const &Agent::getOpponentFoundCorrectPredictionPercentage() const
 {
     return opponentFoundCorrectPredictionPercentage;
+}
+vector<size_t> const &Agent::getPredictedOpponentType() const
+{
+    return predictedOpponentType;
+}
+vector<size_t> const &Agent::getActualOpponentType() const
+{
+    return actualOpponentType;
 }

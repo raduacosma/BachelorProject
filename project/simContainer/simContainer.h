@@ -42,6 +42,7 @@ class SimContainer
     Eigen::VectorXf getStateForOpponent() const;
     void resetNextEpisode();
     Eigen::VectorXf getCurrentStateForOpponent() const;
+    size_t getNrOpponents();
 };
 inline Eigen::VectorXf SimContainer::getCurrentStateForOpponent() const
 {

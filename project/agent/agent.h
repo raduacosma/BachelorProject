@@ -16,6 +16,7 @@
 #include "experience.h"
 #include <cmath>
 #include <vector>
+#include <map>
 
 enum class AgentType
 {
@@ -64,8 +65,12 @@ class Agent
     std::vector<float> opponentCorrectPredictionPercentage;
     std::vector<float> thisEpisodeLoss;
     std::vector<float> learningLosses;
+    std::vector<size_t> predictedOpponentType;
+    std::vector<size_t> actualOpponentType;
 
   public:
+    std::vector<size_t> const &getPredictedOpponentType() const;
+    std::vector<size_t> const &getActualOpponentType() const;
     std::vector<float> const &getLearningLosses() const;
 
   protected:
@@ -97,6 +102,7 @@ class Agent
                                                       float));
 
   public:
+    std::map<size_t,std::map<size_t,float>> opChoiceMatrix;
     explicit Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
                    MLPParams opponentMLP, size_t _nrEpisodes, size_t pNrEpisodesToEpsilonZero,
                    OpModellingType pOpModellingType, float pEpsilon, float pGamma);

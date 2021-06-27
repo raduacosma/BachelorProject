@@ -82,7 +82,7 @@ void OpTrack::noTrainPettittOpInit(Agent &agent)
                            {
                                return currOpRef.predictWithLoss(currExperience.lastState, currExperience.newState);
                            });
-            std::sort(opLossRef.begin(), opLossRef.end());
+//            std::sort(opLossRef.begin(), opLossRef.end());
         }
     }
 
@@ -376,7 +376,7 @@ void OpTrack::noTrainPettittOpTracking(Agent &agent, Eigen::VectorXf const &last
                            {
                                return currDoneOp.predictWithLoss(currExperience.lastState, currExperience.newState);
                            });
-            std::sort(currOpListLossHistory.begin(), currOpListLossHistory.end());
+//            std::sort(currOpListLossHistory.begin(), currOpListLossHistory.end());
             // both arrays need to be sorted, opListLossHistory[opIdx] should already be sorted from init
             auto [prob, U, K] = Pettitt{}.testGivenK(opListLossHistory[opIdx], currOpListLossHistory,
                                                      opListLossHistory[opIdx].size() - 1);
@@ -438,5 +438,9 @@ void OpTrack::updateCorrectPercentage(Agent &agent)
     {
         ++agent.correctOpCurrentEpisode;
     }
+//    ++agent.opChoiceMatrix[agent.maze->getCurrSimState()][agent.currOp];
     ++agent.totalPredOpCurrentEpisode;
+    agent.predictedOpponentType.push_back(agent.currOp);
+    agent.actualOpponentType.push_back(agent.maze->getCurrSimState());
+
 }

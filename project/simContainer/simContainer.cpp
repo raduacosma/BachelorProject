@@ -21,6 +21,10 @@ SimState &SimContainer::getCurrentLevel()
 {
     return simStates[currSimState];
 }
+size_t SimContainer::getNrOpponents()
+{
+    return simStates.size();
+}
 bool SimContainer::nextLevel()
 {
     ++currSimState;

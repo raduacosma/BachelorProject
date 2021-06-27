@@ -68,9 +68,40 @@ void writeSummaryResults(std::unique_ptr<Agent> &agent, std::string const &fileN
     std::cout<<"killedByOpponentMeanLast\n"<<killedSum/static_cast<double>(numberOfEpisodes-nrEpisodesToEpsilonZero)<<'\n';
     std::cout << "opponent recognition percentage\n" << agent->getCorrectOpponentTypePredictionPercentage() << '\n';
     std::cout << "predicted nr of opponents\n" << agent->getPredictedNrOfOpponents()<<'\n';
+    for(auto const &opIdx:agent->opChoiceMatrix)
+    {
+        std::cout<<"Opponent idx: "<<opIdx.first<<std::endl;
+        for (auto const &chosenIdx : opIdx.second)
+        {
+            std::cout<<"Chosen Opponent: "<<chosenIdx.first<<" "<<chosenIdx.second<<std::endl;
+        }
+    }
     std::cout<<"time in ms\n"<<totalTime<<'\n';
 
 
+}
+
+void writeFullEpHistory(std::unique_ptr<Agent> &agent, std::string const &fileName)
+{
+    std::cout<<"actualOpType,predOpType,rewards,opPredPerc,foundOpPredPerc,killedByOpPerc\n";
+    auto const &actualOpType = agent->getActualOpponentType();
+    auto const &predOpType = agent->getPredictedOpponentType();
+    auto const &rewards = agent->getRewards();
+    auto const &opPredPerc = agent->getOpponentCorrectPredictionPercentage();
+    auto const &foundOpPredPerc = agent->getOpponentFoundCorrectPredictionPercentage();
+    auto const &killedByOpPerc = agent->getOpDeathsPerEp();
+    for(size_t idx; idx!=opPredPerc.size();++idx)
+    {
+        std::cout<<actualOpType[idx]<<','<<predOpType[idx]<<','<<rewards[idx]<<','<<opPredPerc[idx]
+            <<','<<foundOpPredPerc[idx]<<','<<killedByOpPerc[idx]<<'\n';
+    }
+    for(size_t idx = opPredPerc.size();idx!=actualOpType.size();++idx)
+    {
+        std::cout<<actualOpType[idx]<<','<<predOpType[idx]<<",NA,NA,NA,NA\n";
+    }
+    std::cout << "opponent recognition percentage\n" << agent->getCorrectOpponentTypePredictionPercentage() << '\n';
+    std::cout << "predicted nr of opponents\n" << agent->getPredictedNrOfOpponents()<<'\n';
+    std::cout<<fileName<<'\n';
 }
 void runHeadless(std::string const &file)
 {
@@ -140,5 +171,6 @@ void runHeadless(std::string const &file)
     auto end = std::chrono::high_resolution_clock::now();
     auto totalTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
 //    std::cout << "time in ms: " << totalTime;
-    writeSummaryResults(agent,file,nrEpisodesToEpsilonZero,hs.numberOfEpisodes,totalTime);
+    writeFullEpHistory(agent,file);
+//    writeSummaryResults(agent,file,nrEpisodesToEpsilonZero,hs.numberOfEpisodes,totalTime);
 }
