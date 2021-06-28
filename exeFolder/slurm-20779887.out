@@ -1,0 +1,42 @@
+srun: error: pg-node137: task 0: Segmentation fault
+srun: Terminating job step 20779887.0
+
+
+###############################################################################
+Peregrine Cluster
+Job 20779887 for user 's3601072'
+Finished at: Sun Jun 27 23:38:39 CEST 2021
+
+Job details:
+============
+
+Job ID              : 20779887
+Name                : jobSpec.txt
+User                : s3601072
+Partition           : regular
+Nodes               : pg-node137
+Number of Nodes     : 1
+Cores               : 1
+State               : CANCELLED,FAILED
+Submit              : 2021-06-27T23:12:31
+Start               : 2021-06-27T23:16:16
+End                 : 2021-06-27T23:38:39
+Reserved walltime   : 04:59:00
+Used walltime       : 00:22:23
+Used CPU time       : 00:22:20 (efficiency: 99.83%)
+% User (Computation): 100.00%
+% System (I/O)      :  0.00%
+Mem reserved        : 200M/node
+Max Mem used        : 6.54M (pg-node137)
+Max Disk Write      : 0.00  (pg-node137)
+Max Disk Read       : 51.20K (pg-node137)
+
+
+Acknowledgements:
+=================
+
+Please see this page for information about acknowledging Peregrine in your publications:
+
+https://wiki.hpc.rug.nl/peregrine/introduction/scientific_output
+
+################################################################################
