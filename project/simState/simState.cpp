@@ -266,10 +266,10 @@ Eigen::VectorXf SimState::getStateForOpponent() const
 }
 void SimState::resetAgentPos()
 {
-        std::uniform_int_distribution<> distr{ -3, 3 }; // hardcoded but no need for tweaks
-        auto &rngEngine = globalRng.getRngEngine();
-        agentPos = { initialAgentPos.x, initialAgentPos.y + distr(rngEngine) };
-//    agentPos = initialAgentPos;
+//        std::uniform_int_distribution<> distr{ -3, 3 }; // hardcoded but no need for tweaks
+//        auto &rngEngine = globalRng.getRngEngine();
+//        agentPos = { initialAgentPos.x, initialAgentPos.y + distr(rngEngine) };
+    agentPos = initialAgentPos;
 }
 
 void SimState::resetForNextEpisode()
@@ -367,7 +367,7 @@ std::vector<std::vector<FloatVec4>> const &SimState::getFullMazeRepr()
 
 void SimState::generateStateRepresentation()
 {
-    vector<FloatVec4> row{ simSize.y, { 211, 211, 211, 255 } };
+    vector<FloatVec4> row{ simSize.y, { 255, 255, 255, 255 } };
     vector<vector<FloatVec4>> repr{ simSize.x, row };
 
     // Since default pos's are initialized to 0, the (0,0) tile gets colored
@@ -386,7 +386,7 @@ void SimState::generateStateRepresentation()
     FloatVec4 goalColor = { 0, 128, 0, 255 };
     FloatVec4 wallColor = { 128, 128, 128, 255 };
     FloatVec4 opponentColor = { 255, 0, 0, 255 };
-    FloatVec4 opponentTraceColor = { 243, 122, 122, 255 };
+    FloatVec4 opponentTraceColor = { 255,255,255, 255 };
     FloatVec4 agentViewColor = { 135, 206, 235, 255 };
     FloatVec4 opponentViewColor = { 202, 119, 119, 255 };
     assignWithBoundCheck(agentPos, agentColor);
@@ -397,12 +397,15 @@ void SimState::generateStateRepresentation()
     }
 
     //    assignWithBoundCheck(opponentPos,SimObject::OPPONENT);
-
-    for (auto const &opPos : currOpTrace)
+    FloatVec4 color= opponentColor;
+    float factor = 0.075f;
+    for (size_t idx = 0; idx!=opponentTrace.size();++idx)
     {
-        assignWithBoundCheck(opPos, opponentTraceColor);
+        color = {(255.0f-color.x)*factor+color.x,(255.0f-color.y)*factor+color.y,(255.0f-color.z)*factor+color.z,255};
+//        color = {(color.x+255.0f)/2,(color.y+255.0f)/2,(color.z+255.0f)/2,color.w};
+        assignWithBoundCheck(opponentTrace[idx], color);
     }
-    assignWithBoundCheck(currOpTrace.back(), opponentColor);
+//    assignWithBoundCheck(currOpTrace.back(), opponentColor);
     auto applyViewColor = [&](Position pos, FloatVec4 color, size_t visionGridSize)
     {
         for (size_t i = 0; i < simSize.x; ++i)
@@ -416,8 +419,8 @@ void SimState::generateStateRepresentation()
                 }
             }
     };
-    applyViewColor(agentPos, agentViewColor, agentVisionGridSize);
-    applyViewColor(currOpTrace.back(), opponentViewColor, opponentVisionGridSize);
+//    applyViewColor(agentPos, agentViewColor, agentVisionGridSize);
+//    applyViewColor(currOpTrace.back(), opponentViewColor, opponentVisionGridSize);
 
     stateRepresentation = move(repr);
 }
