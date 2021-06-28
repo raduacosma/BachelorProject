@@ -90,10 +90,17 @@ void writeFullEpHistory(std::unique_ptr<Agent> &agent, std::string const &fileNa
     auto const &opPredPerc = agent->getOpponentCorrectPredictionPercentage();
     auto const &foundOpPredPerc = agent->getOpponentFoundCorrectPredictionPercentage();
     auto const &killedByOpPerc = agent->getOpDeathsPerEp();
+    bool opModeling = false;
+    if(predOpType.size()>=opPredPerc.size())
+        opModeling = true;
     for(size_t idx=0; idx!=opPredPerc.size();++idx)
     {
+        if(opModeling)
         std::cout<<actualOpType[idx]<<','<<predOpType[idx]<<','<<rewards[idx]<<','<<opPredPerc[idx]
             <<','<<foundOpPredPerc[idx]<<','<<killedByOpPerc[idx]<<'\n';
+        else
+            std::cout<<"NA"<<','<<"NA"<<','<<rewards[idx]<<','<<opPredPerc[idx]
+                     <<','<<"NA"<<','<<killedByOpPerc[idx]<<'\n';
     }
     for(size_t idx = opPredPerc.size();idx!=actualOpType.size();++idx)
     {
