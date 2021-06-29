@@ -102,10 +102,13 @@ void writeFullEpHistory(std::unique_ptr<Agent> &agent, std::string const &fileNa
             std::cout<<"NA"<<','<<"NA"<<','<<rewards[idx]<<','<<opPredPerc[idx]
                      <<','<<"NA"<<','<<killedByOpPerc[idx]<<'\n';
     }
+    if(opModeling)
+{
     for(size_t idx = opPredPerc.size();idx!=actualOpType.size();++idx)
     {
         std::cout<<actualOpType[idx]<<','<<predOpType[idx]<<",NA,NA,NA,NA\n";
     }
+}
     std::cout << "opponent recognition percentage\n" << agent->getCorrectOpponentTypePredictionPercentage() << '\n';
     std::cout << "predicted nr of opponents\n" << agent->getPredictedNrOfOpponents()<<'\n';
     std::cout<<fileName<<'\n';
