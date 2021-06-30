@@ -217,7 +217,7 @@ int main(int argc, char **argv)
     SimStateParams simStateParams = { .traceSize = hs.traceSize,
                                       .agentVisionGridSize = hs.agentVisionGridSize,
                                       .opponentVisionGridSize = hs.opponentVisionGridSize,
-                                      .randomOpCoef = hs.randomOpCoef };
+                                      .randomOpCoef = 0.2 };
     OpTrackParams opTrackParams = { .pValueThreshold = hs.pValueThreshold,
                                     .minHistorySize = hs.minHistorySize,
                                     .maxHistorySize = hs.maxHistorySize };

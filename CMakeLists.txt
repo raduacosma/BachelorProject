@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(BachelorProject)
 INCLUDE(FindPkgConfig)
-set(SHOULD_HAVE_GUI FALSE)
+set(SHOULD_HAVE_GUI TRUE)
 if(SHOULD_HAVE_GUI)
 pkg_search_module(GLFW REQUIRED glfw3)
 include_directories(${GLFW_INCLUDE_DIRS})
