@@ -181,6 +181,6 @@ void runHeadless(std::string const &file)
     auto end = std::chrono::high_resolution_clock::now();
     auto totalTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
 //    std::cout << "time in ms: " << totalTime;
-    writeFullEpHistory(agent,file);
-//    writeSummaryResults(agent,file,nrEpisodesToEpsilonZero,hs.numberOfEpisodes,totalTime);
+//    writeFullEpHistory(agent,file);
+    writeSummaryResults(agent,file,nrEpisodesToEpsilonZero,hs.numberOfEpisodes,totalTime);
 }
