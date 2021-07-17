@@ -1,3 +1,0 @@
-/home/s3601072/BachelorProject/build/CMakeFiles/rebuild_cache.dir
-/home/s3601072/BachelorProject/build/CMakeFiles/edit_cache.dir
-/home/s3601072/BachelorProject/build/CMakeFiles/BachelorProject.dir
