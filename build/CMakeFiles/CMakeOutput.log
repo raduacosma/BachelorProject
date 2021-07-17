@@ -1,0 +1,520 @@
+The system is: Linux - 3.10.0-1127.13.1.el7.x86_64 - x86_64
+Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+Compiler: /software/software/GCCcore/10.2.0/bin/cc 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+
+The C compiler identification is GNU, found in "/home/s3601072/BachelorProject/build/CMakeFiles/3.18.4/CompilerIdC/a.out"
+
+Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+Compiler: /software/software/GCCcore/10.2.0/bin/c++ 
+Build flags: 
+Id flags:  
+
+The output was:
+0
+
+
+Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.out"
+
+The CXX compiler identification is GNU, found in "/home/s3601072/BachelorProject/build/CMakeFiles/3.18.4/CompilerIdCXX/a.out"
+
+Detecting C compiler ABI info compiled with the following output:
+Change Dir: /home/s3601072/BachelorProject/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_ee342/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_ee342.dir/build.make CMakeFiles/cmTC_ee342.dir/build
+gmake[1]: Entering directory `/home/s3601072/BachelorProject/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ee342.dir/CMakeCCompilerABI.c.o
+/software/software/GCCcore/10.2.0/bin/cc   -v -o CMakeFiles/cmTC_ee342.dir/CMakeCCompilerABI.c.o -c /apps/haswell/software/CMake/3.18.4-GCCcore-10.2.0/share/cmake-3.18/Modules/CMakeCCompilerABI.c
+Using built-in specs.
+COLLECT_GCC=/software/software/GCCcore/10.2.0/bin/cc
+Target: x86_64-pc-linux-gnu
+Configured with: ../configure --enable-languages=c,c++,fortran --enable-lto --enable-checking=release --disable-multilib --enable-shared=yes --enable-static=yes --enable-threads=posix --enable-plugins --enable-gold=default --enable-ld --with-plugin-ld=ld.gold --prefix=/software/software/GCCcore/10.2.0 --with-local-prefix=/software/software/GCCcore/10.2.0 --enable-bootstrap --with-isl=/dev/shm/f115261/GCCcore/10.2.0/system-system/gcc-10.2.0/stage2_stuff --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu
+Thread model: posix
+Supported LTO compression algorithms: zlib
+gcc version 10.2.0 (GCC) 
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ee342.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64'
+ /apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/cc1 -quiet -v -iprefix /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/ /apps/haswell/software/CMake/3.18.4-GCCcore-10.2.0/share/cmake-3.18/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_ee342.dir/CMakeCCompilerABI.c.o -version -o /local/tmp/ccyionIg.s
+GNU C17 (GCC) version 10.2.0 (x86_64-pc-linux-gnu)
+	compiled by GNU C version 10.2.0, GMP version 6.2.0, MPFR version 4.1.0, MPC version 1.1.0, isl version isl-0.22.1-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring nonexistent directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include-fixed"
+ignoring nonexistent directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../x86_64-pc-linux-gnu/include"
+ignoring duplicate directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/../../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include"
+ignoring nonexistent directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/../../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include-fixed"
+ignoring nonexistent directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/../../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../x86_64-pc-linux-gnu/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /software/software/binutils/2.35-GCCcore-10.2.0/include
+ /software/software/libarchive/3.4.3-GCCcore-10.2.0/include
+ /software/software/cURL/7.72.0-GCCcore-10.2.0/include
+ /software/software/bzip2/1.0.8-GCCcore-10.2.0/include
+ /software/software/zlib/1.2.11-GCCcore-10.2.0/include
+ /software/software/ncurses/6.2-GCCcore-10.2.0/include
+ /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include
+ /software/software/GCCcore/10.2.0/include
+ /usr/include
+End of search list.
+GNU C17 (GCC) version 10.2.0 (x86_64-pc-linux-gnu)
+	compiled by GNU C version 10.2.0, GMP version 6.2.0, MPFR version 4.1.0, MPC version 1.1.0, isl version isl-0.22.1-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: dcc93e9364b496956afaf99b49c19d36
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ee342.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64'
+ as -v --64 -o CMakeFiles/cmTC_ee342.dir/CMakeCCompilerABI.c.o /local/tmp/ccyionIg.s
+GNU assembler version 2.35 (x86_64-pc-linux-gnu) using BFD version (GNU Binutils) 2.35
+COMPILER_PATH=/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/:/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/
+LIBRARY_PATH=/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/:/software/software/binutils/2.35-GCCcore-10.2.0/lib/../lib64/:/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/../lib64/:/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/../lib64/:/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/../lib64/:/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/../lib64/:/software/software/ncurses/6.2-GCCcore-10.2.0/lib/../lib64/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/software/software/binutils/2.35-GCCcore-10.2.0/lib/:/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/:/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/:/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/:/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/:/software/software/ncurses/6.2-GCCcore-10.2.0/lib/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ee342.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64'
+Linking C executable cmTC_ee342
+/apps/haswell/software/CMake/3.18.4-GCCcore-10.2.0/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ee342.dir/link.txt --verbose=1
+/software/software/GCCcore/10.2.0/bin/cc  -v CMakeFiles/cmTC_ee342.dir/CMakeCCompilerABI.c.o -o cmTC_ee342 
+Using built-in specs.
+COLLECT_GCC=/software/software/GCCcore/10.2.0/bin/cc
+COLLECT_LTO_WRAPPER=/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/lto-wrapper
+Target: x86_64-pc-linux-gnu
+Configured with: ../configure --enable-languages=c,c++,fortran --enable-lto --enable-checking=release --disable-multilib --enable-shared=yes --enable-static=yes --enable-threads=posix --enable-plugins --enable-gold=default --enable-ld --with-plugin-ld=ld.gold --prefix=/software/software/GCCcore/10.2.0 --with-local-prefix=/software/software/GCCcore/10.2.0 --enable-bootstrap --with-isl=/dev/shm/f115261/GCCcore/10.2.0/system-system/gcc-10.2.0/stage2_stuff --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu
+Thread model: posix
+Supported LTO compression algorithms: zlib
+gcc version 10.2.0 (GCC) 
+COMPILER_PATH=/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/:/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/
+LIBRARY_PATH=/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/:/software/software/binutils/2.35-GCCcore-10.2.0/lib/../lib64/:/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/../lib64/:/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/../lib64/:/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/../lib64/:/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/../lib64/:/software/software/ncurses/6.2-GCCcore-10.2.0/lib/../lib64/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/software/software/binutils/2.35-GCCcore-10.2.0/lib/:/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/:/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/:/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/:/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/:/software/software/ncurses/6.2-GCCcore-10.2.0/lib/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_ee342' '-mtune=generic' '-march=x86-64'
+ /apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/collect2 -plugin /apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/liblto_plugin.so -plugin-opt=/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/lto-wrapper -plugin-opt=-fresolution=/local/tmp/cciPa32k.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_ee342 /lib/../lib64/crt1.o /lib/../lib64/crti.o /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/crtbegin.o -L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0 -L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc -L/software/software/binutils/2.35-GCCcore-10.2.0/lib/../lib64 -L/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/../lib64 -L/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/../lib64 -L/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/../lib64 -L/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/../lib64 -L/software/software/ncurses/6.2-GCCcore-10.2.0/lib/../lib64 -L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/software/software/binutils/2.35-GCCcore-10.2.0/lib -L/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib -L/software/software/cURL/7.72.0-GCCcore-10.2.0/lib -L/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib -L/software/software/zlib/1.2.11-GCCcore-10.2.0/lib -L/software/software/ncurses/6.2-GCCcore-10.2.0/lib -L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../.. CMakeFiles/cmTC_ee342.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/crtend.o /lib/../lib64/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_ee342' '-mtune=generic' '-march=x86-64'
+gmake[1]: Leaving directory `/home/s3601072/BachelorProject/build/CMakeFiles/CMakeTmp'
+
+
+
+Parsed C implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/software/software/binutils/2.35-GCCcore-10.2.0/include]
+    add: [/software/software/libarchive/3.4.3-GCCcore-10.2.0/include]
+    add: [/software/software/cURL/7.72.0-GCCcore-10.2.0/include]
+    add: [/software/software/bzip2/1.0.8-GCCcore-10.2.0/include]
+    add: [/software/software/zlib/1.2.11-GCCcore-10.2.0/include]
+    add: [/software/software/ncurses/6.2-GCCcore-10.2.0/include]
+    add: [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include]
+    add: [/software/software/GCCcore/10.2.0/include]
+    add: [/usr/include]
+  end of search list found
+  collapse include dir [/software/software/binutils/2.35-GCCcore-10.2.0/include] ==> [/software/software/binutils/2.35-GCCcore-10.2.0/include]
+  collapse include dir [/software/software/libarchive/3.4.3-GCCcore-10.2.0/include] ==> [/software/software/libarchive/3.4.3-GCCcore-10.2.0/include]
+  collapse include dir [/software/software/cURL/7.72.0-GCCcore-10.2.0/include] ==> [/software/software/cURL/7.72.0-GCCcore-10.2.0/include]
+  collapse include dir [/software/software/bzip2/1.0.8-GCCcore-10.2.0/include] ==> [/software/software/bzip2/1.0.8-GCCcore-10.2.0/include]
+  collapse include dir [/software/software/zlib/1.2.11-GCCcore-10.2.0/include] ==> [/software/software/zlib/1.2.11-GCCcore-10.2.0/include]
+  collapse include dir [/software/software/ncurses/6.2-GCCcore-10.2.0/include] ==> [/software/software/ncurses/6.2-GCCcore-10.2.0/include]
+  collapse include dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include] ==> [/apps/haswell/software/GCCcore/10.2.0/lib/gcc/x86_64-pc-linux-gnu/10.2.0/include]
+  collapse include dir [/software/software/GCCcore/10.2.0/include] ==> [/software/software/GCCcore/10.2.0/include]
+  collapse include dir [/usr/include] ==> [/usr/include]
+  implicit include dirs: [/software/software/binutils/2.35-GCCcore-10.2.0/include;/software/software/libarchive/3.4.3-GCCcore-10.2.0/include;/software/software/cURL/7.72.0-GCCcore-10.2.0/include;/software/software/bzip2/1.0.8-GCCcore-10.2.0/include;/software/software/zlib/1.2.11-GCCcore-10.2.0/include;/software/software/ncurses/6.2-GCCcore-10.2.0/include;/apps/haswell/software/GCCcore/10.2.0/lib/gcc/x86_64-pc-linux-gnu/10.2.0/include;/software/software/GCCcore/10.2.0/include;/usr/include]
+
+
+Parsed C implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/s3601072/BachelorProject/build/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/gmake cmTC_ee342/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_ee342.dir/build.make CMakeFiles/cmTC_ee342.dir/build]
+  ignore line: [gmake[1]: Entering directory `/home/s3601072/BachelorProject/build/CMakeFiles/CMakeTmp']
+  ignore line: [Building C object CMakeFiles/cmTC_ee342.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/software/software/GCCcore/10.2.0/bin/cc   -v -o CMakeFiles/cmTC_ee342.dir/CMakeCCompilerABI.c.o -c /apps/haswell/software/CMake/3.18.4-GCCcore-10.2.0/share/cmake-3.18/Modules/CMakeCCompilerABI.c]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/software/software/GCCcore/10.2.0/bin/cc]
+  ignore line: [Target: x86_64-pc-linux-gnu]
+  ignore line: [Configured with: ../configure --enable-languages=c,c++,fortran --enable-lto --enable-checking=release --disable-multilib --enable-shared=yes --enable-static=yes --enable-threads=posix --enable-plugins --enable-gold=default --enable-ld --with-plugin-ld=ld.gold --prefix=/software/software/GCCcore/10.2.0 --with-local-prefix=/software/software/GCCcore/10.2.0 --enable-bootstrap --with-isl=/dev/shm/f115261/GCCcore/10.2.0/system-system/gcc-10.2.0/stage2_stuff --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [Supported LTO compression algorithms: zlib]
+  ignore line: [gcc version 10.2.0 (GCC) ]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ee342.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64']
+  ignore line: [ /apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/cc1 -quiet -v -iprefix /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/ /apps/haswell/software/CMake/3.18.4-GCCcore-10.2.0/share/cmake-3.18/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_ee342.dir/CMakeCCompilerABI.c.o -version -o /local/tmp/ccyionIg.s]
+  ignore line: [GNU C17 (GCC) version 10.2.0 (x86_64-pc-linux-gnu)]
+  ignore line: [	compiled by GNU C version 10.2.0  GMP version 6.2.0  MPFR version 4.1.0  MPC version 1.1.0  isl version isl-0.22.1-GMP]
+  ignore line: []
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [ignoring nonexistent directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include-fixed"]
+  ignore line: [ignoring nonexistent directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../x86_64-pc-linux-gnu/include"]
+  ignore line: [ignoring duplicate directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/../../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include"]
+  ignore line: [ignoring nonexistent directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/../../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include-fixed"]
+  ignore line: [ignoring nonexistent directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/../../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../x86_64-pc-linux-gnu/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /software/software/binutils/2.35-GCCcore-10.2.0/include]
+  ignore line: [ /software/software/libarchive/3.4.3-GCCcore-10.2.0/include]
+  ignore line: [ /software/software/cURL/7.72.0-GCCcore-10.2.0/include]
+  ignore line: [ /software/software/bzip2/1.0.8-GCCcore-10.2.0/include]
+  ignore line: [ /software/software/zlib/1.2.11-GCCcore-10.2.0/include]
+  ignore line: [ /software/software/ncurses/6.2-GCCcore-10.2.0/include]
+  ignore line: [ /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include]
+  ignore line: [ /software/software/GCCcore/10.2.0/include]
+  ignore line: [ /usr/include]
+  ignore line: [End of search list.]
+  ignore line: [GNU C17 (GCC) version 10.2.0 (x86_64-pc-linux-gnu)]
+  ignore line: [	compiled by GNU C version 10.2.0  GMP version 6.2.0  MPFR version 4.1.0  MPC version 1.1.0  isl version isl-0.22.1-GMP]
+  ignore line: []
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [Compiler executable checksum: dcc93e9364b496956afaf99b49c19d36]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ee342.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64']
+  ignore line: [ as -v --64 -o CMakeFiles/cmTC_ee342.dir/CMakeCCompilerABI.c.o /local/tmp/ccyionIg.s]
+  ignore line: [GNU assembler version 2.35 (x86_64-pc-linux-gnu) using BFD version (GNU Binutils) 2.35]
+  ignore line: [COMPILER_PATH=/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/:/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/]
+  ignore line: [LIBRARY_PATH=/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/:/software/software/binutils/2.35-GCCcore-10.2.0/lib/../lib64/:/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/../lib64/:/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/../lib64/:/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/../lib64/:/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/../lib64/:/software/software/ncurses/6.2-GCCcore-10.2.0/lib/../lib64/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/software/software/binutils/2.35-GCCcore-10.2.0/lib/:/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/:/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/:/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/:/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/:/software/software/ncurses/6.2-GCCcore-10.2.0/lib/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../:/lib/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_ee342.dir/CMakeCCompilerABI.c.o' '-c' '-mtune=generic' '-march=x86-64']
+  ignore line: [Linking C executable cmTC_ee342]
+  ignore line: [/apps/haswell/software/CMake/3.18.4-GCCcore-10.2.0/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ee342.dir/link.txt --verbose=1]
+  ignore line: [/software/software/GCCcore/10.2.0/bin/cc  -v CMakeFiles/cmTC_ee342.dir/CMakeCCompilerABI.c.o -o cmTC_ee342 ]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/software/software/GCCcore/10.2.0/bin/cc]
+  ignore line: [COLLECT_LTO_WRAPPER=/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/lto-wrapper]
+  ignore line: [Target: x86_64-pc-linux-gnu]
+  ignore line: [Configured with: ../configure --enable-languages=c,c++,fortran --enable-lto --enable-checking=release --disable-multilib --enable-shared=yes --enable-static=yes --enable-threads=posix --enable-plugins --enable-gold=default --enable-ld --with-plugin-ld=ld.gold --prefix=/software/software/GCCcore/10.2.0 --with-local-prefix=/software/software/GCCcore/10.2.0 --enable-bootstrap --with-isl=/dev/shm/f115261/GCCcore/10.2.0/system-system/gcc-10.2.0/stage2_stuff --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [Supported LTO compression algorithms: zlib]
+  ignore line: [gcc version 10.2.0 (GCC) ]
+  ignore line: [COMPILER_PATH=/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/:/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/]
+  ignore line: [LIBRARY_PATH=/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/:/software/software/binutils/2.35-GCCcore-10.2.0/lib/../lib64/:/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/../lib64/:/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/../lib64/:/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/../lib64/:/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/../lib64/:/software/software/ncurses/6.2-GCCcore-10.2.0/lib/../lib64/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/software/software/binutils/2.35-GCCcore-10.2.0/lib/:/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/:/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/:/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/:/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/:/software/software/ncurses/6.2-GCCcore-10.2.0/lib/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../:/lib/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_ee342' '-mtune=generic' '-march=x86-64']
+  link line: [ /apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/collect2 -plugin /apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/liblto_plugin.so -plugin-opt=/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/lto-wrapper -plugin-opt=-fresolution=/local/tmp/cciPa32k.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_ee342 /lib/../lib64/crt1.o /lib/../lib64/crti.o /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/crtbegin.o -L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0 -L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc -L/software/software/binutils/2.35-GCCcore-10.2.0/lib/../lib64 -L/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/../lib64 -L/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/../lib64 -L/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/../lib64 -L/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/../lib64 -L/software/software/ncurses/6.2-GCCcore-10.2.0/lib/../lib64 -L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/software/software/binutils/2.35-GCCcore-10.2.0/lib -L/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib -L/software/software/cURL/7.72.0-GCCcore-10.2.0/lib -L/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib -L/software/software/zlib/1.2.11-GCCcore-10.2.0/lib -L/software/software/ncurses/6.2-GCCcore-10.2.0/lib -L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../.. CMakeFiles/cmTC_ee342.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/crtend.o /lib/../lib64/crtn.o]
+    arg [/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/collect2] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/liblto_plugin.so] ==> ignore
+    arg [-plugin-opt=/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/lto-wrapper] ==> ignore
+    arg [-plugin-opt=-fresolution=/local/tmp/cciPa32k.res] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_x86_64] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_ee342] ==> ignore
+    arg [/lib/../lib64/crt1.o] ==> ignore
+    arg [/lib/../lib64/crti.o] ==> ignore
+    arg [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/crtbegin.o] ==> ignore
+    arg [-L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0] ==> dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0]
+    arg [-L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc] ==> dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc]
+    arg [-L/software/software/binutils/2.35-GCCcore-10.2.0/lib/../lib64] ==> dir [/software/software/binutils/2.35-GCCcore-10.2.0/lib/../lib64]
+    arg [-L/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/../lib64] ==> dir [/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/../lib64]
+    arg [-L/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/../lib64] ==> dir [/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/../lib64]
+    arg [-L/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/../lib64] ==> dir [/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/../lib64]
+    arg [-L/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/../lib64] ==> dir [/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/../lib64]
+    arg [-L/software/software/ncurses/6.2-GCCcore-10.2.0/lib/../lib64] ==> dir [/software/software/ncurses/6.2-GCCcore-10.2.0/lib/../lib64]
+    arg [-L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib64] ==> dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib64]
+    arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+    arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+    arg [-L/software/software/binutils/2.35-GCCcore-10.2.0/lib] ==> dir [/software/software/binutils/2.35-GCCcore-10.2.0/lib]
+    arg [-L/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib] ==> dir [/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib]
+    arg [-L/software/software/cURL/7.72.0-GCCcore-10.2.0/lib] ==> dir [/software/software/cURL/7.72.0-GCCcore-10.2.0/lib]
+    arg [-L/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib] ==> dir [/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib]
+    arg [-L/software/software/zlib/1.2.11-GCCcore-10.2.0/lib] ==> dir [/software/software/zlib/1.2.11-GCCcore-10.2.0/lib]
+    arg [-L/software/software/ncurses/6.2-GCCcore-10.2.0/lib] ==> dir [/software/software/ncurses/6.2-GCCcore-10.2.0/lib]
+    arg [-L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../..] ==> dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../..]
+    arg [CMakeFiles/cmTC_ee342.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [-lgcc] ==> lib [gcc]
+    arg [--push-state] ==> ignore
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--pop-state] ==> ignore
+    arg [-lc] ==> lib [c]
+    arg [-lgcc] ==> lib [gcc]
+    arg [--push-state] ==> ignore
+    arg [--as-needed] ==> ignore
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [--pop-state] ==> ignore
+    arg [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/crtend.o] ==> ignore
+    arg [/lib/../lib64/crtn.o] ==> ignore
+  collapse library dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0] ==> [/apps/haswell/software/GCCcore/10.2.0/lib/gcc/x86_64-pc-linux-gnu/10.2.0]
+  collapse library dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc] ==> [/apps/haswell/software/GCCcore/10.2.0/lib/gcc]
+  collapse library dir [/software/software/binutils/2.35-GCCcore-10.2.0/lib/../lib64] ==> [/software/software/binutils/2.35-GCCcore-10.2.0/lib64]
+  collapse library dir [/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/../lib64] ==> [/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib64]
+  collapse library dir [/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/../lib64] ==> [/software/software/cURL/7.72.0-GCCcore-10.2.0/lib64]
+  collapse library dir [/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/../lib64] ==> [/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib64]
+  collapse library dir [/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/../lib64] ==> [/software/software/zlib/1.2.11-GCCcore-10.2.0/lib64]
+  collapse library dir [/software/software/ncurses/6.2-GCCcore-10.2.0/lib/../lib64] ==> [/software/software/ncurses/6.2-GCCcore-10.2.0/lib64]
+  collapse library dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib64] ==> [/apps/haswell/software/GCCcore/10.2.0/lib64]
+  collapse library dir [/lib/../lib64] ==> [/lib64]
+  collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+  collapse library dir [/software/software/binutils/2.35-GCCcore-10.2.0/lib] ==> [/software/software/binutils/2.35-GCCcore-10.2.0/lib]
+  collapse library dir [/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib] ==> [/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib]
+  collapse library dir [/software/software/cURL/7.72.0-GCCcore-10.2.0/lib] ==> [/software/software/cURL/7.72.0-GCCcore-10.2.0/lib]
+  collapse library dir [/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib] ==> [/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib]
+  collapse library dir [/software/software/zlib/1.2.11-GCCcore-10.2.0/lib] ==> [/software/software/zlib/1.2.11-GCCcore-10.2.0/lib]
+  collapse library dir [/software/software/ncurses/6.2-GCCcore-10.2.0/lib] ==> [/software/software/ncurses/6.2-GCCcore-10.2.0/lib]
+  collapse library dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../..] ==> [/apps/haswell/software/GCCcore/10.2.0/lib]
+  implicit libs: [gcc;gcc_s;c;gcc;gcc_s]
+  implicit dirs: [/apps/haswell/software/GCCcore/10.2.0/lib/gcc/x86_64-pc-linux-gnu/10.2.0;/apps/haswell/software/GCCcore/10.2.0/lib/gcc;/software/software/binutils/2.35-GCCcore-10.2.0/lib64;/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib64;/software/software/cURL/7.72.0-GCCcore-10.2.0/lib64;/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib64;/software/software/zlib/1.2.11-GCCcore-10.2.0/lib64;/software/software/ncurses/6.2-GCCcore-10.2.0/lib64;/apps/haswell/software/GCCcore/10.2.0/lib64;/lib64;/usr/lib64;/software/software/binutils/2.35-GCCcore-10.2.0/lib;/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib;/software/software/cURL/7.72.0-GCCcore-10.2.0/lib;/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib;/software/software/zlib/1.2.11-GCCcore-10.2.0/lib;/software/software/ncurses/6.2-GCCcore-10.2.0/lib;/apps/haswell/software/GCCcore/10.2.0/lib]
+  implicit fwks: []
+
+
+Detecting CXX compiler ABI info compiled with the following output:
+Change Dir: /home/s3601072/BachelorProject/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_69750/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_69750.dir/build.make CMakeFiles/cmTC_69750.dir/build
+gmake[1]: Entering directory `/home/s3601072/BachelorProject/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_69750.dir/CMakeCXXCompilerABI.cpp.o
+/software/software/GCCcore/10.2.0/bin/c++   -v -o CMakeFiles/cmTC_69750.dir/CMakeCXXCompilerABI.cpp.o -c /apps/haswell/software/CMake/3.18.4-GCCcore-10.2.0/share/cmake-3.18/Modules/CMakeCXXCompilerABI.cpp
+Using built-in specs.
+COLLECT_GCC=/software/software/GCCcore/10.2.0/bin/c++
+Target: x86_64-pc-linux-gnu
+Configured with: ../configure --enable-languages=c,c++,fortran --enable-lto --enable-checking=release --disable-multilib --enable-shared=yes --enable-static=yes --enable-threads=posix --enable-plugins --enable-gold=default --enable-ld --with-plugin-ld=ld.gold --prefix=/software/software/GCCcore/10.2.0 --with-local-prefix=/software/software/GCCcore/10.2.0 --enable-bootstrap --with-isl=/dev/shm/f115261/GCCcore/10.2.0/system-system/gcc-10.2.0/stage2_stuff --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu
+Thread model: posix
+Supported LTO compression algorithms: zlib
+gcc version 10.2.0 (GCC) 
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_69750.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/cc1plus -quiet -v -iprefix /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/ -D_GNU_SOURCE /apps/haswell/software/CMake/3.18.4-GCCcore-10.2.0/share/cmake-3.18/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_69750.dir/CMakeCXXCompilerABI.cpp.o -version -o /local/tmp/ccWDtaQy.s
+GNU C++14 (GCC) version 10.2.0 (x86_64-pc-linux-gnu)
+	compiled by GNU C version 10.2.0, GMP version 6.2.0, MPFR version 4.1.0, MPC version 1.1.0, isl version isl-0.22.1-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring nonexistent directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include-fixed"
+ignoring nonexistent directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../x86_64-pc-linux-gnu/include"
+ignoring duplicate directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/../../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0"
+ignoring duplicate directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/../../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0/x86_64-pc-linux-gnu"
+ignoring duplicate directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/../../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0/backward"
+ignoring duplicate directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/../../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include"
+ignoring nonexistent directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/../../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include-fixed"
+ignoring nonexistent directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/../../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../x86_64-pc-linux-gnu/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /software/software/binutils/2.35-GCCcore-10.2.0/include
+ /software/software/libarchive/3.4.3-GCCcore-10.2.0/include
+ /software/software/cURL/7.72.0-GCCcore-10.2.0/include
+ /software/software/bzip2/1.0.8-GCCcore-10.2.0/include
+ /software/software/zlib/1.2.11-GCCcore-10.2.0/include
+ /software/software/ncurses/6.2-GCCcore-10.2.0/include
+ /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0
+ /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0/x86_64-pc-linux-gnu
+ /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0/backward
+ /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include
+ /software/software/GCCcore/10.2.0/include
+ /usr/include
+End of search list.
+GNU C++14 (GCC) version 10.2.0 (x86_64-pc-linux-gnu)
+	compiled by GNU C version 10.2.0, GMP version 6.2.0, MPFR version 4.1.0, MPC version 1.1.0, isl version isl-0.22.1-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: 1dfde1895b102f84abe6acccb207b0e8
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_69750.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ as -v --64 -o CMakeFiles/cmTC_69750.dir/CMakeCXXCompilerABI.cpp.o /local/tmp/ccWDtaQy.s
+GNU assembler version 2.35 (x86_64-pc-linux-gnu) using BFD version (GNU Binutils) 2.35
+COMPILER_PATH=/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/:/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/
+LIBRARY_PATH=/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/:/software/software/binutils/2.35-GCCcore-10.2.0/lib/../lib64/:/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/../lib64/:/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/../lib64/:/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/../lib64/:/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/../lib64/:/software/software/ncurses/6.2-GCCcore-10.2.0/lib/../lib64/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/software/software/binutils/2.35-GCCcore-10.2.0/lib/:/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/:/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/:/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/:/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/:/software/software/ncurses/6.2-GCCcore-10.2.0/lib/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_69750.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+Linking CXX executable cmTC_69750
+/apps/haswell/software/CMake/3.18.4-GCCcore-10.2.0/bin/cmake -E cmake_link_script CMakeFiles/cmTC_69750.dir/link.txt --verbose=1
+/software/software/GCCcore/10.2.0/bin/c++  -v CMakeFiles/cmTC_69750.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_69750 
+Using built-in specs.
+COLLECT_GCC=/software/software/GCCcore/10.2.0/bin/c++
+COLLECT_LTO_WRAPPER=/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/lto-wrapper
+Target: x86_64-pc-linux-gnu
+Configured with: ../configure --enable-languages=c,c++,fortran --enable-lto --enable-checking=release --disable-multilib --enable-shared=yes --enable-static=yes --enable-threads=posix --enable-plugins --enable-gold=default --enable-ld --with-plugin-ld=ld.gold --prefix=/software/software/GCCcore/10.2.0 --with-local-prefix=/software/software/GCCcore/10.2.0 --enable-bootstrap --with-isl=/dev/shm/f115261/GCCcore/10.2.0/system-system/gcc-10.2.0/stage2_stuff --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu
+Thread model: posix
+Supported LTO compression algorithms: zlib
+gcc version 10.2.0 (GCC) 
+COMPILER_PATH=/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/:/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/
+LIBRARY_PATH=/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/:/software/software/binutils/2.35-GCCcore-10.2.0/lib/../lib64/:/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/../lib64/:/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/../lib64/:/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/../lib64/:/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/../lib64/:/software/software/ncurses/6.2-GCCcore-10.2.0/lib/../lib64/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/software/software/binutils/2.35-GCCcore-10.2.0/lib/:/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/:/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/:/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/:/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/:/software/software/ncurses/6.2-GCCcore-10.2.0/lib/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_69750' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/collect2 -plugin /apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/liblto_plugin.so -plugin-opt=/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/lto-wrapper -plugin-opt=-fresolution=/local/tmp/ccjJkFOA.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_69750 /lib/../lib64/crt1.o /lib/../lib64/crti.o /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/crtbegin.o -L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0 -L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc -L/software/software/binutils/2.35-GCCcore-10.2.0/lib/../lib64 -L/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/../lib64 -L/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/../lib64 -L/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/../lib64 -L/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/../lib64 -L/software/software/ncurses/6.2-GCCcore-10.2.0/lib/../lib64 -L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/software/software/binutils/2.35-GCCcore-10.2.0/lib -L/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib -L/software/software/cURL/7.72.0-GCCcore-10.2.0/lib -L/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib -L/software/software/zlib/1.2.11-GCCcore-10.2.0/lib -L/software/software/ncurses/6.2-GCCcore-10.2.0/lib -L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../.. CMakeFiles/cmTC_69750.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/crtend.o /lib/../lib64/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_69750' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+gmake[1]: Leaving directory `/home/s3601072/BachelorProject/build/CMakeFiles/CMakeTmp'
+
+
+
+Parsed CXX implicit include dir info from above output: rv=done
+  found start of include info
+  found start of implicit include info
+    add: [/software/software/binutils/2.35-GCCcore-10.2.0/include]
+    add: [/software/software/libarchive/3.4.3-GCCcore-10.2.0/include]
+    add: [/software/software/cURL/7.72.0-GCCcore-10.2.0/include]
+    add: [/software/software/bzip2/1.0.8-GCCcore-10.2.0/include]
+    add: [/software/software/zlib/1.2.11-GCCcore-10.2.0/include]
+    add: [/software/software/ncurses/6.2-GCCcore-10.2.0/include]
+    add: [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0]
+    add: [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0/x86_64-pc-linux-gnu]
+    add: [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0/backward]
+    add: [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include]
+    add: [/software/software/GCCcore/10.2.0/include]
+    add: [/usr/include]
+  end of search list found
+  collapse include dir [/software/software/binutils/2.35-GCCcore-10.2.0/include] ==> [/software/software/binutils/2.35-GCCcore-10.2.0/include]
+  collapse include dir [/software/software/libarchive/3.4.3-GCCcore-10.2.0/include] ==> [/software/software/libarchive/3.4.3-GCCcore-10.2.0/include]
+  collapse include dir [/software/software/cURL/7.72.0-GCCcore-10.2.0/include] ==> [/software/software/cURL/7.72.0-GCCcore-10.2.0/include]
+  collapse include dir [/software/software/bzip2/1.0.8-GCCcore-10.2.0/include] ==> [/software/software/bzip2/1.0.8-GCCcore-10.2.0/include]
+  collapse include dir [/software/software/zlib/1.2.11-GCCcore-10.2.0/include] ==> [/software/software/zlib/1.2.11-GCCcore-10.2.0/include]
+  collapse include dir [/software/software/ncurses/6.2-GCCcore-10.2.0/include] ==> [/software/software/ncurses/6.2-GCCcore-10.2.0/include]
+  collapse include dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0] ==> [/apps/haswell/software/GCCcore/10.2.0/include/c++/10.2.0]
+  collapse include dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0/x86_64-pc-linux-gnu] ==> [/apps/haswell/software/GCCcore/10.2.0/include/c++/10.2.0/x86_64-pc-linux-gnu]
+  collapse include dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0/backward] ==> [/apps/haswell/software/GCCcore/10.2.0/include/c++/10.2.0/backward]
+  collapse include dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include] ==> [/apps/haswell/software/GCCcore/10.2.0/lib/gcc/x86_64-pc-linux-gnu/10.2.0/include]
+  collapse include dir [/software/software/GCCcore/10.2.0/include] ==> [/software/software/GCCcore/10.2.0/include]
+  collapse include dir [/usr/include] ==> [/usr/include]
+  implicit include dirs: [/software/software/binutils/2.35-GCCcore-10.2.0/include;/software/software/libarchive/3.4.3-GCCcore-10.2.0/include;/software/software/cURL/7.72.0-GCCcore-10.2.0/include;/software/software/bzip2/1.0.8-GCCcore-10.2.0/include;/software/software/zlib/1.2.11-GCCcore-10.2.0/include;/software/software/ncurses/6.2-GCCcore-10.2.0/include;/apps/haswell/software/GCCcore/10.2.0/include/c++/10.2.0;/apps/haswell/software/GCCcore/10.2.0/include/c++/10.2.0/x86_64-pc-linux-gnu;/apps/haswell/software/GCCcore/10.2.0/include/c++/10.2.0/backward;/apps/haswell/software/GCCcore/10.2.0/lib/gcc/x86_64-pc-linux-gnu/10.2.0/include;/software/software/GCCcore/10.2.0/include;/usr/include]
+
+
+Parsed CXX implicit link information from above output:
+  link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
+  ignore line: [Change Dir: /home/s3601072/BachelorProject/build/CMakeFiles/CMakeTmp]
+  ignore line: []
+  ignore line: [Run Build Command(s):/usr/bin/gmake cmTC_69750/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_69750.dir/build.make CMakeFiles/cmTC_69750.dir/build]
+  ignore line: [gmake[1]: Entering directory `/home/s3601072/BachelorProject/build/CMakeFiles/CMakeTmp']
+  ignore line: [Building CXX object CMakeFiles/cmTC_69750.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/software/software/GCCcore/10.2.0/bin/c++   -v -o CMakeFiles/cmTC_69750.dir/CMakeCXXCompilerABI.cpp.o -c /apps/haswell/software/CMake/3.18.4-GCCcore-10.2.0/share/cmake-3.18/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/software/software/GCCcore/10.2.0/bin/c++]
+  ignore line: [Target: x86_64-pc-linux-gnu]
+  ignore line: [Configured with: ../configure --enable-languages=c,c++,fortran --enable-lto --enable-checking=release --disable-multilib --enable-shared=yes --enable-static=yes --enable-threads=posix --enable-plugins --enable-gold=default --enable-ld --with-plugin-ld=ld.gold --prefix=/software/software/GCCcore/10.2.0 --with-local-prefix=/software/software/GCCcore/10.2.0 --enable-bootstrap --with-isl=/dev/shm/f115261/GCCcore/10.2.0/system-system/gcc-10.2.0/stage2_stuff --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [Supported LTO compression algorithms: zlib]
+  ignore line: [gcc version 10.2.0 (GCC) ]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_69750.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  ignore line: [ /apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/cc1plus -quiet -v -iprefix /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/ -D_GNU_SOURCE /apps/haswell/software/CMake/3.18.4-GCCcore-10.2.0/share/cmake-3.18/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpbase CMakeCXXCompilerABI.cpp -mtune=generic -march=x86-64 -auxbase-strip CMakeFiles/cmTC_69750.dir/CMakeCXXCompilerABI.cpp.o -version -o /local/tmp/ccWDtaQy.s]
+  ignore line: [GNU C++14 (GCC) version 10.2.0 (x86_64-pc-linux-gnu)]
+  ignore line: [	compiled by GNU C version 10.2.0  GMP version 6.2.0  MPFR version 4.1.0  MPC version 1.1.0  isl version isl-0.22.1-GMP]
+  ignore line: []
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [ignoring nonexistent directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include-fixed"]
+  ignore line: [ignoring nonexistent directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../x86_64-pc-linux-gnu/include"]
+  ignore line: [ignoring duplicate directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/../../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0"]
+  ignore line: [ignoring duplicate directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/../../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0/x86_64-pc-linux-gnu"]
+  ignore line: [ignoring duplicate directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/../../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0/backward"]
+  ignore line: [ignoring duplicate directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/../../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include"]
+  ignore line: [ignoring nonexistent directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/../../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include-fixed"]
+  ignore line: [ignoring nonexistent directory "/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/../../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../x86_64-pc-linux-gnu/include"]
+  ignore line: [#include "..." search starts here:]
+  ignore line: [#include <...> search starts here:]
+  ignore line: [ /software/software/binutils/2.35-GCCcore-10.2.0/include]
+  ignore line: [ /software/software/libarchive/3.4.3-GCCcore-10.2.0/include]
+  ignore line: [ /software/software/cURL/7.72.0-GCCcore-10.2.0/include]
+  ignore line: [ /software/software/bzip2/1.0.8-GCCcore-10.2.0/include]
+  ignore line: [ /software/software/zlib/1.2.11-GCCcore-10.2.0/include]
+  ignore line: [ /software/software/ncurses/6.2-GCCcore-10.2.0/include]
+  ignore line: [ /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0]
+  ignore line: [ /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0/x86_64-pc-linux-gnu]
+  ignore line: [ /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../include/c++/10.2.0/backward]
+  ignore line: [ /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/include]
+  ignore line: [ /software/software/GCCcore/10.2.0/include]
+  ignore line: [ /usr/include]
+  ignore line: [End of search list.]
+  ignore line: [GNU C++14 (GCC) version 10.2.0 (x86_64-pc-linux-gnu)]
+  ignore line: [	compiled by GNU C version 10.2.0  GMP version 6.2.0  MPFR version 4.1.0  MPC version 1.1.0  isl version isl-0.22.1-GMP]
+  ignore line: []
+  ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+  ignore line: [Compiler executable checksum: 1dfde1895b102f84abe6acccb207b0e8]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_69750.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  ignore line: [ as -v --64 -o CMakeFiles/cmTC_69750.dir/CMakeCXXCompilerABI.cpp.o /local/tmp/ccWDtaQy.s]
+  ignore line: [GNU assembler version 2.35 (x86_64-pc-linux-gnu) using BFD version (GNU Binutils) 2.35]
+  ignore line: [COMPILER_PATH=/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/:/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/]
+  ignore line: [LIBRARY_PATH=/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/:/software/software/binutils/2.35-GCCcore-10.2.0/lib/../lib64/:/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/../lib64/:/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/../lib64/:/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/../lib64/:/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/../lib64/:/software/software/ncurses/6.2-GCCcore-10.2.0/lib/../lib64/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/software/software/binutils/2.35-GCCcore-10.2.0/lib/:/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/:/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/:/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/:/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/:/software/software/ncurses/6.2-GCCcore-10.2.0/lib/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../:/lib/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'CMakeFiles/cmTC_69750.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  ignore line: [Linking CXX executable cmTC_69750]
+  ignore line: [/apps/haswell/software/CMake/3.18.4-GCCcore-10.2.0/bin/cmake -E cmake_link_script CMakeFiles/cmTC_69750.dir/link.txt --verbose=1]
+  ignore line: [/software/software/GCCcore/10.2.0/bin/c++  -v CMakeFiles/cmTC_69750.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_69750 ]
+  ignore line: [Using built-in specs.]
+  ignore line: [COLLECT_GCC=/software/software/GCCcore/10.2.0/bin/c++]
+  ignore line: [COLLECT_LTO_WRAPPER=/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/lto-wrapper]
+  ignore line: [Target: x86_64-pc-linux-gnu]
+  ignore line: [Configured with: ../configure --enable-languages=c,c++,fortran --enable-lto --enable-checking=release --disable-multilib --enable-shared=yes --enable-static=yes --enable-threads=posix --enable-plugins --enable-gold=default --enable-ld --with-plugin-ld=ld.gold --prefix=/software/software/GCCcore/10.2.0 --with-local-prefix=/software/software/GCCcore/10.2.0 --enable-bootstrap --with-isl=/dev/shm/f115261/GCCcore/10.2.0/system-system/gcc-10.2.0/stage2_stuff --build=x86_64-pc-linux-gnu --host=x86_64-pc-linux-gnu]
+  ignore line: [Thread model: posix]
+  ignore line: [Supported LTO compression algorithms: zlib]
+  ignore line: [gcc version 10.2.0 (GCC) ]
+  ignore line: [COMPILER_PATH=/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/:/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/]
+  ignore line: [LIBRARY_PATH=/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/:/software/software/binutils/2.35-GCCcore-10.2.0/lib/../lib64/:/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/../lib64/:/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/../lib64/:/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/../lib64/:/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/../lib64/:/software/software/ncurses/6.2-GCCcore-10.2.0/lib/../lib64/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib64/:/lib/../lib64/:/usr/lib/../lib64/:/software/software/binutils/2.35-GCCcore-10.2.0/lib/:/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/:/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/:/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/:/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/:/software/software/ncurses/6.2-GCCcore-10.2.0/lib/:/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../:/lib/:/usr/lib/]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-o' 'cmTC_69750' '-shared-libgcc' '-mtune=generic' '-march=x86-64']
+  link line: [ /apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/collect2 -plugin /apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/liblto_plugin.so -plugin-opt=/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/lto-wrapper -plugin-opt=-fresolution=/local/tmp/ccjJkFOA.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --eh-frame-hdr -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_69750 /lib/../lib64/crt1.o /lib/../lib64/crti.o /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/crtbegin.o -L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0 -L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc -L/software/software/binutils/2.35-GCCcore-10.2.0/lib/../lib64 -L/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/../lib64 -L/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/../lib64 -L/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/../lib64 -L/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/../lib64 -L/software/software/ncurses/6.2-GCCcore-10.2.0/lib/../lib64 -L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib64 -L/lib/../lib64 -L/usr/lib/../lib64 -L/software/software/binutils/2.35-GCCcore-10.2.0/lib -L/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib -L/software/software/cURL/7.72.0-GCCcore-10.2.0/lib -L/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib -L/software/software/zlib/1.2.11-GCCcore-10.2.0/lib -L/software/software/ncurses/6.2-GCCcore-10.2.0/lib -L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../.. CMakeFiles/cmTC_69750.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/crtend.o /lib/../lib64/crtn.o]
+    arg [/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/collect2] ==> ignore
+    arg [-plugin] ==> ignore
+    arg [/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/liblto_plugin.so] ==> ignore
+    arg [-plugin-opt=/apps/haswell/software/GCCcore/10.2.0/bin/../libexec/gcc/x86_64-pc-linux-gnu/10.2.0/lto-wrapper] ==> ignore
+    arg [-plugin-opt=-fresolution=/local/tmp/ccjJkFOA.res] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lc] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
+    arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+    arg [--eh-frame-hdr] ==> ignore
+    arg [-m] ==> ignore
+    arg [elf_x86_64] ==> ignore
+    arg [-dynamic-linker] ==> ignore
+    arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
+    arg [-o] ==> ignore
+    arg [cmTC_69750] ==> ignore
+    arg [/lib/../lib64/crt1.o] ==> ignore
+    arg [/lib/../lib64/crti.o] ==> ignore
+    arg [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/crtbegin.o] ==> ignore
+    arg [-L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0] ==> dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0]
+    arg [-L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc] ==> dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc]
+    arg [-L/software/software/binutils/2.35-GCCcore-10.2.0/lib/../lib64] ==> dir [/software/software/binutils/2.35-GCCcore-10.2.0/lib/../lib64]
+    arg [-L/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/../lib64] ==> dir [/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/../lib64]
+    arg [-L/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/../lib64] ==> dir [/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/../lib64]
+    arg [-L/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/../lib64] ==> dir [/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/../lib64]
+    arg [-L/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/../lib64] ==> dir [/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/../lib64]
+    arg [-L/software/software/ncurses/6.2-GCCcore-10.2.0/lib/../lib64] ==> dir [/software/software/ncurses/6.2-GCCcore-10.2.0/lib/../lib64]
+    arg [-L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib64] ==> dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib64]
+    arg [-L/lib/../lib64] ==> dir [/lib/../lib64]
+    arg [-L/usr/lib/../lib64] ==> dir [/usr/lib/../lib64]
+    arg [-L/software/software/binutils/2.35-GCCcore-10.2.0/lib] ==> dir [/software/software/binutils/2.35-GCCcore-10.2.0/lib]
+    arg [-L/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib] ==> dir [/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib]
+    arg [-L/software/software/cURL/7.72.0-GCCcore-10.2.0/lib] ==> dir [/software/software/cURL/7.72.0-GCCcore-10.2.0/lib]
+    arg [-L/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib] ==> dir [/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib]
+    arg [-L/software/software/zlib/1.2.11-GCCcore-10.2.0/lib] ==> dir [/software/software/zlib/1.2.11-GCCcore-10.2.0/lib]
+    arg [-L/software/software/ncurses/6.2-GCCcore-10.2.0/lib] ==> dir [/software/software/ncurses/6.2-GCCcore-10.2.0/lib]
+    arg [-L/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../..] ==> dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../..]
+    arg [CMakeFiles/cmTC_69750.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [-lstdc++] ==> lib [stdc++]
+    arg [-lm] ==> lib [m]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [-lc] ==> lib [c]
+    arg [-lgcc_s] ==> lib [gcc_s]
+    arg [-lgcc] ==> lib [gcc]
+    arg [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/crtend.o] ==> ignore
+    arg [/lib/../lib64/crtn.o] ==> ignore
+  collapse library dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0] ==> [/apps/haswell/software/GCCcore/10.2.0/lib/gcc/x86_64-pc-linux-gnu/10.2.0]
+  collapse library dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc] ==> [/apps/haswell/software/GCCcore/10.2.0/lib/gcc]
+  collapse library dir [/software/software/binutils/2.35-GCCcore-10.2.0/lib/../lib64] ==> [/software/software/binutils/2.35-GCCcore-10.2.0/lib64]
+  collapse library dir [/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib/../lib64] ==> [/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib64]
+  collapse library dir [/software/software/cURL/7.72.0-GCCcore-10.2.0/lib/../lib64] ==> [/software/software/cURL/7.72.0-GCCcore-10.2.0/lib64]
+  collapse library dir [/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib/../lib64] ==> [/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib64]
+  collapse library dir [/software/software/zlib/1.2.11-GCCcore-10.2.0/lib/../lib64] ==> [/software/software/zlib/1.2.11-GCCcore-10.2.0/lib64]
+  collapse library dir [/software/software/ncurses/6.2-GCCcore-10.2.0/lib/../lib64] ==> [/software/software/ncurses/6.2-GCCcore-10.2.0/lib64]
+  collapse library dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../../../lib64] ==> [/apps/haswell/software/GCCcore/10.2.0/lib64]
+  collapse library dir [/lib/../lib64] ==> [/lib64]
+  collapse library dir [/usr/lib/../lib64] ==> [/usr/lib64]
+  collapse library dir [/software/software/binutils/2.35-GCCcore-10.2.0/lib] ==> [/software/software/binutils/2.35-GCCcore-10.2.0/lib]
+  collapse library dir [/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib] ==> [/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib]
+  collapse library dir [/software/software/cURL/7.72.0-GCCcore-10.2.0/lib] ==> [/software/software/cURL/7.72.0-GCCcore-10.2.0/lib]
+  collapse library dir [/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib] ==> [/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib]
+  collapse library dir [/software/software/zlib/1.2.11-GCCcore-10.2.0/lib] ==> [/software/software/zlib/1.2.11-GCCcore-10.2.0/lib]
+  collapse library dir [/software/software/ncurses/6.2-GCCcore-10.2.0/lib] ==> [/software/software/ncurses/6.2-GCCcore-10.2.0/lib]
+  collapse library dir [/apps/haswell/software/GCCcore/10.2.0/bin/../lib/gcc/x86_64-pc-linux-gnu/10.2.0/../../..] ==> [/apps/haswell/software/GCCcore/10.2.0/lib]
+  implicit libs: [stdc++;m;gcc_s;gcc;c;gcc_s;gcc]
+  implicit dirs: [/apps/haswell/software/GCCcore/10.2.0/lib/gcc/x86_64-pc-linux-gnu/10.2.0;/apps/haswell/software/GCCcore/10.2.0/lib/gcc;/software/software/binutils/2.35-GCCcore-10.2.0/lib64;/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib64;/software/software/cURL/7.72.0-GCCcore-10.2.0/lib64;/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib64;/software/software/zlib/1.2.11-GCCcore-10.2.0/lib64;/software/software/ncurses/6.2-GCCcore-10.2.0/lib64;/apps/haswell/software/GCCcore/10.2.0/lib64;/lib64;/usr/lib64;/software/software/binutils/2.35-GCCcore-10.2.0/lib;/software/software/libarchive/3.4.3-GCCcore-10.2.0/lib;/software/software/cURL/7.72.0-GCCcore-10.2.0/lib;/software/software/bzip2/1.0.8-GCCcore-10.2.0/lib;/software/software/zlib/1.2.11-GCCcore-10.2.0/lib;/software/software/ncurses/6.2-GCCcore-10.2.0/lib;/apps/haswell/software/GCCcore/10.2.0/lib]
+  implicit fwks: []
+
+
+Performing C++ SOURCE FILE Test COMPILER_SUPPORTS_MARCH_NATIVE succeeded with the following output:
+Change Dir: /home/s3601072/BachelorProject/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/gmake cmTC_cad76/fast && /usr/bin/gmake  -f CMakeFiles/cmTC_cad76.dir/build.make CMakeFiles/cmTC_cad76.dir/build
+gmake[1]: Entering directory `/home/s3601072/BachelorProject/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_cad76.dir/src.cxx.o
+/software/software/GCCcore/10.2.0/bin/c++   -DCOMPILER_SUPPORTS_MARCH_NATIVE   -march=native -std=gnu++2a -o CMakeFiles/cmTC_cad76.dir/src.cxx.o -c /home/s3601072/BachelorProject/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_cad76
+/apps/haswell/software/CMake/3.18.4-GCCcore-10.2.0/bin/cmake -E cmake_link_script CMakeFiles/cmTC_cad76.dir/link.txt --verbose=1
+/software/software/GCCcore/10.2.0/bin/c++  -DCOMPILER_SUPPORTS_MARCH_NATIVE CMakeFiles/cmTC_cad76.dir/src.cxx.o -o cmTC_cad76 
+gmake[1]: Leaving directory `/home/s3601072/BachelorProject/build/CMakeFiles/CMakeTmp'
+
+
+Source file was:
+int main() { return 0; }

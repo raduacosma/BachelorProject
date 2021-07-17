@@ -1,0 +1,7 @@
+#!/bin/bash
+#SBATCH --ntasks=1
+#SBATCH --mem=200MB
+#SBATCH --time=29
+#SBATCH --partition=short
+
+srun ./BachelorProject $* 
