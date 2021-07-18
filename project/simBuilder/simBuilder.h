@@ -13,7 +13,6 @@ struct SimBuilder
     SimBuilder(size_t width, size_t height);
     SimBuilder() = default;
     SimBuilder &operator=(SimBuilder &&tmp);
-    //    void swap(SimBuilder &other);
     std::vector<std::vector<FloatVec4>> const &getFullMazeRepr();
     void updateCanvasStepSize(FloatVec2 stepSize);
     void updateCanvasBegPos(FloatVec2 pos);

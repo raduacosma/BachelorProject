@@ -42,7 +42,7 @@ class SimState
     std::deque<Position> randomFluctuations;
     float randomOpCoef;
 
-    // REWARDS TODO: decide on these
+    // REWARDS
     float d_outOfBoundsReward;
     float d_reachedGoalReward;
     float d_killedByOpponentReward;

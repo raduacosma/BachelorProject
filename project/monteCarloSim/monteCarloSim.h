@@ -28,7 +28,7 @@ class MonteCarloSim
 
     std::vector<Position> const &walls;
 
-    // REWARDS TODO: decide on these
+    // REWARDS
     float d_outOfBoundsReward;
     float d_reachedGoalReward;
     float d_killedByOpponentReward;
@@ -37,7 +37,6 @@ class MonteCarloSim
 
   public:
     MonteCarloSim(SimState const &simState);
-    // this also moves the agent
     std::tuple<float, SimResult> computeNextStateAndReward(Actions action, Actions opAction);
     Eigen::VectorXf getStateForAgent() const;
     Eigen::VectorXf getStateForOpponent() const;

@@ -5,7 +5,7 @@
 QERLearning::QERLearning(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
                          MLPParams opponentMLP, ExpReplayParams expReplayParams, size_t _nrEpisodes,
                          size_t pNrEpisodesToEpsilonZero, OpModellingType pOpModellingType, float pEpsilon,
-                         float pGamma) // TODO: check how size is passed
+                         float pGamma)
     : Agent(opTrackParams, agentMonteCarloParams, std::move(agentMLP), std::move(opponentMLP), _nrEpisodes,
             pNrEpisodesToEpsilonZero, pOpModellingType, pEpsilon, pGamma),
       targetMLP(mlp), cSwapPeriod(expReplayParams.cSwapPeriod), miniBatchSize(expReplayParams.miniBatchSize),
@@ -56,8 +56,6 @@ bool QERLearning::performOneStep()
         }
         else
             experiences[expCounter] = { action, reward, true, lastState, newState };
-
-        // lastState and lastAction will probably be handled by newEpisode so they should not matter
         ++expCounter;
         ++cCounter;
         return false;
@@ -68,9 +66,6 @@ bool QERLearning::performOneStep()
     }
     else
         experiences[expCounter] = { action, reward, false, lastState, newState };
-    // do I need lastState somewhere? Since learning rate is 1 it reduces in the equation and
-    // the backprop is already done on the deltas from lastState
-    // check if d_oldstate should be updated even if we can't continue
     lastState = newState;
     ++expCounter;
     ++cCounter;

@@ -44,10 +44,6 @@ void writeFullResults(std::unique_ptr<Agent> &agent)
     copy(trainLossPerEp.begin(), trainLossPerEp.end(), std::ostream_iterator<float>(trainLoss, "\n"));
     std::cout << "opponent prediction percentage: " << agent->getCorrectOpponentTypePredictionPercentage() << std::endl;
     std::cout << "nr of times killed by opponent: " << agent->getOpDeathPercentage() << std::endl;
-    //    std::ofstream opponentLoss{"results/opponentFirstEpLoss.txt"};
-    //    std::vector<float> const &opponentThisLoss = agent->getThisEpisodeLoss();
-    //    copy(opponentThisLoss.begin(), opponentThisLoss.end(),
-    //         std::ostream_iterator<float>(opponentLoss, "\n"));
 }
 
 void writeSummaryResults(std::unique_ptr<Agent> &agent, std::string const &fileName, size_t nrEpisodesToEpsilonZero, size_t numberOfEpisodes, long totalTime)
@@ -153,7 +149,6 @@ void runHeadless(std::string const &file)
     OpTrackParams opTrackParams = { .pValueThreshold = hs.pValueThreshold,
                                     .minHistorySize = hs.minHistorySize,
                                     .maxHistorySize = hs.maxHistorySize };
-    // could also use stack but meh, this way is more certain
     std::unique_ptr<Agent> agent;
     switch (hs.agentType)
     {

@@ -39,16 +39,8 @@ MLP::MLP(std::vector<size_t> _sizes, float _learningRate, float pRegParam, Activ
                                                            }));
         else
         {
-            //            std::normal_distribution<float> norm{ 0, 4.0f*std::sqrt(2.0f / (sizes[x]+sizes[y])) };
-            //            std::uniform_real_distribution<float>
-            //            uni{-4.0f*std::sqrt(6.0f/static_cast<float>(sizes[x]+sizes[y])),4.0f*std::sqrt(6.0f/static_cast<float>(sizes[x]+sizes[y]))};
             std::uniform_real_distribution<float> uni{ -1.0f / std::sqrt(static_cast<float>(sizes[x])),
                                                        1.0f / std::sqrt(static_cast<float>(sizes[x])) };
-
-            //            std::normal_distribution<float> norm{ 0, 1.0f / static_cast<float>(sizes[x]) };
-            //            std::uniform_real_distribution<float>
-            //            uni{-4.0f*std::sqrt(6.0f/static_cast<float>(sizes[x]+sizes[y])),4.0f*std::sqrt(6.0f/static_cast<float>(sizes[x]+sizes[y]))};
-
             weights.push_back(Eigen::MatrixXf::NullaryExpr(sizes[y], sizes[x],
                                                            [&]()
                                                            {
@@ -83,10 +75,10 @@ void MLP::randomizeWeights()
                                                       });
         else
         {
-            //            std::normal_distribution<float> norm{ 0, 1.0f / static_cast<float>(sizes[x]) };
+
             std::uniform_real_distribution<float> uni{
                 -1.0f / std::sqrt(static_cast<float>(sizes[x])), 1.0f / std::sqrt(static_cast<float>(sizes[x]))
-            }; //            std::normal_distribution<float> norm{ 0, std::sqrt(2.0f / (sizes[x]+sizes[y])) };
+            };
             weights[x] = Eigen::MatrixXf::NullaryExpr(sizes[y], sizes[x],
                                                       [&]()
                                                       {
@@ -129,10 +121,9 @@ Eigen::VectorXf MLP::predict(Eigen::VectorXf const &input)
         float expsSum = exps.sum();
         return exps / expsSum;
     }
-    //    throw std::runtime_error("Reached end of predict without returning");
 }
 float MLP::predictWithLoss(Eigen::VectorXf const &input, Eigen::VectorXf const &output)
-{ // TODO: check this function with MLP subproject
+{
     Eigen::VectorXf prediction = predict(input);
     return computeLoss(prediction, output);
 }
@@ -167,8 +158,6 @@ Eigen::VectorXf MLP::feedforward(Eigen::VectorXf const &input)
         currZs = weights[idx] * activations[idx] + biases[idx];
         activations[idx + 1] = currZs.unaryExpr(&sigmoid);
     }
-    //    std::cout<<"activations: "<<activations.size()<<std::endl;
-    //    std::cout<<"zs: "<<zs.size()<<std::endl;
     Eigen::VectorXf &currZs = zs[nrLayersBeforeActivation];
     currZs =
         weights[nrLayersBeforeActivation] * activations[nrLayersBeforeActivation] + biases[nrLayersBeforeActivation];
@@ -190,11 +179,10 @@ Eigen::VectorXf MLP::feedforward(Eigen::VectorXf const &input)
         activationRef = exps / expsSum;
         return activationRef;
     }
-    //    throw std::runtime_error("Reached end of feedforward without returning");
 }
 float MLP::update(Eigen::VectorXf const &output, MLPUpdateType updateType)
 {
-    Eigen::VectorXf delta; // maybe directly modify nablaBiases.back()?
+    Eigen::VectorXf delta;
     if (outputActivationFunction == ActivationFunction::SIGMOID)
     {
         delta = (activations.back() - output).cwiseProduct(zs.back().unaryExpr(&sigmoidPrime));
@@ -210,25 +198,17 @@ float MLP::update(Eigen::VectorXf const &output, MLPUpdateType updateType)
         delta = activations.back();
         delta(idx) -= 1.0f;
     }
-    // TODO: why is the loss after the delta? check in the future
     float loss;
     if (outputActivationFunction == ActivationFunction::SOFTMAX)
     {
         loss = -(output.array() * activations.back().array().log()).sum();
-        //        Eigen::VectorXf logActivations = activations.back().array().log();
-        //        loss = (-output.array() *  logActivations.array()-
-        //                (1 - output.array()) * (1 - logActivations.array()))
-        //                   .array()
-        //                   .sum(); // optimize this
     }
     else
     {
         loss = (activations.back() - output).array().square().mean();
     }
-    //    std::cout<<"loss: "<<loss<<std::endl;
     Eigen::VectorXf &biasesBack = nablaBiases.back();
     biasesBack = delta;
-    //    std::cout<<delta.transpose()<<std::endl;
     nablaWeights.back() = biasesBack * activations[nrLayers - 2].transpose();
     for (size_t l = 2; l != nrLayers; ++l)
     {

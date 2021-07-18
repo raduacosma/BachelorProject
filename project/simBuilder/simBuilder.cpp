@@ -11,8 +11,7 @@ SimBuilder::SimBuilder(size_t width, size_t height)
     generateStateRepresentation();
 }
 std::vector<std::vector<FloatVec4>> const &SimBuilder::getFullMazeRepr()
-{ // maybe have generateStateRepr here and remove the move constr along
-    // with refactoring main to use uniquePtr for SimBuilder?
+{
     generateStateRepresentation();
     vector<FloatVec4> row{ simSize.y, { 255, 255, 255, 255 } };
     vector<vector<FloatVec4>> repr{ simSize.x, row };
@@ -121,7 +120,7 @@ void SimBuilder::updateCanvasEndPos(FloatVec2 pos)
     canvasEndPos = pos;
 }
 void SimBuilder::generateStateRepresentation()
-{ // TODO: make this more like SimState
+{
     vector<SimObject> row{ simSize.y, SimObject::NONE };
     vector<vector<SimObject>> repr{ simSize.x, row };
 
@@ -129,7 +128,7 @@ void SimBuilder::generateStateRepresentation()
     // even though it should not. Therefore, initialize in the constructor
     // all the empty pos's to {height,width} and then check here if they
     // are indeed out of bounds. Since this is just for the GUI, performance
-    // does not really matter so it's fine
+    // does not really matter
     auto assignWithBoundCheck = [&](Position pos, SimObject tileState)
     {
         if (pos.x >= getWidth() && pos.y >= getHeight())

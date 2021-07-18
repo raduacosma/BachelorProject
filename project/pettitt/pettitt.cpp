@@ -13,7 +13,6 @@ std::tuple<double, double, int> Pettitt::testGivenK(std::vector<double> const &x
     std::vector<double> rank = ranks2(x, x2);
     std::vector<double> rankPartialSum;
     rankPartialSum.reserve(n);
-    // careful with 0 or 1 size arrays, but I guess that won't ever be the case
     rankPartialSum.push_back(rank[0]);
     for (size_t idx = 1; idx != n; ++idx)
     {
@@ -24,14 +23,9 @@ std::tuple<double, double, int> Pettitt::testGivenK(std::vector<double> const &x
         return 2 * rankPartialSum[x - 1] - x * (n + 1);
     };
     Eigen::ArrayXd Uk = k.unaryExpr(func);
-    // K will take into account 0 numbering, so this will be 9 with the one in R is 10
-    //    std::cout<<"begin: "<<std::endl;
-    //    std::cout<<"UK: "<<Uk.transpose()<<std::endl;
+    // K will take into account 0 numbering
     double U = std::abs(Uk[K]);
     double pval = std::min(1.0, 2 * std::exp((-6 * U * U) / (n * n * (n + 1))));
-    //    std::cout<<"pettitt: "<<pval<<std::endl;
-    //    std::cout<<"K: "<<K<<std::endl;
-    //    std::cout<<"end: "<<std::endl;
     return std::make_tuple(pval, U, K);
 }
 std::tuple<double, double, int> Pettitt::testGivenK(std::deque<double> const &x, std::vector<double> const &x2, int K)
@@ -44,7 +38,6 @@ std::tuple<double, double, int> Pettitt::testGivenK(std::deque<double> const &x,
     std::vector<double> rank = ranks2(x, x2);
     std::vector<double> rankPartialSum;
     rankPartialSum.reserve(n);
-    // careful with 0 or 1 size arrays, but I guess that won't ever be the case
     rankPartialSum.push_back(rank[0]);
     for (size_t idx = 1; idx != n; ++idx)
     {
@@ -55,14 +48,9 @@ std::tuple<double, double, int> Pettitt::testGivenK(std::deque<double> const &x,
         return 2 * rankPartialSum[x - 1] - x * (n + 1);
     };
     Eigen::ArrayXd Uk = k.unaryExpr(func);
-    // K will take into account 0 numbering, so this will be 9 with the one in R is 10
-    //    std::cout<<"begin: "<<std::endl;
-    //    std::cout<<"UK: "<<Uk.transpose()<<std::endl;
+    // K will take into account 0 numbering
     double U = std::abs(Uk[K]);
     double pval = std::min(1.0, 2 * std::exp((-6 * U * U) / (n * n * (n + 1))));
-    //    std::cout<<"pettitt: "<<pval<<std::endl;
-    //    std::cout<<"K: "<<K<<std::endl;
-    //    std::cout<<"end: "<<std::endl;
     return std::make_tuple(pval, U, K);
 }
 std::tuple<double, double, int> Pettitt::test2(std::vector<double> const &x, std::vector<double> const &x2)
@@ -75,7 +63,6 @@ std::tuple<double, double, int> Pettitt::test2(std::vector<double> const &x, std
     std::vector<double> rank = ranks2(x, x2);
     std::vector<double> rankPartialSum;
     rankPartialSum.reserve(n);
-    // careful with 0 or 1 size arrays, but I guess that won't ever be the case
     rankPartialSum.push_back(rank[0]);
     for (size_t idx = 1; idx != n; ++idx)
     {
@@ -86,14 +73,9 @@ std::tuple<double, double, int> Pettitt::test2(std::vector<double> const &x, std
         return 2 * rankPartialSum[x - 1] - x * (n + 1);
     };
     Eigen::ArrayXd Uk = k.unaryExpr(func);
-    int K; // K will take into account 0 numbering, so this will be 9 with the one in R is 10
-           //    std::cout<<"begin: "<<std::endl;
-           //    std::cout<<"UK: "<<Uk.transpose()<<std::endl;
+    int K; // K will take into account 0 numbering
     double U = Uk.abs().maxCoeff(&K);
     double pval = std::min(1.0, 2 * std::exp((-6 * U * U) / (n * n * (n + 1))));
-    //    std::cout<<"pettitt: "<<pval<<std::endl;
-    //    std::cout<<"K: "<<K<<std::endl;
-    //    std::cout<<"end: "<<std::endl;
     return std::make_tuple(pval, U, K);
 }
 std::tuple<double, double, int> Pettitt::test2(std::deque<double> const &x, std::vector<double> const &x2)
@@ -106,7 +88,6 @@ std::tuple<double, double, int> Pettitt::test2(std::deque<double> const &x, std:
     std::vector<double> rank = ranks2(x, x2);
     std::vector<double> rankPartialSum;
     rankPartialSum.reserve(n);
-    // careful with 0 or 1 size arrays, but I guess that won't ever be the case
     rankPartialSum.push_back(rank[0]);
     for (size_t idx = 1; idx != n; ++idx)
     {
@@ -117,14 +98,9 @@ std::tuple<double, double, int> Pettitt::test2(std::deque<double> const &x, std:
         return 2 * rankPartialSum[x - 1] - x * (n + 1);
     };
     Eigen::ArrayXd Uk = k.unaryExpr(func);
-    int K; // K will take into account 0 numbering, so this will be 9 with the one in R is 10
-           //    std::cout<<"begin: "<<std::endl;
-           //    std::cout<<"UK: "<<Uk.transpose()<<std::endl;
+    int K; // K will take into account 0 numbering
     double U = Uk.abs().maxCoeff(&K);
     double pval = std::min(1.0, 2 * std::exp((-6 * U * U) / (n * n * (n + 1))));
-    //    std::cout<<"pettitt: "<<pval<<std::endl;
-    //    std::cout<<"K: "<<K<<std::endl;
-    //    std::cout<<"end: "<<std::endl;
     return std::make_tuple(pval, U, K);
 }
 // pval, U, K in that order
@@ -138,7 +114,6 @@ std::tuple<double, double, int> Pettitt::test(std::vector<double> const &x)
     std::vector<double> rank = ranks(x);
     std::vector<double> rankPartialSum;
     rankPartialSum.reserve(n);
-    // careful with 0 or 1 size arrays, but I guess that won't ever be the case
     rankPartialSum.push_back(rank[0]);
     for (size_t idx = 1; idx != n; ++idx)
     {
@@ -149,7 +124,7 @@ std::tuple<double, double, int> Pettitt::test(std::vector<double> const &x)
         return 2 * rankPartialSum[x - 1] - x * (n + 1);
     };
     Eigen::ArrayXd Uk = k.unaryExpr(func);
-    size_t K; // K will take into account 0 numbering, so this will be 9 with the one in R is 10
+    size_t K; // K will take into account 0 numbering
     double U = Uk.abs().maxCoeff(&K);
     double pval = std::min(1.0, 2 * std::exp((-6 * U * U) / (n * n * (n + 1))));
     return std::make_tuple(pval, U, K);

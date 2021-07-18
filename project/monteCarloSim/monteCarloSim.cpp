@@ -17,10 +17,8 @@ MonteCarloSim::MonteCarloSim(SimState const &simState)
       d_normalReward(simState.d_normalReward), opponentTrace(simState.currOpTrace)
 {
 }
-// constructor from MonteCarloSim
 Position MonteCarloSim::computeNewPos(Actions currAction, Position pos)
 {
-    // TODO: decide if x and y start from lower or higher should be fine now
     switch (currAction)
     {
         case Actions::UP:
@@ -32,7 +30,7 @@ Position MonteCarloSim::computeNewPos(Actions currAction, Position pos)
         case Actions::RIGHT:
             return { pos.x + 1, pos.y };
     }
-    // should throw something but meh
+    // should never reach this
     return { pos.x, pos.y };
 }
 
@@ -40,8 +38,6 @@ tuple<float, SimResult> MonteCarloSim::computeNextStateAndReward(Actions action,
 {
     updateOpPos(opAction);
     auto [reward, canContinue] = updateAgentPos(action);
-    // make sure this and hash should be updated before opponent ?? what is this
-
     return make_tuple(reward, canContinue);
 }
 void MonteCarloSim::updateOpPos(Actions opAction)
@@ -68,8 +64,6 @@ void MonteCarloSim::updateOpPos(Actions opAction)
         if (futurePos == tracePos)
             return;
     }
-
-    // check walls and stuff  ??
     if (opponentTrace.size() > traceSize)
     {
         opponentTrace.pop_front();
@@ -77,9 +71,7 @@ void MonteCarloSim::updateOpPos(Actions opAction)
     opponentTrace.push_back(futurePos);
 }
 Eigen::VectorXf MonteCarloSim::getStateForAgent() const
-{ // should the goal really be a vision grid?
-    // also, everywhere the agent center is included for avoiding the performance cost
-    // of the if and supposedly being better for 2D representations but debatable
+{
     size_t offsetForGoal = agentStateSize * 2;
     Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize * 2 + 4);
     auto applyToArray = [&](Position const &pos, size_t offset)
@@ -121,14 +113,10 @@ Eigen::VectorXf MonteCarloSim::getStateForAgent() const
         agentGrid[offsetForGoal + 2] = 0;
         agentGrid[offsetForGoal + 3] = yDiff;
     }
-    //    agentGrid[offsetForGoal] = static_cast<int>(goalPos.x - agentPos.x) / 20.0f;
-    //    agentGrid[offsetForGoal + 1] = static_cast<int>(goalPos.y - agentPos.y) / 20.0f;
     return agentGrid;
 }
 Eigen::VectorXf MonteCarloSim::getStateForOpponent() const
-{ // should the goal really be a vision grid?
-    // also, everywhere the agent center is included for avoiding the performance cost
-    // of the if and supposedly being better for 2D representations but debatable
+{
     Position currPos = opponentTrace.back();
     Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(opponentStateSize * 3);
     auto applyToArray = [&](Position const &pos, size_t offset)
@@ -158,11 +146,11 @@ pair<float, SimResult> MonteCarloSim::updateAgentPos(Actions action)
     //    float reward = abs(static_cast<int>(agentPos.x - goalPos.x))+abs(static_cast<int>(agentPos.y - goalPos.y));
     if (futurePos.x < 0 or futurePos.x >= simSize.x or futurePos.y < 0 or futurePos.y >= simSize.y)
     {
-        return make_pair(d_outOfBoundsReward, SimResult::CONTINUE); // false means end episode
+        return make_pair(d_outOfBoundsReward, SimResult::CONTINUE);
     }
     if (futurePos == goalPos)
     {
-        agentPos = futurePos; // should it go over the goal? probably does not matter at this point
+        agentPos = futurePos;
         return make_pair(d_reachedGoalReward, SimResult::REACHED_GOAL);
     }
     for (auto const &wall : walls)
@@ -180,7 +168,6 @@ pair<float, SimResult> MonteCarloSim::updateAgentPos(Actions action)
         }
     }
 
-    // check walls and stuff ??
     agentPos = futurePos;
     return make_pair(d_normalReward, SimResult::CONTINUE);
 }

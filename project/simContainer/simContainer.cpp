@@ -30,12 +30,9 @@ bool SimContainer::nextLevel()
     ++currSimState;
     if (currSimState == simStates.size())
     {
-        //        std::shuffle(simStates.begin(),simStates.end(),globalRng.getRngEngine());
         currSimState = 0;
-        //        simStates[currSimState].resetForNextEpisode();
         return false; // no more levels
     }
-    //    simStates[currSimState].resetForNextEpisode();
     return true;
 }
 
@@ -43,7 +40,6 @@ std::tuple<float, bool> SimContainer::computeNextStateAndReward(Actions action)
 {
     auto [reward, continueStatus] = simStates[currSimState].computeNextStateAndReward(action);
     lastOpponentAction = simStates[currSimState].getLastOpponentAction();
-    // should these really be before the level is changed?
     lastOpponentState = simStates[currSimState].getStateForOpponent();
     lastSwitchedLevel = false;
     bool canContinue = true;
@@ -64,12 +60,9 @@ std::tuple<float, bool> SimContainer::computeNextStateAndReward(Actions action)
                 ++episodeCount;
             }
             simStates[currSimState].resetForNextEpisode();
-//            cout << "reached goal" << endl;
             lastSwitchedLevel = true;
-            //            agent->maze(this);
             break;
         case SimResult::KILLED_BY_OPPONENT:
-//            cout << "hit opponent" << endl;
             canContinue = false;
             resetNextEpisode();
             break;
@@ -81,7 +74,6 @@ void SimContainer::resetNextEpisode()
 {
     goToBeginning();
     simStates[currSimState].resetForNextEpisode();
-    //            agent->maze(this); // needed? since everything goes through simContainer probably not
     ++episodeCount;
     lastSwitchedLevel = true;
 }

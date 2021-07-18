@@ -5,12 +5,12 @@
 #include <iostream>
 #include <random>
 #include <tuple>
-// TODO: check out monte carlo estimates for target Q-values
+
 using namespace std;
 Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
              MLPParams opponentMLP, size_t _nrEpisodes, size_t pNrEpisodesToEpsilonZero,
              OpModellingType pOpModellingType, float pEpsilon,
-             float pGamma) // TODO: check how size is passed
+             float pGamma)
     : opTrack(opTrackParams.pValueThreshold, opTrackParams.minHistorySize, opTrackParams.maxHistorySize),
       nrEpisodes(_nrEpisodes), nrEpisodesToEpsilonZero(pNrEpisodesToEpsilonZero), rewards(vector<float>(_nrEpisodes)),
       mlp(agentMLP.sizes, agentMLP.learningRate, agentMLP.regParam, agentMLP.outputActivationFunc,
@@ -33,8 +33,6 @@ Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloP
     opponentCorrectPredictionPercentage.reserve(nrEpisodes);
     thisEpisodeLoss.reserve(nrEpisodes);
     learningLosses.reserve(nrEpisodes);
-//    predictedOpponentType.reserve(nrEpisodes*maze->getNrOpponents());
-//    actualOpponentType.reserve(nrEpisodes*maze->getNrOpponents());
 }
 bool Agent::performOneStep()
 {
@@ -42,19 +40,12 @@ bool Agent::performOneStep()
 }
 void Agent::run()
 {
-    // initialize Q values? They are set to 0 in stateSpaceSize and Marco's
-    // slides say initialize "arbitrarily" while the book says terminal states
-    // should be 0, so I guess initializing them all to 0 could be fine?
-
-    // tracking stuff? avg rewards etc etc etc
     runReward = 0;
     float initialEpsilon = epsilon;
     float lastEpsilon = 0;
     float killedByOpponentReward = maze->getCurrentLevel().killedByOpponentReward();
     for (size_t nrEpisode = 0; nrEpisode != nrEpisodes; ++nrEpisode)
     {
-//        std::cout << epsilon << std::endl;
-        // d_oldstate was modified from Maze so it's fine, anything else?
         newEpisode();
         currentEpisodeOpLoss = 0;
         currentEpisodeAgentLoss = 0;
@@ -64,7 +55,6 @@ void Agent::run()
         size_t stepCount = 0;
         float totalReward = 0;
         initOpponentMethod();
-        //        thisEpisodeLoss = std::vector<float>();  // this is for the old loss at switch stuff
         while (true)
         {
             ++stepCount;
@@ -88,27 +78,15 @@ void Agent::run()
                 initOpponentMethod();
             }
         }
-//        std::cout << "totalReward: " << totalReward << std::endl;
-//        std::cout << opList.size() << std::endl;
         learningLosses.push_back(currentEpisodeAgentLoss / stepCount);
-        //        if(nrEpisode%1000==0)
-        //        {
-        //            std::ofstream trainLoss{"results/trainLoss2.txt"};
-        //            copy(learningLosses.begin(), learningLosses.end(),
-        //                 std::ostream_iterator<float>(trainLoss, "\n"));
-        //        }
-
         opponentPredictionLosses.push_back(currentEpisodeOpLoss / stepCount);
         opponentCorrectPredictionPercentage.push_back(static_cast<float>(currentEpisodeCorrectPredictions) / stepCount);
         opponentFoundCorrectPredictionPercentage.push_back(static_cast<float>(foundCurrentEpisodeCorrectPredictions)/countFoundPredictionsCurrentEpisode);
-//        std::cout<<"op predictions: "<<static_cast<float>(currentEpisodeCorrectPredictions) / stepCount<<std::endl;
-//        std::cout<<static_cast<float>(correctOpCurrentEpisode) / totalPredOpCurrentEpisode<<std::endl;
         runReward += totalReward;
         rewards[nrEpisode] = totalReward;
         if (epsilon > lastEpsilon)
             epsilon -= (initialEpsilon - lastEpsilon) / nrEpisodesToEpsilonZero;
     }
-    // any cleanup?
 }
 void Agent::handleOpponentAction()
 {
@@ -119,7 +97,7 @@ void Agent::handleOpponentAction()
             opPredict(&OpTrack::normalOpTracking);
             break;
         case OpModellingType::KOLSMIR:
-            opPredictInterLoss(&OpTrack::kolsmirOpTracking); // TODO: handle level change in init
+            opPredictInterLoss(&OpTrack::kolsmirOpTracking);
             break;
         case OpModellingType::BADLOSSPETTITT:
             opPredictInterLoss(&OpTrack::pettittOpTracking);
@@ -130,15 +108,10 @@ void Agent::handleOpponentAction()
     }
 }
 void Agent::initOpponentMethod()
-{ // same as a bit below? weird actually since it returns after might work
-    // getStateForOpponent might be useless at this point
-    // actually this is probably also fine since this is after a level switch I guess,
-    // since opponentNotInit is set to true after the action is processed
+{
     lastOpponentState = maze->getCurrentStateForOpponent();
     for (auto &item : opLosses)
         item = 0.0f;
-//    if(not opTrack.isFoundOpModel())
-//        currOp = opList.size() - 1;
     switch (opModellingType)
     {
         case OpModellingType::NEWEVERYTIME:
@@ -158,28 +131,24 @@ void Agent::initOpponentMethod()
     }
 }
 void Agent::opPredict(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf const &, Eigen::VectorXf const &, float))
-{ // TODO: check that level switching works properly
+{
     Eigen::VectorXf newOpponentState = maze->getStateForOpponent();
     size_t newOpponentAction = maze->getLastOpponentAction();
     Eigen::VectorXf opponentActionTarget = Eigen::VectorXf::Zero(4);
     opponentActionTarget(static_cast<size_t>(newOpponentAction)) = 1.0f;
     size_t opponentActionIdx;
     opList[currOp].feedforward(lastOpponentState).maxCoeff(&opponentActionIdx);
-    //    std::cout<<opponentActionIdx<<" "<<newOpponentAction<<std::endl;
     if (newOpponentAction == opponentActionIdx)
         ++currentEpisodeCorrectPredictions;
     float currentLoss = opList[currOp].update(opponentActionTarget);
-    // TODO: Be careful with end of episode and reset and such
     currentEpisodeOpLoss += currentLoss;
-    //    std::cout<<"Op loss: "<<currentLoss<<std::endl;
     (opTrack.*tracking)(*this, lastOpponentState, opponentActionTarget, currentLoss);
-    //    thisEpisodeLoss.push_back(currentLoss); // TODO: only turn this on when needed
     lastOpponentState = newOpponentState;
 }
 
 void Agent::opPredictInterLoss(void (OpTrack::*tracking)(Agent &agent, Eigen::VectorXf const &, Eigen::VectorXf const &,
                                                          float))
-{ // TODO: check that level switching works properly
+{
     Eigen::VectorXf newOpponentState = maze->getStateForOpponent();
     size_t newOpponentAction = maze->getLastOpponentAction();
     Eigen::VectorXf opponentActionTarget = Eigen::VectorXf::Zero(4);
@@ -187,7 +156,6 @@ void Agent::opPredictInterLoss(void (OpTrack::*tracking)(Agent &agent, Eigen::Ve
     Eigen::VectorXf currPrediction = opList[currOp].predict(lastOpponentState);
     size_t opponentActionIdx;
     currPrediction.maxCoeff(&opponentActionIdx);
-    //    std::cout<<opponentActionIdx<<" "<<newOpponentAction<<std::endl;
     if (newOpponentAction == opponentActionIdx)
     {
         ++currentEpisodeCorrectPredictions;
@@ -195,8 +163,6 @@ void Agent::opPredictInterLoss(void (OpTrack::*tracking)(Agent &agent, Eigen::Ve
             ++foundCurrentEpisodeCorrectPredictions;
     }
     float currentLoss = opList[currOp].computeLoss(currPrediction, opponentActionTarget);
-    // TODO: Be careful with end of episode and reset and such
-    // this is also wrong but since the train loss metric overall is kind of useless for these methods meh
     currentEpisodeOpLoss += currentLoss;
     size_t currIdx = currOp;
     if (not opTrack.isFoundOpModel())
@@ -219,17 +185,13 @@ void Agent::opPredictInterLoss(void (OpTrack::*tracking)(Agent &agent, Eigen::Ve
     {
         ++countFoundPredictionsCurrentEpisode;
     }
-    //    std::cout<<"Op loss: "<<currentLoss<<std::endl;
     opList[currOp].train(lastOpponentState, opponentActionTarget);
-    // currentLoss here is bad since it should be the train loss on currOp, but since that is used for old pettitt
-    // I'll leave it like this
+    // currentLoss here is bad since it should be the train loss on currOp, but it was only used for old pettitt which is not used anymore
     (opTrack.*tracking)(*this, lastOpponentState, opponentActionTarget, currentLoss);
-    //    thisEpisodeLoss.push_back(currentLoss); // TODO: only turn this on when needed
     if (not opTrack.isFoundOpModel())
         currOp = currIdx;
     lastOpponentState = newOpponentState;
 }
-// if I pass an agentState here it should already be the current state in maze that I will get anyways
 float Agent::MonteCarloRollout(size_t action)
 {
     auto &rngEngine = globalRng.getRngEngine();
@@ -250,8 +212,6 @@ float Agent::MonteCarloRollout(size_t action)
             std::discrete_distribution<> distr({ opProbs[0], opProbs[1], opProbs[2], opProbs[3] });
             opAction = distr(rngEngine);
         }
-
-        // always call updateOpPos before computeNextState and getting the state
         auto [reward, canContinue] =
             copyMaze.computeNextStateAndReward(static_cast<Actions>(action), static_cast<Actions>(opAction));
         rolloutReward += reward;
@@ -275,7 +235,7 @@ float Agent::MonteCarloRollout(size_t action)
                 }
                 size_t agentAction;
                 float lastStateVal = mlp.predict(copyMaze.getStateForAgent())
-                    .maxCoeff(&agentAction); // this and last if should have the same agent state one call to the other
+                    .maxCoeff(&agentAction);
                 auto [innerReward, innerCanContinue] = copyMaze.computeNextStateAndReward(
                     static_cast<Actions>(agentAction), static_cast<Actions>(innerOpAction));
                 rolloutReward += gammaVals[i] * innerReward;
@@ -291,7 +251,7 @@ float Agent::MonteCarloRollout(size_t action)
             }
         }
         else if (canContinue == SimResult::CONTINUE and
-                 maxNrSteps == 0) // 1 or 0 here? since maxNrSteps corresponds to the while
+                 maxNrSteps == 0)
         {
             rolloutReward += mlp.predict(copyMaze.getStateForAgent()).maxCoeff();
         }
@@ -317,7 +277,6 @@ size_t Agent::actionWithQ(Eigen::VectorXf const &qVals) const
             if (qVals[idx] == maxVal)
                 maxIdxs.push_back(idx);
         choice = maxIdxs[globalRng.getUniReal01() * maxIdxs.size()];
-        //        qVals.maxCoeff(&choice);
     }
 
     return choice;
@@ -333,7 +292,6 @@ void Agent::newEpisode()
 {
     lastState = maze->getStateForAgent();
     lastOpponentState = maze->getStateForOpponent();
-    // Some algorithms require this. Empty for the others.
 }
 
 Agent::~Agent()

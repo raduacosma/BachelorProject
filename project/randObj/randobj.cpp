@@ -1,5 +1,5 @@
 #include "randobj.h"
-// TODO: make the limits for distrs configurable
+
 RandObj::RandObj(float minMLP, float maxMLP, int expReplaySize)
     : rngEngine(std::random_device{}()), uniReal01(0.0, 1.0), randomInitMLP(minMLP, maxMLP),
       expReplayIdx(0, expReplaySize - 1)

@@ -31,7 +31,7 @@ class SimContainer
     size_t getEpisodeCount() const;
 
   public:
-    SimContainer() = default; // needed? probably not since I removed those move stuff and rely on unique_pt
+    SimContainer() = default;
     SimContainer(std::string const &filename, Agent *agentParam, Rewards rewards, SimStateParams simStateParams);
     SimState &getCurrentLevel();
     Eigen::VectorXf getStateForAgent() const;
@@ -61,10 +61,9 @@ inline size_t SimContainer::getLastOpponentAction() const
 inline void SimContainer::goToBeginning()
 {
     currSimState = 0;
-    //    simStates[currSimState].resetForNextEpisode();
 }
 inline Eigen::VectorXf SimContainer::getStateForAgent() const
-{ // TODO: check that this does not get messed up by level switching
+{
     return simStates[currSimState].getStateForAgent();
 }
 inline size_t SimContainer::getCurrSimState() const

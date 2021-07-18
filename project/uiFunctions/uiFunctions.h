@@ -46,9 +46,8 @@ void drawGameState(StateRepr &simState)
                  ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
                      ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar |
                      ImGuiWindowFlags_NoScrollWithMouse);
-    ImVec2 canvas_p0 = ImGui::GetCursorScreenPos(); // ImDrawList API uses
-    // screen coordinates!
-    ImVec2 canvas_sz = ImGui::GetContentRegionAvail(); // Resize canvas to what's available
+    ImVec2 canvas_p0 = ImGui::GetCursorScreenPos();
+    ImVec2 canvas_sz = ImGui::GetContentRegionAvail();
     if (canvas_sz.x < 50.0f)
         canvas_sz.x = 50.0f;
     if (canvas_sz.y < 50.0f)

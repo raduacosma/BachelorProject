@@ -55,13 +55,10 @@ SimState::SimState(std::string const &filename, Rewards rewards, SimStateParams 
     {
         walls.push_back({ wallsx, wallsy });
     }
-
-    //    sendNrStatesToAgent();
     resetForNextEpisode();
 }
 Position SimState::computeNewPos(Actions currAction, Position pos)
 {
-    // TODO: decide if x and y start from lower or higher should be fine now
     switch (currAction)
     {
         case Actions::UP:
@@ -73,12 +70,10 @@ Position SimState::computeNewPos(Actions currAction, Position pos)
         case Actions::RIGHT:
             return { pos.x + 1, pos.y };
     }
-    // should throw something but meh
     return { pos.x, pos.y };
 }
 Position SimState::computeNewAgentPos(Actions agentAction)
 {
-    // TODO: decide if x and y start from lower or higher
     switch (agentAction)
     {
         case Actions::UP:
@@ -90,7 +85,6 @@ Position SimState::computeNewAgentPos(Actions agentAction)
         case Actions::RIGHT:
             return { agentPos.x + 1, agentPos.y };
     }
-    // should throw something but meh
     return { agentPos.x, agentPos.y };
 }
 
@@ -98,8 +92,6 @@ tuple<float, SimResult> SimState::computeNextStateAndReward(Actions action)
 {
     updateOpponentPos();
     auto [reward, canContinue] = updateAgentPos(action);
-    // make sure this and hash should be updated before opponent ?? what is this
-
     return make_tuple(reward, canContinue);
 }
 void SimState::updateOpponentPos()
@@ -142,7 +134,6 @@ Actions SimState::computeDirection(Position const &newPos, Position const &lastP
         return Actions::UP;
     else if (yDiff > 0)
         return Actions::DOWN;
-    // this should never be reached, should throw something but meh
     return Actions::DOWN;
 }
 void SimState::createRandomFluctuations(Position const &newPos)
@@ -188,10 +179,7 @@ void SimState::createRandomFluctuations(Position const &newPos)
 }
 
 Eigen::VectorXf SimState::getStateForAgent() const
-{ // should the goal really be a vision grid?
-    // also, everywhere the agent center is included for avoiding the performance cost
-    // of the if and supposedly being better for 2D representations but debatable
-    // TODO: maybe make the goal/non-goal configurable
+{
     size_t offsetForGoal = agentStateSize * 2;
     Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(agentStateSize * 2 + 4);
     auto applyToArray = [&](Position const &pos, size_t offset)
@@ -234,15 +222,10 @@ Eigen::VectorXf SimState::getStateForAgent() const
         agentGrid[offsetForGoal + 2] = 0;
         agentGrid[offsetForGoal + 3] = yDiff;
     }
-    //    std::cout<<agentGrid[offsetForGoal]<<" "<<agentGrid[offsetForGoal+1]<<" "<<agentGrid[offsetForGoal+2]<<"
-    //    "<<agentGrid[offsetForGoal+3]<<std::endl; agentGrid[offsetForGoal] = static_cast<int>(goalPos.x - agentPos.x)
-    //    / 20.0f; agentGrid[offsetForGoal + 1] = static_cast<int>(goalPos.y - agentPos.y) / 20.0f;
     return agentGrid;
 }
 Eigen::VectorXf SimState::getStateForOpponent() const
-{ // should the goal really be a vision grid?
-    // also, everywhere the agent center is included for avoiding the performance cost
-    // of the if and supposedly being better for 2D representations but debatable
+{
     Eigen::VectorXf agentGrid = Eigen::VectorXf::Zero(opponentStateSize * 3);
     Position opPosNow = currOpTrace.back();
     auto applyToArray = [&](Position const &pos, size_t offset)
@@ -266,17 +249,17 @@ Eigen::VectorXf SimState::getStateForOpponent() const
 }
 void SimState::resetAgentPos()
 {
-        std::uniform_int_distribution<> distr{ -3, 3 }; // hardcoded but no need for tweaks
+        std::uniform_int_distribution<> distr{ -3, 3 };
         auto &rngEngine = globalRng.getRngEngine();
         agentPos = { initialAgentPos.x, initialAgentPos.y + distr(rngEngine) };
 //    agentPos = initialAgentPos;
 }
 
 void SimState::resetForNextEpisode()
-{ // TODO: make cache this distr in globalrng
+{
     std::uniform_int_distribution<> distr(0, opponentTrace.size() - 1);
     currOpPosIdx = distr(globalRng.getRngEngine());
-    size_t opLength = traceSize + 1; // replace with trace size
+    size_t opLength = traceSize + 1;
     // be careful, we can't do the >-1 check due to size_t and this should
     // stop after 0 but if something is wrong good to check this
     randomFluctuations.resize(0);
@@ -291,14 +274,11 @@ void SimState::resetForNextEpisode()
         currOpTrace.push_front(opponentTrace[idx]);
         --opLength;
     }
-    // reset the state but needs to feed back in the cycle I guess
     resetAgentPos();
 }
 bool SimState::checkPositionForOpponent(Position const &futurePos)
 {
     //    float reward = abs(static_cast<int>(agentPos.x - goalPos.x))+abs(static_cast<int>(agentPos.y - goalPos.y));
-    // TODO: the check below 0 is useless since these are size_ts, but since it will overflow it's probably fine
-    // just keep it in mind
     if (futurePos.x < 0 or futurePos.x >= simSize.x or futurePos.y < 0 or futurePos.y >= simSize.y)
     {
         return false;
@@ -314,7 +294,6 @@ bool SimState::checkPositionForOpponent(Position const &futurePos)
             return false;
         }
     }
-    // TODO: if ever opponent paths overlap, this and other things like it will need to be modified
     for (auto const &tracePos : opponentTrace)
     {
         if (futurePos == tracePos)
@@ -333,7 +312,7 @@ pair<float, SimResult> SimState::updateAgentPos(Actions action)
     //    float reward = abs(static_cast<int>(agentPos.x - goalPos.x))+abs(static_cast<int>(agentPos.y - goalPos.y));
     if (futurePos.x < 0 or futurePos.x >= simSize.x or futurePos.y < 0 or futurePos.y >= simSize.y)
     {
-        return make_pair(d_outOfBoundsReward, SimResult::CONTINUE); // false means end episode
+        return make_pair(d_outOfBoundsReward, SimResult::CONTINUE);
     }
     if (futurePos == goalPos)
     {
@@ -354,7 +333,6 @@ pair<float, SimResult> SimState::updateAgentPos(Actions action)
             return make_pair(d_killedByOpponentReward, SimResult::KILLED_BY_OPPONENT);
         }
     }
-    // check walls and stuff
     agentPos = futurePos;
     return make_pair(d_normalReward, SimResult::CONTINUE);
 }
@@ -374,7 +352,7 @@ void SimState::generateStateRepresentation()
     // even though it should not. Therefore, initialize in the constructor
     // all the empty pos's to {height,width} and then check here if they
     // are indeed out of bounds. Since this is just for the GUI, performance
-    // does not really matter so it's fine
+    // does not really matter
     auto assignWithBoundCheck = [&](Position pos, FloatVec4 color)
     {
         if (pos.x >= getWidth() || pos.y >= getHeight() || pos.x < 0 || pos.y < 0)

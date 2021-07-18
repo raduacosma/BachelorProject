@@ -39,7 +39,7 @@ class Agent
 
   protected:
     OpTrack opTrack;
-    size_t const NR_ACTIONS = 4; // Hardcoded number of actions
+    size_t const NR_ACTIONS = 4;
     float runReward;
     size_t simTime = 0;
     SimContainer *maze; // The maze the agent is navigating
