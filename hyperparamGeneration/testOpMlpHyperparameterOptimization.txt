@@ -1,0 +1,217 @@
+000:
+maxRewardMean: 6.81166
+finishedRunNr: 8
+allRewardMeans
+6.598640,6.834540,6.832460,6.860380,6.838050,6.840850,6.861560,6.826810,
+opponentPredictionPercentage
+0.797207
+foundOpponentPredictionPercentage
+0
+maxFileName
+012seed_opponentVisionGridSize_opponentLearningRate_000.txt
+
+001:
+maxRewardMean: 6.74926
+finishedRunNr: 8
+allRewardMeans
+6.848890,6.822480,6.812130,6.777280,6.410180,6.735100,6.796820,6.791210,
+opponentPredictionPercentage
+0.805353
+foundOpponentPredictionPercentage
+0.834142
+maxFileName
+412seed_opponentVisionGridSize_opponentLearningRate_001.txt
+
+002:
+maxRewardMean: 6.77119
+finishedRunNr: 8
+allRewardMeans
+6.783450,6.784300,6.753850,6.662030,6.820080,6.736030,6.811790,6.817970,
+opponentPredictionPercentage
+0.769333
+foundOpponentPredictionPercentage
+0.798654
+maxFileName
+712seed_opponentVisionGridSize_opponentLearningRate_002.txt
+
+010:
+maxRewardMean: 6.13983
+finishedRunNr: 8
+allRewardMeans
+6.197800,6.112490,6.502310,6.027700,6.398190,6.321390,5.240050,6.318700,
+opponentPredictionPercentage
+0.663348
+foundOpponentPredictionPercentage
+0
+maxFileName
+001seed_opponentVisionGridSize_opponentLearningRate_010.txt
+
+011:
+maxRewardMean: 6.16632
+finishedRunNr: 8
+allRewardMeans
+6.473380,6.155520,6.678940,5.616590,6.574360,5.535130,6.020780,6.275860,
+opponentPredictionPercentage
+0.809414
+foundOpponentPredictionPercentage
+0.829988
+maxFileName
+612seed_opponentVisionGridSize_opponentLearningRate_011.txt
+
+012:
+maxRewardMean: 6.27467
+finishedRunNr: 8
+allRewardMeans
+6.277610,5.668240,6.401640,6.243590,6.446810,6.184310,6.617240,6.357900,
+opponentPredictionPercentage
+0.779814
+foundOpponentPredictionPercentage
+0.807754
+maxFileName
+512seed_opponentVisionGridSize_opponentLearningRate_012.txt
+
+020:
+maxRewardMean: 5.95785
+finishedRunNr: 8
+allRewardMeans
+6.021230,6.652890,6.615990,6.602710,6.392430,6.536070,6.534970,2.306480,
+opponentPredictionPercentage
+0.68754
+foundOpponentPredictionPercentage
+0
+maxFileName
+302seed_opponentVisionGridSize_opponentLearningRate_020.txt
+
+021:
+maxRewardMean: 6.35128
+finishedRunNr: 8
+allRewardMeans
+6.434520,6.462500,6.656550,6.607000,6.225420,5.435310,6.562510,6.426460,
+opponentPredictionPercentage
+0.798496
+foundOpponentPredictionPercentage
+0.825349
+maxFileName
+512seed_opponentVisionGridSize_opponentLearningRate_021.txt
+
+022:
+maxRewardMean: 5.71587
+finishedRunNr: 8
+allRewardMeans
+6.210140,6.586190,6.642060,6.527090,1.325120,6.192020,5.919370,6.325000,
+opponentPredictionPercentage
+0.779551
+foundOpponentPredictionPercentage
+0.807674
+maxFileName
+012seed_opponentVisionGridSize_opponentLearningRate_022.txt
+
+100:
+maxRewardMean: 6.73164
+finishedRunNr: 8
+allRewardMeans
+6.750820,6.767260,6.723820,6.660690,6.783970,6.766310,6.678250,6.722010,
+opponentPredictionPercentage
+0.661159
+foundOpponentPredictionPercentage
+0
+maxFileName
+411seed_opponentVisionGridSize_opponentLearningRate_100.txt
+
+101:
+maxRewardMean: 6.67162
+finishedRunNr: 8
+allRewardMeans
+6.724680,6.658580,6.756490,6.633130,6.647510,6.695420,6.650090,6.607090,
+opponentPredictionPercentage
+0.625377
+foundOpponentPredictionPercentage
+0.635054
+maxFileName
+712seed_opponentVisionGridSize_opponentLearningRate_101.txt
+
+102:
+maxRewardMean: 6.70848
+finishedRunNr: 8
+allRewardMeans
+6.724320,6.655910,6.681890,6.700170,6.731970,6.739850,6.693010,6.740730,
+opponentPredictionPercentage
+0.636204
+foundOpponentPredictionPercentage
+0.652971
+maxFileName
+111seed_opponentVisionGridSize_opponentLearningRate_102.txt
+
+110:
+maxRewardMean: 6.50138
+finishedRunNr: 8
+allRewardMeans
+6.596590,6.375730,6.527640,6.454210,6.607980,6.427090,6.378460,6.643310,
+opponentPredictionPercentage
+0.641375
+foundOpponentPredictionPercentage
+0
+maxFileName
+610seed_opponentVisionGridSize_opponentLearningRate_110.txt
+
+111:
+maxRewardMean: 6.41397
+finishedRunNr: 8
+allRewardMeans
+6.545610,6.414030,6.537960,6.409450,6.100900,6.459060,6.320010,6.524720,
+opponentPredictionPercentage
+0.636613
+foundOpponentPredictionPercentage
+0.649198
+maxFileName
+312seed_opponentVisionGridSize_opponentLearningRate_111.txt
+
+112:
+maxRewardMean: 6.53433
+finishedRunNr: 8
+allRewardMeans
+6.482450,6.296050,6.478220,6.667210,6.666030,6.543400,6.563760,6.577510,
+opponentPredictionPercentage
+0.633912
+foundOpponentPredictionPercentage
+0.653152
+maxFileName
+111seed_opponentVisionGridSize_opponentLearningRate_112.txt
+
+120:
+maxRewardMean: 6.55291
+finishedRunNr: 8
+allRewardMeans
+6.373400,6.474920,6.605390,6.707830,6.669630,6.482320,6.538250,6.571550,
+opponentPredictionPercentage
+0.665547
+foundOpponentPredictionPercentage
+0
+maxFileName
+011seed_opponentVisionGridSize_opponentLearningRate_120.txt
+
+121:
+maxRewardMean: 6.52376
+finishedRunNr: 8
+allRewardMeans
+6.644310,6.526660,6.392970,6.457840,6.557480,6.352730,6.615910,6.642140,
+opponentPredictionPercentage
+0.558443
+foundOpponentPredictionPercentage
+0.575789
+maxFileName
+101seed_opponentVisionGridSize_opponentLearningRate_121.txt
+
+122:
+maxRewardMean: 6.48506
+finishedRunNr: 8
+allRewardMeans
+6.464950,6.454940,6.617670,6.331530,6.575670,6.456560,6.456470,6.522690,
+opponentPredictionPercentage
+0.556478
+foundOpponentPredictionPercentage
+0.572258
+maxFileName
+401seed_opponentVisionGridSize_opponentLearningRate_122.txt
+
+result count: 862

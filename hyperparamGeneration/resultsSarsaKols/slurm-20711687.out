@@ -1,0 +1,55 @@
+seed_givenRandom/3seed_givenRandom_sarsaKols.txt
+rewardsMeanLast
+6.88965
+opPredMeanLast
+0.805782
+opponentFoundPredMeanLast
+0.838014
+killedByOpponentMeanLast
+0.02116
+opponent recognition percentage
+0.2343
+predicted nr of opponents
+4
+time in ms
+10116341
+
+
+###############################################################################
+Peregrine Cluster
+Job 20711687 for user 's3601072'
+Finished at: Fri Jun 25 15:14:07 CEST 2021
+
+Job details:
+============
+
+Job ID              : 20711687
+Name                : jobSpec.txt
+User                : s3601072
+Partition           : regular
+Nodes               : pg-node201
+Number of Nodes     : 1
+Cores               : 1
+State               : COMPLETED
+Submit              : 2021-06-25T12:24:55
+Start               : 2021-06-25T12:25:29
+End                 : 2021-06-25T15:14:07
+Reserved walltime   : 09:59:00
+Used walltime       : 02:48:38
+Used CPU time       : 02:48:34 (efficiency: 99.96%)
+% User (Computation): 99.86%
+% System (I/O)      :  0.13%
+Mem reserved        : 200M/node
+Max Mem used        : 3.99M (pg-node201)
+Max Disk Write      : 0.00  (pg-node201)
+Max Disk Read       : 61.44K (pg-node201)
+
+
+Acknowledgements:
+=================
+
+Please see this page for information about acknowledging Peregrine in your publications:
+
+https://wiki.hpc.rug.nl/peregrine/introduction/scientific_output
+
+################################################################################

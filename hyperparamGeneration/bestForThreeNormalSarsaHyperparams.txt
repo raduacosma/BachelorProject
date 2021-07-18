@@ -1,0 +1,31 @@
+000:
+finishedRunNr: 8
+maxRewardMean: 2.07404
+allRewardMeans
+2.144580,2.155860,1.976290,2.107130,2.159920,2.116040,2.144690,1.787820,
+opponentPredictionPercentage
+0.900025
+listOpponentPredictionPercentage
+0.898591,0.900349,0.900195,0.899776,0.900066,0.902447,0.899160,0.899618,
+foundOpponentPredictionPercentage
+0
+listFoundOpponentPredictionPercentage
+0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,
+killedByOpponentPercentage
+0.00045
+listKilledByOpponentPercentage
+0.000000,0.000400,0.000800,0.000000,0.000400,0.000800,0.000000,0.001200,
+opponentRecognitionPercentage
+0
+listOpponentRecognitionPercentage
+0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,
+predicted nr of opponents
+1
+listPredicted nr of opponents
+1.000000,1.000000,1.000000,1.000000,1.000000,1.000000,1.000000,1.000000,
+maxFileName
+2seed_givenRandom_000.txt
+
+
+
+result count: 8

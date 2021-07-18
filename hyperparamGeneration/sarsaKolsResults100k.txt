@@ -1,0 +1,31 @@
+:
+finishedRunNr: 8
+maxRewardMean: 4.685
+allRewardMeans
+6.786500,6.900750,6.889650,6.917500,-9.315520,6.882470,5.538540,6.880120,
+opponentPredictionPercentage
+0.849637
+listOpponentPredictionPercentage
+0.815731,0.829765,0.805782,0.852828,0.991756,0.815705,0.854105,0.831427,
+foundOpponentPredictionPercentage
+0.879936
+listFoundOpponentPredictionPercentage
+0.848160,0.863290,0.838014,0.892442,0.994145,0.849214,0.885319,0.868901,
+killedByOpponentPercentage
+0.019065
+listKilledByOpponentPercentage
+0.024160,0.020640,0.021160,0.019920,0.000920,0.016960,0.024280,0.024480,
+opponentRecognitionPercentage
+0.242099
+listOpponentRecognitionPercentage
+0.247261,0.231767,0.234300,0.195078,0.266899,0.225656,0.269907,0.265921,
+predicted nr of opponents
+4.625
+listPredicted nr of opponents
+4.625
+maxFileName
+6seed_givenRandom_sarsaKols.txt
+
+
+
+result count: 0

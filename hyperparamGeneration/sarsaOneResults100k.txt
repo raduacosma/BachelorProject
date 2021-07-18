@@ -1,0 +1,31 @@
+:
+finishedRunNr: 8
+maxRewardMean: 5.56351
+allRewardMeans
+6.843720,3.525920,6.901600,6.039440,6.841810,6.966400,0.480412,6.908780,
+opponentPredictionPercentage
+0.832034
+listOpponentPredictionPercentage
+0.823496,0.840897,0.822686,0.832690,0.823029,0.823595,0.866603,0.823278,
+foundOpponentPredictionPercentage
+0
+listFoundOpponentPredictionPercentage
+0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,
+killedByOpponentPercentage
+0.02054
+listKilledByOpponentPercentage
+0.022600,0.018680,0.024400,0.019360,0.022160,0.014320,0.022480,0.020320,
+opponentRecognitionPercentage
+0
+listOpponentRecognitionPercentage
+0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,
+predicted nr of opponents
+1
+listPredicted nr of opponents
+1
+maxFileName
+4seed_givenRandom_sarsaOne.txt
+
+
+
+result count: 0

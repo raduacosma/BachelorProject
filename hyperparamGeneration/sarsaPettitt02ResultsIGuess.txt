@@ -1,0 +1,61 @@
+001:
+finishedRunNr: 8
+maxRewardMean: 6.76598
+allRewardMeans
+6.782190,6.814610,6.823910,6.743700,6.798400,6.534260,6.766170,6.864570,
+opponentPredictionPercentage
+0.791493
+listOpponentPredictionPercentage
+0.795594,0.782257,0.778825,0.790748,0.787468,0.804433,0.795994,0.796625,
+foundOpponentPredictionPercentage
+0.818447
+listFoundOpponentPredictionPercentage
+0.821989,0.809100,0.804912,0.815614,0.814325,0.833500,0.824504,0.823630,
+killedByOpponentPercentage
+0.0319
+listKilledByOpponentPercentage
+0.030000,0.026800,0.019200,0.050400,0.028000,0.044000,0.036400,0.020400,
+opponentRecognitionPercentage
+0.259706
+listOpponentRecognitionPercentage
+0.279454,0.199434,0.197127,0.226277,0.293608,0.303059,0.286755,0.291937,
+predicted nr of opponents
+4
+listPredicted nr of opponents
+4.000000,4.000000,3.000000,4.000000,4.000000,4.000000,4.000000,5.000000,
+maxFileName
+6000new_good_seed_pValueThreshold_minHistorySize_maxHistorySize_001.txt
+
+
+
+002:
+finishedRunNr: 8
+maxRewardMean: 6.78943
+allRewardMeans
+6.662030,6.825450,6.782440,6.817970,6.833070,6.803360,6.804240,6.786920,
+opponentPredictionPercentage
+0.771238
+listOpponentPredictionPercentage
+0.774991,0.769932,0.772340,0.769333,0.771241,0.771086,0.772046,0.768937,
+foundOpponentPredictionPercentage
+0.801147
+listFoundOpponentPredictionPercentage
+0.805348,0.799629,0.802705,0.798654,0.801272,0.800590,0.802805,0.798177,
+killedByOpponentPercentage
+0.02675
+listKilledByOpponentPercentage
+0.037200,0.020800,0.028000,0.022800,0.023600,0.024000,0.027600,0.030000,
+opponentRecognitionPercentage
+0.167919
+listOpponentRecognitionPercentage
+0.267095,0.073629,0.075934,0.259476,0.259091,0.067744,0.262799,0.077582,
+predicted nr of opponents
+2
+listPredicted nr of opponents
+2.000000,2.000000,2.000000,2.000000,2.000000,2.000000,2.000000,2.000000,
+maxFileName
+2113new_good_seed_pValueThreshold_minHistorySize_maxHistorySize_002.txt
+
+
+
+result count: 512

@@ -1,0 +1,145 @@
+001:
+maxRewardMean: 6.74572
+finishedRunNr: 8
+allRewardMeans
+6.705000,6.706610,6.541870,6.824810,6.841820,6.775850,6.774720,6.795120,
+opponentPredictionPercentage
+0.810999
+foundOpponentPredictionPercentage
+0.834387
+maxFileName
+5112new_good_seed_pValueThreshold_minHistorySize_maxHistorySize_001.txt
+
+002:
+maxRewardMean: 6.76021
+finishedRunNr: 8
+allRewardMeans
+6.846570,6.777530,6.775630,6.461650,6.771410,6.789660,6.810930,6.848280,
+opponentPredictionPercentage
+0.779536
+foundOpponentPredictionPercentage
+0.801435
+maxFileName
+1102new_good_seed_pValueThreshold_minHistorySize_maxHistorySize_002.txt
+
+011:
+maxRewardMean: 2.43214
+finishedRunNr: 8
+allRewardMeans
+5.807360,-9.565110,6.624100,6.407000,6.434080,5.946220,-6.234820,4.038290,
+opponentPredictionPercentage
+0.852456
+foundOpponentPredictionPercentage
+0.870781
+maxFileName
+4012new_good_seed_pValueThreshold_minHistorySize_maxHistorySize_011.txt
+
+012:
+maxRewardMean: 1.94766
+finishedRunNr: 8
+allRewardMeans
+1.232020,6.518590,-8.771330,6.450420,6.649320,6.587180,-7.961770,4.876840,
+opponentPredictionPercentage
+0.828669
+foundOpponentPredictionPercentage
+0.847632
+maxFileName
+4012new_good_seed_pValueThreshold_minHistorySize_maxHistorySize_012.txt
+
+021:
+maxRewardMean: 3.94116
+finishedRunNr: 8
+allRewardMeans
+6.065220,6.078890,6.139380,6.319130,5.338440,5.715720,-9.578910,5.451450,
+opponentPredictionPercentage
+0.831648
+foundOpponentPredictionPercentage
+0.853716
+maxFileName
+4110new_good_seed_pValueThreshold_minHistorySize_maxHistorySize_021.txt
+
+022:
+maxRewardMean: 1.07759
+finishedRunNr: 8
+allRewardMeans
+6.644550,-3.017700,-2.982260,-2.859650,6.636500,6.505650,6.215440,-8.521820,
+opponentPredictionPercentage
+0.8271
+foundOpponentPredictionPercentage
+0.845046
+maxFileName
+1011new_good_seed_pValueThreshold_minHistorySize_maxHistorySize_022.txt
+
+101:
+maxRewardMean: 6.67378
+finishedRunNr: 8
+allRewardMeans
+6.737170,6.638450,6.718190,6.716970,6.622100,6.644820,6.729530,6.582980,
+opponentPredictionPercentage
+0.63501
+foundOpponentPredictionPercentage
+0.650631
+maxFileName
+0011new_good_seed_pValueThreshold_minHistorySize_maxHistorySize_101.txt
+
+102:
+maxRewardMean: 4.62112
+finishedRunNr: 8
+allRewardMeans
+6.649300,6.731350,6.689260,6.734920,6.714190,6.705770,6.744240,-10.000100,
+opponentPredictionPercentage
+0.672596
+foundOpponentPredictionPercentage
+0.685818
+maxFileName
+3101new_good_seed_pValueThreshold_minHistorySize_maxHistorySize_102.txt
+
+111:
+maxRewardMean: 5.04979
+finishedRunNr: 8
+allRewardMeans
+6.020360,6.483210,6.595910,4.564390,6.479420,-2.952030,6.554290,6.652800,
+opponentPredictionPercentage
+0.654253
+foundOpponentPredictionPercentage
+0.66864
+maxFileName
+2001new_good_seed_pValueThreshold_minHistorySize_maxHistorySize_111.txt
+
+112:
+maxRewardMean: 6.03087
+finishedRunNr: 8
+allRewardMeans
+6.628250,3.015610,6.574710,5.869220,6.440060,6.607280,6.575640,6.536180,
+opponentPredictionPercentage
+0.64658
+foundOpponentPredictionPercentage
+0.668001
+maxFileName
+7213new_good_seed_pValueThreshold_minHistorySize_maxHistorySize_112.txt
+
+121:
+maxRewardMean: 5.22121
+finishedRunNr: 8
+allRewardMeans
+6.602900,6.705280,6.594940,6.647170,6.561010,-4.442990,6.531780,6.569560,
+opponentPredictionPercentage
+0.651657
+foundOpponentPredictionPercentage
+0.666553
+maxFileName
+6000new_good_seed_pValueThreshold_minHistorySize_maxHistorySize_121.txt
+
+122:
+maxRewardMean: 4.96306
+finishedRunNr: 8
+allRewardMeans
+6.526350,6.629910,6.588990,6.566710,6.639290,6.551750,-6.363450,6.564950,
+opponentPredictionPercentage
+0.664135
+foundOpponentPredictionPercentage
+0.678348
+maxFileName
+3002new_good_seed_pValueThreshold_minHistorySize_maxHistorySize_122.txt
+
+result count: 2303

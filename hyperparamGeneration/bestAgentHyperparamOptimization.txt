@@ -1,0 +1,49 @@
+000:
+maxRewardMean: 6.77018
+finishedRunNr: 8
+allRewardMeans
+6.776670,6.841990,6.805620,6.807770,6.813790,6.812700,6.804390,6.498480,
+maxFileName
+001seed_epsilon_gamma_000.txt
+
+001:
+maxRewardMean: 6.74926
+finishedRunNr: 8
+allRewardMeans
+6.777280,6.822480,6.812130,6.410180,6.848890,6.735100,6.791210,6.796820,
+maxFileName
+001seed_epsilon_gamma_001.txt
+
+002:
+maxRewardMean: 6.77119
+finishedRunNr: 8
+allRewardMeans
+6.753850,6.662030,6.736030,6.811790,6.817970,6.783450,6.784300,6.820080,
+maxFileName
+601seed_epsilon_gamma_002.txt
+
+100:
+maxRewardMean: 6.69607
+finishedRunNr: 8
+allRewardMeans
+6.712020,6.755490,6.680070,6.681680,6.498090,6.771610,6.808880,6.660690,
+maxFileName
+611seed_epsilon_gamma_100.txt
+
+101:
+maxRewardMean: 6.67162
+finishedRunNr: 8
+allRewardMeans
+6.658580,6.695420,6.633130,6.650090,6.607090,6.724680,6.647510,6.756490,
+maxFileName
+111seed_epsilon_gamma_101.txt
+
+102:
+maxRewardMean: 6.68817
+finishedRunNr: 8
+allRewardMeans
+6.696070,6.754060,6.714600,6.646300,6.492750,6.754490,6.749290,6.697820,
+maxFileName
+011seed_epsilon_gamma_102.txt
+
+result count: 808
