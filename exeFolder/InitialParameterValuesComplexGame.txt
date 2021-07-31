@@ -1,7 +1,7 @@
 seed
 275165314
 files
-closelong.txt,group1long.txt,group2long.txt,group3long.txt,group4long.txt,group5long.txt,group6long.txt,group7long.txt,group8long.txt
+complex1.txt,complex2.txt,complex3.txt,complex4.txt,complex5.txt,complex6.txt,complex7.txt,complex8.txt,complex9.txt
 miniBatchSize
 16
 numberOfEpisodes
