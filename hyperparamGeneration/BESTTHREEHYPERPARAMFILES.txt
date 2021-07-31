@@ -1,3 +1,0 @@
-602seed_maxNrSteps_nrRollouts_000.txt
-4201seed_pValueThreshold_minHistorySize_maxHistorySize_001.txt
-5311seed_pValueThreshold_minHistorySize_maxHistorySize_002.txt
