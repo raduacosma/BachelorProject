@@ -9,6 +9,7 @@
 
 void generateHyperparams(std::string folder, std::string name, std::string newName)
 {
+    // the seed values used in this thesis
     std::array<unsigned int, 8> seedRange = { 275165314,  3310202799, 1126433036, 2960205070,
                                               3500374631, 1192398765, 3162705734, 4003750407 };
     std::array<size_t, 2> miniBatchSizeRange = { 8,     16 };
@@ -23,6 +24,7 @@ void generateHyperparams(std::string folder, std::string name, std::string newNa
     std::array<size_t, 3> nrRolloutsRange = { 1, 3, 5 };
     std::array<float, 3> agentLearningRateRange = { 0.0001f, 0.0005f, 0.001f };
     std::array<float, 3> opponentLearningRateRange = { 0.0001f, 0.0005f, 0.001f };
+    // the last 0.2f should only be used for Simple game hyperparameters, remove for Complex game
     std::array<float, 4> pValueThresholdRange = { 0.025f, 0.05f, 0.1f, 0.2f };
     std::array<size_t, 2> minHistorySizeRange = { 8, 10 };
     std::array<size_t, 4> maxHistorySizeRange = { 20, 30, 50, 100 };
@@ -41,6 +43,9 @@ void generateHyperparams(std::string folder, std::string name, std::string newNa
         epsilonRange = sarsaEpsilonRange;
     else
         epsilonRange = qLearningEpsilonRange;
+
+    // Following are functions that generate hyperparameter combinations for a specific
+    // step of the hyperparameter optimisation procedure
     auto genOpModelling = [&]()
     {
         for (size_t seedIdx = 0; seedIdx != seedRange.size(); ++seedIdx)
@@ -374,5 +379,8 @@ void generateHyperparams(std::string folder, std::string name, std::string newNa
           }
       }
     };
+
+    // modify this call here to whichever hyperparameter generation procedure is desired
+    // and recompile
     genGivenRandom();
 }

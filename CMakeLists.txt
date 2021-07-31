@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.15)
 project(BachelorProject)
 INCLUDE(FindPkgConfig)
+# if the GUI simulation functionality is not desired, set this to FALSE (also used to produce the results in the thesis)
+# otherwise, set it to TRUE
 set(SHOULD_HAVE_GUI FALSE)
 if(SHOULD_HAVE_GUI)
 pkg_search_module(GLFW REQUIRED glfw3)

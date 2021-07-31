@@ -3,7 +3,7 @@
 // creation, etc.) If you are new to Dear ImGui, read documentation from the docs/ folder + read the top of imgui.cpp.
 // Read online: https://github.com/ocornut/imgui/tree/master/docs
 
-
+#define EIGEN_MPL2_ONLY
 #include "agent/agent.h"
 #include "agent/dqerQueueLearning/dqerQueueLearning.h"
 #include "agent/qerqueueLearning/qerQueueLearning.h"
@@ -192,7 +192,7 @@ int main(int argc, char **argv)
     SimStateParams simStateParams = { .traceSize = hs.traceSize,
                                       .agentVisionGridSize = hs.agentVisionGridSize,
                                       .opponentVisionGridSize = hs.opponentVisionGridSize,
-                                      .randomOpCoef = 0.2 };
+                                      .randomOpCoef = -1.0f };
     OpTrackParams opTrackParams = { .pValueThreshold = hs.pValueThreshold,
                                     .minHistorySize = hs.minHistorySize,
                                     .maxHistorySize = hs.maxHistorySize };

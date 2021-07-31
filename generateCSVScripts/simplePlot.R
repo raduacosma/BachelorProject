@@ -7,23 +7,7 @@ library(tidyverse)
 library(dplyr)
 library(matrixStats)
 
-rewards = read.table("opponentPredictionLossesTwoDOUBLE.txt")
-plotRewards<- function(data,column){
-  rewardsCopy = data[column] %>% drop_na();
-  rewardsCopy <- tibble::rowid_to_column(rewardsCopy, "ID")
-  print(rewardsCopy)
- # setDT(rewards)
-#  rewards$id = 1:nrow(rewards);
-  currPlot<-ggplot(rewardsCopy,(aes(x=ID,y=opPredPerc)))+geom_line()+ggtitle("Q-Learning in a simple game")+
-    theme(plot.title = element_text(hjust = 0.5, size = 16)) +
-    labs(x="Episode Number",y="Total Reward Per Episode")
-  theme(axis.title.x = element_text(size=16)) +
-    theme(axis.title.y = element_text(size=16))+
-    theme(axis.text=element_text(size=15)) 
-  return(currPlot)
-}
-
-
+# plot results
 plotAll<-function(df,name,legend1,df2,name2,legend2,df3,name3,legend3,xtext,ytext,titletext,legendtitletext)
 {
   

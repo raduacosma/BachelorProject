@@ -9,8 +9,11 @@
 #include <fstream>
 
 void computeRewardStatistics();
+
+// Generate the same config with all random seeds
 void computeRandomForBest()
 {
+    // file name
     std::ifstream in("BESTTHREEHYPERPARAMFILES.txt");
     std::regex firstPartRegex("[0-9]+");
     std::string fileName;
@@ -40,10 +43,17 @@ int main() {
 //computeRandomForBest();
 //    generateHyperparams("","602seed_maxNrSteps_nrRollouts_000.txt","sarsaOne.txt");
 }
+
+// compute the final statistics over all files that were obtained from hyperparameter optimisation
+// and generate the next hyperparameter optimisation step
+// the file structure is hardcoded
 void computeRewardStatistics()
 {
+    // statistic file
     std::ofstream out{"finalBestTestToCompare.txt"};
-    std::string folderPath = "MONTECARLOFINALRESULTS.txt";
+    // folder where hyperparameter optimisation results can be found
+    std::string folderPath = "finalResultsFolder";
+    // name of folder to put generated hyperparameters in
     std::string hyperparamFolderName = "seed_maxNrSteps_nrRollouts";
     std::regex firstPartRegex("[0-9]+");
     size_t resultCnt = 0;

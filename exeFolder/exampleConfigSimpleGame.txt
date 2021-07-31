@@ -1,7 +1,7 @@
 seed
 3162705734
 files
-comp41.txt,comp42.txt
+simple1.txt,simple2.txt,simple3.txt
 miniBatchSize
 16
 numberOfEpisodes
