@@ -52,5 +52,7 @@ of the configuration to be used. Such a file can be found in exeFolder/initialPa
 
 The second command line parameter is optional and if present, will start a GUI simulation if the project was compiled with SHOULD_HAVE_GUI as TRUE (and thus GLFW is also present, as otherwise it would not have compiled).
 
+There are a number of ways to print results, including final statistics (presented in the thesis) and statistics per episode (presented as plots in the thesis). You can specify the printing function in project/runHeadless.cpp. Currently, the statistics per episode function is used.
+
 I would like to thank the Center for Information Technology of the University of Groningen for their support and for providing access to the Peregrine high performance computing cluster.
 
