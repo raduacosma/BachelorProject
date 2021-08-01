@@ -29,7 +29,7 @@ void generateHyperparams(std::string folder, std::string name, std::string newNa
     // the seed values used in this thesis
     std::array<unsigned int, 8> seedRange = { 275165314,  3310202799, 1126433036, 2960205070,
                                               3500374631, 1192398765, 3162705734, 4003750407 };
-    std::array<size_t, 2> miniBatchSizeRange = { 8,     16 };
+    std::array<size_t, 2> miniBatchSizeRange = { 8, 16 };
     std::array<size_t, 2> sizeExperienceRange = { 10000, 100000 };
     std::array<float, 2> sarsaEpsilonRange = { 0.3f, 0.5f };
     std::array<float, 2> qLearningEpsilonRange = { 0.5f, 0.75f };
@@ -45,9 +45,11 @@ void generateHyperparams(std::string folder, std::string name, std::string newNa
     std::array<float, 4> pValueThresholdRange = { 0.025f, 0.05f, 0.1f, 0.2f };
     std::array<size_t, 2> minHistorySizeRange = { 8, 10 };
     std::array<size_t, 4> maxHistorySizeRange = { 20, 30, 50, 100 };
-    std::array<OpModellingType, 3> opModellingTypeRange = {OpModellingType::ONEFORALL,OpModellingType::KOLSMIR,OpModellingType::NOTRAINPETTITT};
-    std::array<AgentType, 3> agentTypeRange = {AgentType::SARSA, AgentType::DEEPQLEARNING, AgentType::DOUBLEDEEPQLEARNING};
-    std::array<float, 2> randomCoefRange = {-1,0.2f};
+    std::array<OpModellingType, 3> opModellingTypeRange = { OpModellingType::ONEFORALL, OpModellingType::KOLSMIR,
+                                                            OpModellingType::NOTRAINPETTITT };
+    std::array<AgentType, 3> agentTypeRange = { AgentType::SARSA, AgentType::DEEPQLEARNING,
+                                                AgentType::DOUBLEDEEPQLEARNING };
+    std::array<float, 2> randomCoefRange = { -1, 0.2f };
     HyperparamSpec initialHs;
     std::ifstream in{ folder + name };
     if (not in)
@@ -99,9 +101,9 @@ void generateHyperparams(std::string folder, std::string name, std::string newNa
                                               .maxHistorySize = maxHistorySizeRange[maxHistorySizeIdx]
 
                         };
-                        std::ofstream out{ "bestForThreeSarsaOpModeling/" +
-                                           std::to_string(seedIdx) + std::to_string(pValueThresholdIdx) +
-                                           std::to_string(minHistorySizeIdx) + std::to_string(maxHistorySizeIdx) +
+                        std::ofstream out{ "bestForThreeSarsaOpModeling/" + std::to_string(seedIdx) +
+                                           std::to_string(pValueThresholdIdx) + std::to_string(minHistorySizeIdx) +
+                                           std::to_string(maxHistorySizeIdx) +
                                            +"seed_pValueThreshold_minHistorySize_maxHistorySize_" + newName };
                         out << hs;
                     }
@@ -226,10 +228,9 @@ void generateHyperparams(std::string folder, std::string name, std::string newNa
                                           .opModellingType = initialHs.opModellingType,
                                           .pValueThreshold = initialHs.pValueThreshold,
                                           .minHistorySize = initialHs.minHistorySize,
-                                          .maxHistorySize = initialHs.maxHistorySize
-                    };
-                    std::ofstream out{ "test/" + std::to_string(seedIdx) +
-                                       std::to_string(agentVisionGridSizeIdx) + std::to_string(agentLearningRateIdx) +
+                                          .maxHistorySize = initialHs.maxHistorySize };
+                    std::ofstream out{ "test/" + std::to_string(seedIdx) + std::to_string(agentVisionGridSizeIdx) +
+                                       std::to_string(agentLearningRateIdx) +
                                        +"seed_agentVisionGridSize_agentLearningRate_" + newName };
                     out << hs;
                 }
@@ -272,8 +273,8 @@ void generateHyperparams(std::string folder, std::string name, std::string newNa
                                           .maxHistorySize = initialHs.maxHistorySize
 
                     };
-                    std::ofstream out{ "newop_seed_opponentVisionGridSize_opponentLearningRate/" + std::to_string(seedIdx) +
-                                       std::to_string(opponentVisionGridSizeIdx) +
+                    std::ofstream out{ "newop_seed_opponentVisionGridSize_opponentLearningRate/" +
+                                       std::to_string(seedIdx) + std::to_string(opponentVisionGridSizeIdx) +
                                        std::to_string(opponentLearningRateIdx) +
                                        +"seed_opponentVisionGridSize_opponentLearningRate_" + newName };
                     out << hs;
@@ -351,50 +352,51 @@ void generateHyperparams(std::string folder, std::string name, std::string newNa
                                   .maxHistorySize = initialHs.maxHistorySize
 
             };
-            std::ofstream out{ "MONTECARLORANDOMHYPERPARAMS/" + std::to_string(seedIdx) + "seed_givenRandom_" + newName };
+            std::ofstream out{ "MONTECARLORANDOMHYPERPARAMS/" + std::to_string(seedIdx) + "seed_givenRandom_" +
+                               newName };
             out << hs;
         }
     };
     auto genInitialSetups = [&]()
     {
-      for (size_t randCoefIdx = 0; randCoefIdx != randomCoefRange.size(); ++randCoefIdx)
-      {
-          for (size_t agentTypeIdx = 0; agentTypeIdx != agentTypeRange.size(); ++agentTypeIdx)
-          {
-              for (size_t opModellingTypeIdx = 0; opModellingTypeIdx != opModellingTypeRange.size(); ++opModellingTypeIdx)
-              {
-                  HyperparamSpec hs = { .seed = initialHs.seed,
-                      .files = initialHs.files,
-                      .miniBatchSize = initialHs.miniBatchSize,
-                      .numberOfEpisodes = initialHs.numberOfEpisodes,
-                      .sizeExperience = initialHs.sizeExperience,
-                      .agentType = agentTypeRange[agentTypeIdx],
-                      .epsilon = initialHs.epsilon,
-                      .gamma = initialHs.gamma,
-                      .agentVisionGridSize = initialHs.agentVisionGridSize,
-                      .opponentVisionGridSize = initialHs.opponentVisionGridSize,
-                      .swapPeriod = initialHs.swapPeriod,
-                      .maxNrSteps = initialHs.maxNrSteps,
-                      .nrRollouts = initialHs.nrRollouts,
-                      .agentLearningRate = initialHs.agentLearningRate,
-                      .agentRegParam = initialHs.agentRegParam,
-                      .opponentLearningRate = initialHs.opponentLearningRate,
-                      .opponentRegParam = initialHs.opponentRegParam,
-                      .traceSize = initialHs.traceSize,
-                      .randomOpCoef = randomCoefRange[randCoefIdx],
-                      .opModellingType = opModellingTypeRange[opModellingTypeIdx],
-                      .pValueThreshold = initialHs.pValueThreshold,
-                      .minHistorySize = initialHs.minHistorySize,
-                      .maxHistorySize = initialHs.maxHistorySize
+        for (size_t randCoefIdx = 0; randCoefIdx != randomCoefRange.size(); ++randCoefIdx)
+        {
+            for (size_t agentTypeIdx = 0; agentTypeIdx != agentTypeRange.size(); ++agentTypeIdx)
+            {
+                for (size_t opModellingTypeIdx = 0; opModellingTypeIdx != opModellingTypeRange.size();
+                     ++opModellingTypeIdx)
+                {
+                    HyperparamSpec hs = { .seed = initialHs.seed,
+                                          .files = initialHs.files,
+                                          .miniBatchSize = initialHs.miniBatchSize,
+                                          .numberOfEpisodes = initialHs.numberOfEpisodes,
+                                          .sizeExperience = initialHs.sizeExperience,
+                                          .agentType = agentTypeRange[agentTypeIdx],
+                                          .epsilon = initialHs.epsilon,
+                                          .gamma = initialHs.gamma,
+                                          .agentVisionGridSize = initialHs.agentVisionGridSize,
+                                          .opponentVisionGridSize = initialHs.opponentVisionGridSize,
+                                          .swapPeriod = initialHs.swapPeriod,
+                                          .maxNrSteps = initialHs.maxNrSteps,
+                                          .nrRollouts = initialHs.nrRollouts,
+                                          .agentLearningRate = initialHs.agentLearningRate,
+                                          .agentRegParam = initialHs.agentRegParam,
+                                          .opponentLearningRate = initialHs.opponentLearningRate,
+                                          .opponentRegParam = initialHs.opponentRegParam,
+                                          .traceSize = initialHs.traceSize,
+                                          .randomOpCoef = randomCoefRange[randCoefIdx],
+                                          .opModellingType = opModellingTypeRange[opModellingTypeIdx],
+                                          .pValueThreshold = initialHs.pValueThreshold,
+                                          .minHistorySize = initialHs.minHistorySize,
+                                          .maxHistorySize = initialHs.maxHistorySize
 
-                  };
-                  std::ofstream out{ "randCoef_agentType_opModellingType/" + std::to_string(randCoefIdx) +
-                                     std::to_string(agentTypeIdx) + std::to_string(opModellingTypeIdx) +
-                                     + ".txt" };
-                  out << hs;
-              }
-          }
-      }
+                    };
+                    std::ofstream out{ "randCoef_agentType_opModellingType/" + std::to_string(randCoefIdx) +
+                                       std::to_string(agentTypeIdx) + std::to_string(opModellingTypeIdx) + +".txt" };
+                    out << hs;
+                }
+            }
+        }
     };
 
     // modify this call here to whichever hyperparameter generation procedure is desired

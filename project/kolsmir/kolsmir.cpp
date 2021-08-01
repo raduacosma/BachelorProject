@@ -11,7 +11,6 @@
  * For the list of contributors see CREDITS (copied directly from ROOT repository).  *
  *************************************************************************************/
 
-
 // Copyright (c) 2021, Radu Alexandru Cosma
 
 /*

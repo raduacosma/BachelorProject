@@ -25,7 +25,6 @@ SOFTWARE.
 
 // Some code for drawing the GUI was adapted from the examples of ImGUI (https://github.com/ocornut/imgui)
 
-
 #if SHOULD_HAVE_GUI
 #ifndef _INCLUDED_UIFUNCTIONS
 #define _INCLUDED_UIFUNCTIONS

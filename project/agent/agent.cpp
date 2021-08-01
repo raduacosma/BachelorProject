@@ -26,8 +26,7 @@
 using namespace std;
 Agent::Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
              MLPParams opponentMLP, size_t _nrEpisodes, size_t pNrEpisodesToEpsilonZero,
-             OpModellingType pOpModellingType, float pEpsilon,
-             float pGamma)
+             OpModellingType pOpModellingType, float pEpsilon, float pGamma)
     : opTrack(opTrackParams.pValueThreshold, opTrackParams.minHistorySize, opTrackParams.maxHistorySize),
       nrEpisodes(_nrEpisodes), nrEpisodesToEpsilonZero(pNrEpisodesToEpsilonZero), rewards(vector<float>(_nrEpisodes)),
       mlp(agentMLP.sizes, agentMLP.learningRate, agentMLP.regParam, agentMLP.outputActivationFunc,
@@ -98,7 +97,8 @@ void Agent::run()
         learningLosses.push_back(currentEpisodeAgentLoss / stepCount);
         opponentPredictionLosses.push_back(currentEpisodeOpLoss / stepCount);
         opponentCorrectPredictionPercentage.push_back(static_cast<float>(currentEpisodeCorrectPredictions) / stepCount);
-        opponentFoundCorrectPredictionPercentage.push_back(static_cast<float>(foundCurrentEpisodeCorrectPredictions)/countFoundPredictionsCurrentEpisode);
+        opponentFoundCorrectPredictionPercentage.push_back(static_cast<float>(foundCurrentEpisodeCorrectPredictions) /
+                                                           countFoundPredictionsCurrentEpisode);
         runReward += totalReward;
         rewards[nrEpisode] = totalReward;
         if (epsilon > lastEpsilon)
@@ -184,11 +184,11 @@ void Agent::opPredictInterLoss(void (OpTrack::*tracking)(Agent &agent, Eigen::Ve
     size_t currIdx = currOp;
     if (not opTrack.isFoundOpModel())
     {
-        for (size_t idx = 0, sz = opList.size()-1; idx != sz; ++idx)
+        for (size_t idx = 0, sz = opList.size() - 1; idx != sz; ++idx)
             opLosses[idx] += opList[idx].predictWithLoss(lastOpponentState, opponentActionTarget);
         int minIdx = -1;
         float minLoss = std::numeric_limits<float>::max();
-        for (int idx = 0, sz = opLosses.size()-1; idx != sz; ++idx)
+        for (int idx = 0, sz = opLosses.size() - 1; idx != sz; ++idx)
             if (minLoss > opLosses[idx])
             {
                 minIdx = idx;
@@ -203,7 +203,8 @@ void Agent::opPredictInterLoss(void (OpTrack::*tracking)(Agent &agent, Eigen::Ve
         ++countFoundPredictionsCurrentEpisode;
     }
     opList[currOp].train(lastOpponentState, opponentActionTarget);
-    // currentLoss here is bad since it should be the train loss on currOp, but it was only used for old pettitt which is not used anymore
+    // currentLoss here is bad since it should be the train loss on currOp, but it was only used for old pettitt which
+    // is not used anymore
     (opTrack.*tracking)(*this, lastOpponentState, opponentActionTarget, currentLoss);
     if (not opTrack.isFoundOpModel())
         currOp = currIdx;
@@ -251,8 +252,7 @@ float Agent::MonteCarloRollout(size_t action)
                     innerOpAction = innerDistr(rngEngine);
                 }
                 size_t agentAction;
-                float lastStateVal = mlp.predict(copyMaze.getStateForAgent())
-                    .maxCoeff(&agentAction);
+                float lastStateVal = mlp.predict(copyMaze.getStateForAgent()).maxCoeff(&agentAction);
                 auto [innerReward, innerCanContinue] = copyMaze.computeNextStateAndReward(
                     static_cast<Actions>(agentAction), static_cast<Actions>(innerOpAction));
                 rolloutReward += gammaVals[i] * innerReward;
@@ -267,8 +267,7 @@ float Agent::MonteCarloRollout(size_t action)
                 }
             }
         }
-        else if (canContinue == SimResult::CONTINUE and
-                 maxNrSteps == 0)
+        else if (canContinue == SimResult::CONTINUE and maxNrSteps == 0)
         {
             rolloutReward += mlp.predict(copyMaze.getStateForAgent()).maxCoeff();
         }

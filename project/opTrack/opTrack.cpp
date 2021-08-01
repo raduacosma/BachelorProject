@@ -343,9 +343,8 @@ void OpTrack::updateCorrectPercentage(Agent &agent)
     {
         ++agent.correctOpCurrentEpisode;
     }
-//    ++agent.opChoiceMatrix[agent.maze->getCurrSimState()][agent.currOp];
+    //    ++agent.opChoiceMatrix[agent.maze->getCurrSimState()][agent.currOp];
     ++agent.totalPredOpCurrentEpisode;
     agent.predictedOpponentType.push_back(agent.currOp);
     agent.actualOpponentType.push_back(agent.maze->getCurrSimState());
-
 }

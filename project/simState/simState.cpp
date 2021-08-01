@@ -266,10 +266,10 @@ Eigen::VectorXf SimState::getStateForOpponent() const
 }
 void SimState::resetAgentPos()
 {
-        std::uniform_int_distribution<> distr{ -3, 3 };
-        auto &rngEngine = globalRng.getRngEngine();
-        agentPos = { initialAgentPos.x, initialAgentPos.y + distr(rngEngine) };
-//    agentPos = initialAgentPos;
+    std::uniform_int_distribution<> distr{ -3, 3 };
+    auto &rngEngine = globalRng.getRngEngine();
+    agentPos = { initialAgentPos.x, initialAgentPos.y + distr(rngEngine) };
+    //    agentPos = initialAgentPos;
 }
 
 void SimState::resetForNextEpisode()
@@ -381,7 +381,7 @@ void SimState::generateStateRepresentation()
     FloatVec4 goalColor = { 0, 128, 0, 255 };
     FloatVec4 wallColor = { 128, 128, 128, 255 };
     FloatVec4 opponentColor = { 255, 0, 0, 255 };
-    FloatVec4 opponentTraceColor = { 178,34,34, 255 };
+    FloatVec4 opponentTraceColor = { 178, 34, 34, 255 };
     FloatVec4 agentViewColor = { 135, 206, 235, 255 };
     FloatVec4 opponentViewColor = { 202, 119, 119, 255 };
     assignWithBoundCheck(agentPos, agentColor);
@@ -392,12 +392,13 @@ void SimState::generateStateRepresentation()
     }
 
     //    assignWithBoundCheck(opponentPos,SimObject::OPPONENT);
-    FloatVec4 color= opponentColor;
+    FloatVec4 color = opponentColor;
     float factor = 0.075f;
-    for (auto const &item:currOpTrace)
+    for (auto const &item : currOpTrace)
     {
-//        color = {(255.0f-color.x)*factor+color.x,(255.0f-color.y)*factor+color.y,(255.0f-color.z)*factor+color.z,255};
-////        color = {(color.x+255.0f)/2,(color.y+255.0f)/2,(color.z+255.0f)/2,color.w};
+        //        color =
+        //        {(255.0f-color.x)*factor+color.x,(255.0f-color.y)*factor+color.y,(255.0f-color.z)*factor+color.z,255};
+        ////        color = {(color.x+255.0f)/2,(color.y+255.0f)/2,(color.z+255.0f)/2,color.w};
         assignWithBoundCheck(item, opponentTraceColor);
     }
     assignWithBoundCheck(currOpTrace.back(), opponentColor);

@@ -32,8 +32,8 @@
 #include "../utilities/utilities.h"
 #include "experience.h"
 #include <cmath>
-#include <vector>
 #include <map>
+#include <vector>
 
 enum class AgentType
 {
@@ -119,7 +119,7 @@ class Agent
                                                       float));
 
   public:
-    std::map<size_t,std::map<size_t,float>> opChoiceMatrix;
+    std::map<size_t, std::map<size_t, float>> opChoiceMatrix;
     explicit Agent(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
                    MLPParams opponentMLP, size_t _nrEpisodes, size_t pNrEpisodesToEpsilonZero,
                    OpModellingType pOpModellingType, float pEpsilon, float pGamma);

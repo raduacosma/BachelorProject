@@ -23,9 +23,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-
-
-
 // The graphical simulation startup code was adapted from the examples of ImGUI (https://github.com/ocornut/imgui):
 
 // Dear ImGui: standalone example application for GLFW + OpenGL 3, using programmable pipeline
@@ -50,10 +47,8 @@ SOFTWARE.
 #include "imgui_impl_opengl3.h"
 #include <stdio.h>
 
-
 #include "uiFunctions/uiFunctions.h"
 #include "uiStateTracker/uiStateTracker.h"
-
 
 #include <fenv.h>
 // About Desktop OpenGL function loaders:
@@ -101,7 +96,7 @@ static void glfw_error_callback(int error, const char *description)
 int main(int argc, char **argv)
 {
     //    Eigen::setNbThreads(1);
-//    std::cout << "nthreads: " << Eigen::nbThreads() << '\n';
+    //    std::cout << "nthreads: " << Eigen::nbThreads() << '\n';
     //    feenableexcept(FE_ALL_EXCEPT & ~FE_INEXACT);
     if (argc == 2)
     {

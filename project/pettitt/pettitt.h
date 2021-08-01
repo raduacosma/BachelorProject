@@ -19,7 +19,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef _INCLUDED_PETTITT
 #define _INCLUDED_PETTITT
 #include <deque>

@@ -93,9 +93,8 @@ void MLP::randomizeWeights()
         else
         {
 
-            std::uniform_real_distribution<float> uni{
-                -1.0f / std::sqrt(static_cast<float>(sizes[x])), 1.0f / std::sqrt(static_cast<float>(sizes[x]))
-            };
+            std::uniform_real_distribution<float> uni{ -1.0f / std::sqrt(static_cast<float>(sizes[x])),
+                                                       1.0f / std::sqrt(static_cast<float>(sizes[x])) };
             weights[x] = Eigen::MatrixXf::NullaryExpr(sizes[y], sizes[x],
                                                       [&]()
                                                       {

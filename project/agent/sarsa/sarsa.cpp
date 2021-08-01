@@ -21,8 +21,7 @@
 
 Sarsa::Sarsa(OpTrackParams opTrackParams, AgentMonteCarloParams agentMonteCarloParams, MLPParams agentMLP,
              MLPParams opponentMLP, size_t _nrEpisodes, size_t pNrEpisodesToEpsilonZero,
-             OpModellingType pOpModellingType, float pEpsilon,
-             float pGamma)
+             OpModellingType pOpModellingType, float pEpsilon, float pGamma)
     : Agent(opTrackParams, agentMonteCarloParams, std::move(agentMLP), std::move(opponentMLP), _nrEpisodes,
             pNrEpisodesToEpsilonZero, pOpModellingType, pEpsilon, pGamma)
 {

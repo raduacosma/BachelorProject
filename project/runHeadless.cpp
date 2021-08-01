@@ -63,40 +63,45 @@ void writeFullResults(std::unique_ptr<Agent> &agent)
     std::cout << "nr of times killed by opponent: " << agent->getOpDeathPercentage() << std::endl;
 }
 
-void writeSummaryResults(std::unique_ptr<Agent> &agent, std::string const &fileName, size_t nrEpisodesToEpsilonZero, size_t numberOfEpisodes, long totalTime)
+void writeSummaryResults(std::unique_ptr<Agent> &agent, std::string const &fileName, size_t nrEpisodesToEpsilonZero,
+                         size_t numberOfEpisodes, long totalTime)
 {
-    std::cout<<fileName<<'\n';
-//    std::ofstream out{"summaryone_"+fileName};
+    std::cout << fileName << '\n';
+    //    std::ofstream out{"summaryone_"+fileName};
     std::vector<float> const &agentRewards = agent->getRewards();
-    double rewardSum= std::accumulate(agentRewards.begin() + nrEpisodesToEpsilonZero, agentRewards.begin()+numberOfEpisodes,0.0 );
-    std::cout<<"rewardsMeanLast\n"<<rewardSum/(numberOfEpisodes-nrEpisodesToEpsilonZero)<<'\n';
+    double rewardSum =
+        std::accumulate(agentRewards.begin() + nrEpisodesToEpsilonZero, agentRewards.begin() + numberOfEpisodes, 0.0);
+    std::cout << "rewardsMeanLast\n" << rewardSum / (numberOfEpisodes - nrEpisodesToEpsilonZero) << '\n';
     std::vector<float> const &agentPredictions = agent->getOpponentCorrectPredictionPercentage();
-    double opPredSum = std::accumulate(agentPredictions.begin() + nrEpisodesToEpsilonZero, agentPredictions.begin()+numberOfEpisodes,0.0);
-    std::cout<<"opPredMeanLast\n"<<opPredSum/(numberOfEpisodes-nrEpisodesToEpsilonZero)<<'\n';
+    double opPredSum = std::accumulate(agentPredictions.begin() + nrEpisodesToEpsilonZero,
+                                       agentPredictions.begin() + numberOfEpisodes, 0.0);
+    std::cout << "opPredMeanLast\n" << opPredSum / (numberOfEpisodes - nrEpisodesToEpsilonZero) << '\n';
     std::vector<float> const &foundOpPred = agent->getOpponentFoundCorrectPredictionPercentage();
-    double foundOpSum = std::accumulate(foundOpPred.begin() + nrEpisodesToEpsilonZero, foundOpPred.begin()+numberOfEpisodes,0.0);
-    std::cout<<"opponentFoundPredMeanLast\n"<<foundOpSum/static_cast<double>(numberOfEpisodes-nrEpisodesToEpsilonZero)<<'\n';
+    double foundOpSum =
+        std::accumulate(foundOpPred.begin() + nrEpisodesToEpsilonZero, foundOpPred.begin() + numberOfEpisodes, 0.0);
+    std::cout << "opponentFoundPredMeanLast\n"
+              << foundOpSum / static_cast<double>(numberOfEpisodes - nrEpisodesToEpsilonZero) << '\n';
     std::vector<size_t> const &killedPerEp = agent->getOpDeathsPerEp();
-    size_t killedSum = std::accumulate(killedPerEp.begin() + nrEpisodesToEpsilonZero, killedPerEp.begin()+numberOfEpisodes,0ul);
-    std::cout<<"killedByOpponentMeanLast\n"<<killedSum/static_cast<double>(numberOfEpisodes-nrEpisodesToEpsilonZero)<<'\n';
+    size_t killedSum =
+        std::accumulate(killedPerEp.begin() + nrEpisodesToEpsilonZero, killedPerEp.begin() + numberOfEpisodes, 0ul);
+    std::cout << "killedByOpponentMeanLast\n"
+              << killedSum / static_cast<double>(numberOfEpisodes - nrEpisodesToEpsilonZero) << '\n';
     std::cout << "opponent recognition percentage\n" << agent->getCorrectOpponentTypePredictionPercentage() << '\n';
-    std::cout << "predicted nr of opponents\n" << agent->getPredictedNrOfOpponents()<<'\n';
-    for(auto const &opIdx:agent->opChoiceMatrix)
+    std::cout << "predicted nr of opponents\n" << agent->getPredictedNrOfOpponents() << '\n';
+    for (auto const &opIdx : agent->opChoiceMatrix)
     {
-        std::cout<<"Opponent idx: "<<opIdx.first<<std::endl;
+        std::cout << "Opponent idx: " << opIdx.first << std::endl;
         for (auto const &chosenIdx : opIdx.second)
         {
-            std::cout<<"Chosen Opponent: "<<chosenIdx.first<<" "<<chosenIdx.second<<std::endl;
+            std::cout << "Chosen Opponent: " << chosenIdx.first << " " << chosenIdx.second << std::endl;
         }
     }
-    std::cout<<"time in ms\n"<<totalTime<<'\n';
-
-
+    std::cout << "time in ms\n" << totalTime << '\n';
 }
 
 void writeFullEpHistory(std::unique_ptr<Agent> &agent, std::string const &fileName)
 {
-    std::cout<<"actualOpType,predOpType,rewards,opPredPerc,foundOpPredPerc,killedByOpPerc\n";
+    std::cout << "actualOpType,predOpType,rewards,opPredPerc,foundOpPredPerc,killedByOpPerc\n";
     auto const &actualOpType = agent->getActualOpponentType();
     auto const &predOpType = agent->getPredictedOpponentType();
     auto const &rewards = agent->getRewards();
@@ -104,27 +109,27 @@ void writeFullEpHistory(std::unique_ptr<Agent> &agent, std::string const &fileNa
     auto const &foundOpPredPerc = agent->getOpponentFoundCorrectPredictionPercentage();
     auto const &killedByOpPerc = agent->getOpDeathsPerEp();
     bool opModeling = false;
-    if(predOpType.size()>=opPredPerc.size())
+    if (predOpType.size() >= opPredPerc.size())
         opModeling = true;
-    for(size_t idx=0; idx!=opPredPerc.size();++idx)
+    for (size_t idx = 0; idx != opPredPerc.size(); ++idx)
     {
-        if(opModeling)
-        std::cout<<actualOpType[idx]<<','<<predOpType[idx]<<','<<rewards[idx]<<','<<opPredPerc[idx]
-            <<','<<foundOpPredPerc[idx]<<','<<killedByOpPerc[idx]<<'\n';
+        if (opModeling)
+            std::cout << actualOpType[idx] << ',' << predOpType[idx] << ',' << rewards[idx] << ',' << opPredPerc[idx]
+                      << ',' << foundOpPredPerc[idx] << ',' << killedByOpPerc[idx] << '\n';
         else
-            std::cout<<"NA"<<','<<"NA"<<','<<rewards[idx]<<','<<opPredPerc[idx]
-                     <<','<<"NA"<<','<<killedByOpPerc[idx]<<'\n';
+            std::cout << "NA" << ',' << "NA" << ',' << rewards[idx] << ',' << opPredPerc[idx] << ',' << "NA" << ','
+                      << killedByOpPerc[idx] << '\n';
     }
-    if(opModeling)
-{
-    for(size_t idx = opPredPerc.size();idx!=actualOpType.size();++idx)
+    if (opModeling)
     {
-        std::cout<<actualOpType[idx]<<','<<predOpType[idx]<<",NA,NA,NA,NA\n";
+        for (size_t idx = opPredPerc.size(); idx != actualOpType.size(); ++idx)
+        {
+            std::cout << actualOpType[idx] << ',' << predOpType[idx] << ",NA,NA,NA,NA\n";
+        }
     }
-}
     std::cout << "opponent recognition percentage\n" << agent->getCorrectOpponentTypePredictionPercentage() << '\n';
-    std::cout << "predicted nr of opponents\n" << agent->getPredictedNrOfOpponents()<<'\n';
-    std::cout<<fileName<<'\n';
+    std::cout << "predicted nr of opponents\n" << agent->getPredictedNrOfOpponents() << '\n';
+    std::cout << fileName << '\n';
 }
 void runHeadless(std::string const &file)
 {
@@ -189,10 +194,10 @@ void runHeadless(std::string const &file)
 
     SimContainer simContainer{ hs.files, agent.get(), rewards, simStateParams };
     agent->run();
-//    writeFullResults(agent);
+    //    writeFullResults(agent);
     auto end = std::chrono::high_resolution_clock::now();
     auto totalTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
-//    std::cout << "time in ms: " << totalTime;
-    writeFullEpHistory(agent,file);
-//    writeSummaryResults(agent,file,nrEpisodesToEpsilonZero,hs.numberOfEpisodes,totalTime);
+    //    std::cout << "time in ms: " << totalTime;
+    writeFullEpHistory(agent, file);
+    //    writeSummaryResults(agent,file,nrEpisodesToEpsilonZero,hs.numberOfEpisodes,totalTime);
 }
