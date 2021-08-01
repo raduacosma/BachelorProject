@@ -8,7 +8,7 @@ It includes:
 
 - simulation code for the level-based game, including a graphical simulation of the game
 
-- hyperparameter optimisation procedure, random seeds used, data preprocessing and plotting code used to obtain the results
+- hyperparameter optimisation procedure, random seeds used and data preprocessing code used to obtain the results
 
 The random seeds are fixed and therefore the program is deterministic. The C++ Mersenne Twister random number generator was used which should provide the same results with all compilers and platforms. However, the C++ standard library statistical distributions were used which are not the same over all compilers and platforms and thus the exact numbers in the thesis might not be fully reproducible (though of course, very similar results will be obtained when attempting to reproduce).
 
