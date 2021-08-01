@@ -1,0 +1,1 @@
+Platform specific code for the graphical simulations, part of the ImGUI library. This was copied from the ImGUI library and placed here so that the headers can be found.

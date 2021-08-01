@@ -19,7 +19,7 @@ You can compile the code using the included CMake files. For the graphical simul
 Everything is self-contained in this project, there are no external dependencies to reproduce the results (unless GLFW, but that is only if the graphical simulation is desired).
 
 The following code was used from other sources:
-- The [Eigen](https://gitlab.com/libeigen/eigen) matrix linear algebra library (included in the code so that no dependencies are required)
+- The [Eigen](https://gitlab.com/libeigen/eigen) linear algebra library
 - The [ImGUI](https://github.com/ocornut/imgui) GUI library (included in the code so that no dependencies are required)
 
 The following code was adapted from other sources:
