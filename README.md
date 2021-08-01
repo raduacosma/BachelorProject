@@ -27,6 +27,8 @@ The following code was adapted from other sources:
 - The Kolmogorov-Smirnov two-sample test was adapted from the [ROOT](https://github.com/root-project/root) data analysis framework. ROOT itself is not required, all the code necessary was adapted into the project/kolsmir folder
 - Pettitt's test for change-point detection was rewritten from the [trend](https://cran.r-project.org/web/packages/trend/index.html) package from R into C++
 
+I would like to thank these projects and authors for their work that enabled this project.
+
 All the code that is or modifies the source code from the other sources mentioned above has the same license as that code. All other code is GPLv3 for compatibility with the "trend" package code which is also GPLv3. According to the licenses of the project the whole project is licensed under GPLv3 with the abovementioned libraries and other source code licensed with their original licenses. This statically linked approach was taken so that the results are easily reproducible (no library change affects the code and only a compiler is needed to run the code).
 
 
